@@ -46,7 +46,7 @@ class _SearchResultsState extends State<SearchResults> {
 
   void _onSearchTermChanged() {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), () {
+    _debounce = Timer(const Duration(milliseconds: 800), () {
       getData();
     });
   }
@@ -143,8 +143,7 @@ class _SearchResultsState extends State<SearchResults> {
                                     child: Stack(
                                       children: [
                                         AspectRatio(
-                                          aspectRatio: 9 /
-                                              16, // Adjust aspect ratio as needed
+                                          aspectRatio: 9 / 16,
                                           child: Opacity(
                                             opacity: 0.9,
                                             child: Image.network(
@@ -214,7 +213,7 @@ class _SearchResultsState extends State<SearchResults> {
                         ),
                       ),
             const SizedBox(
-              height: 100,
+              height: 50,
             ),
           ],
         ),

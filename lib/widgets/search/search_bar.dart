@@ -2,6 +2,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class CatchMFlixxSearch extends StatefulWidget {
   final String? defaultSearch;
@@ -38,6 +39,8 @@ class _CatchMFlixxSearchState extends State<CatchMFlixxSearch> {
             child: Column(
               children: [
                 CupertinoSearchTextField(
+                  prefixIcon:
+                      const PhosphorIcon(PhosphorIconsRegular.magnifyingGlass),
                   controller: searchController,
                   itemColor: Colors.white,
                   padding: const EdgeInsets.all(12),
@@ -46,6 +49,7 @@ class _CatchMFlixxSearchState extends State<CatchMFlixxSearch> {
                     color: Colors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  suffixIcon: const PhosphorIcon(PhosphorIconsLight.xCircle),
                   placeholder: widget.defaultSearch ?? translation.searchFor,
                   style: TextStyles.formSubTitle,
                   onChanged: (val) {

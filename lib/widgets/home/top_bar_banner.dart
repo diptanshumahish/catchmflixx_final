@@ -55,7 +55,7 @@ class _TopBarBannerState extends State<TopBarBanner> {
   Widget build(BuildContext context) {
     final rand = randomNo(_cList.results?.data?.length ?? 1);
     final size = MediaQuery.of(context).size;
-    final translation = AppLocalizations.of(context)!;
+    // final translation = AppLocalizations.of(context)!;
 
     if (_isReady) {
       return FlexibleSpaceBar(
@@ -146,7 +146,7 @@ class _TopBarBannerState extends State<TopBarBanner> {
                             ),
                           );
                         }),
-                  )
+                  ),
                 ],
               ),
             ),

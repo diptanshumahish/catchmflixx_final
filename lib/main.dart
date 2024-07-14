@@ -1,5 +1,6 @@
 import 'package:catchmflixx/firebase_options.dart';
 import 'package:catchmflixx/screens/start/splash_screen.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/theme/theme_catchmflixx.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +23,17 @@ void main() async {
   runApp(const ProviderScope(child: CatchMFlixxApp()));
 }
 
-class CatchMFlixxApp extends StatelessWidget {
+class CatchMFlixxApp extends ConsumerWidget {
   const CatchMFlixxApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final langSet = ref.watch(languageProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Catchmflixx',
       theme: CatchMFLixxTheme.theme,
+      locale: langSet.loc,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
