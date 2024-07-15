@@ -192,7 +192,9 @@ class _MyToWatchListState extends State<MyToWatchList> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            _wl.data?[idx].type ?? "",
+                                            _wl.data?[idx].type == "web_series"
+                                                ? "web series"
+                                                : "movie",
                                             style: TextStyles.smallSubText,
                                           ),
                                           SizedBox(
