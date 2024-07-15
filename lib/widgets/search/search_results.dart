@@ -77,7 +77,8 @@ class _SearchResultsState extends State<SearchResults> {
 
     return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: size.height / 40),
+        padding:
+            EdgeInsets.symmetric(horizontal: size.height / 40, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

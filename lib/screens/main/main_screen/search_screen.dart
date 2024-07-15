@@ -1,6 +1,5 @@
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
 import 'package:catchmflixx/widgets/common/cards/redesigned_genre_car.dart';
-import 'package:catchmflixx/widgets/search/search_bar.dart';
 import 'package:catchmflixx/widgets/search/search_results.dart';
 import 'package:catchmflixx/widgets/search/search_top.dart';
 import 'package:flutter/material.dart';
@@ -113,8 +112,6 @@ class _SearchScreenState extends State<SearchScreen> {
       slivers: [
         SearchTop(
           searchText: translation.navDiscover,
-        ),
-        CatchMFlixxSearch(
           onSearching: (value, search) {
             setState(() {
               isSearching = search;
@@ -129,7 +126,8 @@ class _SearchScreenState extends State<SearchScreen> {
             : SearchResults(searchTerms: _searchData),
         isSearching == false
             ? SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: size.height / 40),
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.height / 40, vertical: 16),
                 sliver: SliverGrid.builder(
                     itemCount: _genreList.length,
                     gridDelegate:

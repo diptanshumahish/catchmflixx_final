@@ -1,44 +1,64 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:catchmflixx/constants/styles/gradient.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SearchTop extends StatelessWidget {
+class SearchTop extends StatefulWidget {
   final String searchText;
-  const SearchTop({super.key, required this.searchText});
+  final String? defaultSearch;
+  final Function(String value, bool search) onSearching;
+  const SearchTop(
+      {super.key,
+      required this.searchText,
+      this.defaultSearch,
+      required this.onSearching});
+
+  @override
+  State<SearchTop> createState() => _SearchTopState();
+}
+
+class _SearchTopState extends State<SearchTop> {
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: size.height / 3,
-            width: size.width,
+    final translation = AppLocalizations.of(context)!;
+    return SliverAppBar(
+      floating: true,
+      stretch: true,
+      backgroundColor: const Color.fromARGB(255, 13, 13, 14),
+      automaticallyImplyLeading: false,
+      title: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: CupertinoSearchTextField(
+            prefixIcon:
+                const PhosphorIcon(PhosphorIconsRegular.magnifyingGlass),
+            controller: searchController,
+            itemColor: Colors.white,
+            padding: const EdgeInsets.all(18),
             decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                        "https://img.playbook.com/ZbPD9M8hctAHzLHxXv37LSL5_et1fgfF8fExiL-EkGU/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzdkZTNjYmRm/LTAyYTMtNDUwNi04/ZjhkLTE2M2NkMGRh/YzZlYQ",
-                        scale: 0.5),
-                    fit: BoxFit.cover)),
-            child: Container(
-              decoration:
-                  const BoxDecoration(gradient: CFGradient.topToBottomGradient),
+              color: Colors.transparent,
             ),
+            suffixIcon: const PhosphorIcon(PhosphorIconsLight.xCircle),
+            placeholder: widget.defaultSearch ?? translation.searchFor,
+            style: TextStyles.searchBox,
+            onChanged: (val) {
+              if (val.isEmpty) {
+                widget.onSearching(val, false);
+              } else {
+                widget.onSearching(val, true);
+              }
+            },
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.height / 40),
-            child: Text(
-              searchText,
-              style: size.height > 840
-                  ? TextStyles.headingMobile
-                  : TextStyles.headingMobileSmallScreens,
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
