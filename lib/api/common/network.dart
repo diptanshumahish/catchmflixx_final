@@ -60,7 +60,7 @@ class NetworkManager {
 
     await addInterceptors();
 
-    Future<Response> _makeApiCall(String token) async {
+    Future<Response> makeApiCall(String token) async {
       final headers = token.isEmpty
           ? <String, String>{}
           : {'Authorization': 'Bearer $token'};
@@ -85,7 +85,7 @@ class NetworkManager {
 
     try {
       String? bearerToken = prefs.getString("bearer");
-      Response res = await _makeApiCall(bearerToken ?? '');
+      Response res = await makeApiCall(bearerToken ?? '');
 
       switch (res.statusCode) {
         case 200:
@@ -110,10 +110,10 @@ class NetworkManager {
       if (e.response?.statusCode == 401) {
         await api.refreshToken();
         String? bearerToken = prefs.getString("bearer");
-        Response res = await _makeApiCall(bearerToken ?? '');
+        Response res = await makeApiCall(bearerToken ?? '');
 
         bearerToken = prefs.getString("bearer");
-        res = await _makeApiCall(bearerToken ?? '');
+        res = await makeApiCall(bearerToken ?? '');
         if (res.statusCode == 200 || res.statusCode == 201) {
           return fromJson(res.data);
         }
