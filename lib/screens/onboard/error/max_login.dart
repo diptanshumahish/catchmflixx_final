@@ -96,9 +96,9 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
                                 decoration: BoxDecoration(
                                     color: Colors.white10,
                                     borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(color: Colors.white12)),
+                                    border: Border.all(color: Colors.white24)),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
