@@ -35,8 +35,6 @@ class NetworkManager {
   }
 
   Future<void> addInterceptors() async {
-    APIManager api = APIManager();
-    await api.refreshToken();
     Directory tempDir = await getApplicationCacheDirectory();
     final cookieJar = PersistCookieJar(
         storage: FileStorage(tempDir.path), ignoreExpires: true);
@@ -58,46 +56,43 @@ class NetworkManager {
     FormData? data,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await init();
-    final bearerToken = prefs.getString("bearer");
-    final String? isNotVerified = prefs.getString("temp_login_mail");
-    final headers = isNotVerified != null
-        ? <String, String>{}
-        : {'Authorization': 'Bearer $bearerToken'};
+    APIManager api = APIManager();
 
-    try {
-      Response res;
+    await addInterceptors();
+
+    Future<Response> _makeApiCall(String token) async {
+      final headers = token.isEmpty
+          ? <String, String>{}
+          : {'Authorization': 'Bearer $token'};
       switch (method.toUpperCase()) {
         case 'POST':
-          res = await dio.post(endpoint,
+          return await dio.post(endpoint,
               data: data, options: Options(headers: headers));
-          break;
         case 'PUT':
-          res = await dio.put(endpoint,
+          return await dio.put(endpoint,
               data: data, options: Options(headers: headers));
-          break;
         case 'PATCH':
-          res = await dio.patch(endpoint,
+          return await dio.patch(endpoint,
               data: data, options: Options(headers: headers));
-          break;
         case 'DELETE':
-          res = await dio.delete(endpoint,
+          return await dio.delete(endpoint,
               data: data, options: Options(headers: headers));
-          break;
         case 'GET':
         default:
-          res = await dio.get(endpoint, options: Options(headers: headers));
-          break;
+          return await dio.get(endpoint, options: Options(headers: headers));
       }
+    }
+
+    try {
+      String? bearerToken = prefs.getString("bearer");
+      Response res = await _makeApiCall(bearerToken ?? '');
 
       switch (res.statusCode) {
         case 200:
-          return fromJson(res.data);
         case 201:
           return fromJson(res.data);
         case 401:
-          ToastShow.returnToast("Session expired, login again");
-          throw Exception("Unauthorized: ${res.data['message']}");
+          break;
         case 403:
           throw Exception("Forbidden: ${res.data['message']}");
         case 404:
@@ -106,13 +101,23 @@ class NetworkManager {
           MessageModel msg = MessageModel.fromJson(res.data);
           ToastShow.returnToast(msg.data?.message ?? "Error");
           throw Exception("Locked: ${res.data['message']}");
-
         case 500:
           throw Exception("Internal server error: ${res.data['message']}");
         default:
           throw Exception("Error: ${res.data['message']}");
       }
     } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        await api.refreshToken();
+        String? bearerToken = prefs.getString("bearer");
+        Response res = await _makeApiCall(bearerToken ?? '');
+
+        bearerToken = prefs.getString("bearer");
+        res = await _makeApiCall(bearerToken ?? '');
+        if (res.statusCode == 200 || res.statusCode == 201) {
+          return fromJson(res.data);
+        }
+      }
       MessageModel msg = MessageModel.fromJson(e.response?.data);
       ToastShow.returnToast(msg.data?.message ?? "Error");
       throw Exception(e.message ?? "Error occurred");
@@ -120,5 +125,7 @@ class NetworkManager {
       ToastShow.returnToast(e.toString());
       throw Exception(e.toString());
     }
+
+    throw Exception("Unhandled error occurred");
   }
 }

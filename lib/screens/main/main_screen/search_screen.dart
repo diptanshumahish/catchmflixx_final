@@ -7,88 +7,28 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final _genreList = [
   {
-    "image": "horror",
+    "image":
+        "https://img.playbook.com/08xI9xg7ygQvPaBeTcJllaXXCK-wVyiDkBRe_1sxeu4/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzg2YzUyZTll/LTcxNjUtNDU5MS1i/MWY1LWIxNjQ3NWJk/MGMyZQ",
     "name": "Horror",
     "desc": "The thrills and chills of nightmares"
   },
   {
-    "image": "comedy",
+    "image":
+        "https://img.playbook.com/he2XwRaA2GCHK9W647yYi6EevGcNFM4gu_5zA8pggrs/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljL2I4OTY0MzZj/LWY3NDgtNDViMC04/Njk0LWZmZDcyMzk2/NmUzNQ",
     "name": "Comedy",
     "desc": "Laughter is the best medicine (and genre)"
   },
   {
-    "image": "action",
+    "image":
+        "https://img.playbook.com/gaBoQYUD1oXjD8qGLb5Tv50LFjnz6LSvNH0h356U6OU/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljL2E2ODA3ZDE1/LWJlNTUtNDlmOS1i/YmMzLTcwZTE3N2U0/MjFiOA",
     "name": "Action",
     "desc": "Fast-paced excitement and adrenaline rush"
   },
   {
-    "image": "thriller",
+    "image":
+        "https://img.playbook.com/HGmawb1RtmjW5IuvHBPhvHW806BSrTJlXAg3v00ISzQ/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzNmMTRjODM5/LTQwOTMtNDdmMi1i/OTA1LTZkYjZjYTk3/OWI5ZQ",
     "name": "Thriller",
     "desc": "Suspenseful buildup that keeps you on the edge of your seat"
-  },
-  {
-    "image": "fantasy",
-    "name": "Fantasy",
-    "desc": "Magical worlds and creatures beyond imagination"
-  },
-  {
-    "image": "science fiction",
-    "name": "Science Fiction",
-    "desc":
-        "Futuristic technology, space exploration, and fantastical science concepts"
-  },
-  {
-    "image": "mystery",
-    "name": "Mystery",
-    "desc": "Unraveling clues and solving puzzles to uncover the truth"
-  },
-  {
-    "image": "romance",
-    "name": "Romance",
-    "desc": "Stories of love, connection, and happily ever afters"
-  },
-  {
-    "image": "drama",
-    "name": "Drama",
-    "desc": "Exploring serious themes and human emotions"
-  },
-  {
-    "image": "historical fiction",
-    "name": "Historical Fiction",
-    "desc": "Journeys through the past, bringing history to life"
-  },
-  {
-    "image": "adventure",
-    "name": "Adventure",
-    "desc": "Exhilarating journeys and daring quests"
-  },
-  {
-    "image": "dystopian",
-    "name": "Dystopian",
-    "desc": "Exploring dark futures and cautionary tales"
-  },
-  {
-    "image": "crime",
-    "name": "Crime",
-    "desc":
-        "Delving into the world of criminals, detectives, and the justice system"
-  },
-  {
-    "image": "superhero",
-    "name": "Superhero",
-    "desc": "Caped crusaders and extraordinary abilities saving the day"
-  },
-  {
-    "image": "supernatural",
-    "name": "Supernatural",
-    "desc":
-        "The unknown realm beyond the natural world, with ghosts, spirits, and paranormal phenomena"
-  },
-  {
-    "image": "psychological thriller",
-    "name": "Psychological Thriller",
-    "desc":
-        "Exploring the depths of human psychology and suspense that messes with your mind"
   },
 ];
 String _searchData = "";
@@ -134,11 +74,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            childAspectRatio: 16 / 9,
+                            childAspectRatio: 16 / 12,
                             crossAxisCount: 2),
                     itemBuilder: (ctx, idx) => ModifiedGenreCard(
-                        poster:
-                            "https://img.playbook.com/Axh_gEkgZbsvB1VDuXm4GNvbjXXu2RUUqwToXJEJ8ZQ/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzM5NTk3ODYx/LWQ1MzItNDZmMC1i/ZDhmLTQ2NjRiYjcz/NjZmMQ",
+                        poster: _genreList[idx]["image"]!,
                         fullDetailsId: "  ",
                         title: _genreList[idx]["name"]!,
                         subTitle: _genreList[idx]["desc"]!)),

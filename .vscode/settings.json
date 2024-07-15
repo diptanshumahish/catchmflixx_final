@@ -5,6 +5,7 @@
         "haptics",
         "Kollektif",
         "prefs",
-        "riverpod"
+        "riverpod",
+        "Seasonmeta"
     ]
 }

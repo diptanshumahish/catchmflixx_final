@@ -22,23 +22,18 @@ class ModifiedGenreCard extends StatelessWidget {
 
     return Container(
       width: size.width,
-      height: 190,
+      height: 210,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.white30),
+          border: Border.all(color: const Color(0x1EFFFFFF)),
           borderRadius: BorderRadius.circular(5)),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: Stack(
           children: [
-            // Image.asset(
-            //   poster,
-            //   fit: BoxFit.cover,
-            //   height: 190,
-            // ),
             CachedNetworkImage(
               imageUrl: poster,
               fit: BoxFit.cover,
-              height: 190,
+              height: 210,
               width: size.width,
             ),
             ClipRRect(

@@ -37,16 +37,15 @@ class _BottomNavbarState extends State<BottomNavbar> {
   Widget build(BuildContext context) {
     final translation = AppLocalizations.of(context)!;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(90),
+      borderRadius: BorderRadius.circular(8),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
         child: Container(
           height: 70,
           decoration: BoxDecoration(
               color: const Color.fromARGB(108, 40, 41, 43),
-              border:
-                  Border.all(color: const Color.fromARGB(97, 255, 255, 255)),
-              borderRadius: BorderRadius.circular(90)),
+              border: Border.all(color: Color.fromARGB(52, 255, 255, 255)),
+              borderRadius: BorderRadius.circular(8)),
           child: Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
