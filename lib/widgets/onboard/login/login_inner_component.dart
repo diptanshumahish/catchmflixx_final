@@ -8,11 +8,13 @@ import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //controllers
 final TextEditingController _eOrMController = TextEditingController();
@@ -126,15 +128,26 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
                         isIos: true),
                   );
                 }),
-            const Text.rich(TextSpan(style: TextStyles.smallSubText, children: [
-              TextSpan(text: "By Logging in to CatchMFlixx, you agree to our "),
+            Text.rich(TextSpan(style: TextStyles.smallSubText, children: [
+              const TextSpan(
+                  text: "By Logging in to CatchMFlixx, you agree to our "),
               TextSpan(
                   text: "Terms & conditions ",
-                  style: TextStyles.smallSubTextActive),
-              TextSpan(text: "& "),
+                  style: TextStyles.smallSubTextActive,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(
+                          Uri.parse("https://www.catchmflixx.com/en/terms"));
+                    }),
+              const TextSpan(text: "& "),
               TextSpan(
                   text: "Privacy Policies",
-                  style: TextStyles.smallSubTextActive)
+                  style: TextStyles.smallSubTextActive,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(Uri.parse(
+                          "https://www.catchmflixx.com/en/privacy-policy"));
+                    })
             ]))
           ], space: 20),
         ),

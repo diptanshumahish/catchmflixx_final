@@ -1,5 +1,7 @@
+import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
 import 'package:catchmflixx/widgets/common/cards/redesigned_genre_car.dart';
+import 'package:catchmflixx/widgets/common/recommendation/picked_for_you.dart';
 import 'package:catchmflixx/widgets/search/search_results.dart';
 import 'package:catchmflixx/widgets/search/search_top.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +66,24 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: SizedBox.shrink(),
               )
             : SearchResults(searchTerms: _searchData),
+        isSearching == false
+            ? const PickedForYou()
+            : const SliverToBoxAdapter(
+                child: SizedBox.shrink(),
+              ),
+        isSearching == false
+            ? SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width / 20),
+                  child: const Text(
+                    "Search suggestions",
+                    style: TextStyles.formSubTitle,
+                  ),
+                ),
+              )
+            : const SliverToBoxAdapter(
+                child: SizedBox.shrink(),
+              ),
         isSearching == false
             ? SliverPadding(
                 padding: EdgeInsets.symmetric(

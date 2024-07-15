@@ -3,6 +3,7 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
 import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
+import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
 import 'package:catchmflixx/screens/list/my_to_watch_list.dart';
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
@@ -55,6 +56,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return CustomScrollView(
       slivers: [
         const SliverAppBar(
@@ -142,6 +144,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               }
             },
             color: Colors.red),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: size.width / 20, vertical: 10),
+            child: const Text(
+              "version ${ConstantTexts.versionInfo}, made with 💖 by the CatchMFlixx team",
+              style: TextStyles.smallSubText,
+            ),
+          ),
+        ),
         const SliverToBoxAdapter(
           child: SizedBox(
             height: 200,

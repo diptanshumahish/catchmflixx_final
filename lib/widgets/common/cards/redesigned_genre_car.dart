@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:catchmflixx/constants/styles/gradient.dart';
-import 'package:catchmflixx/constants/styles/text_styles.dart';
+// import 'package:catchmflixx/constants/styles/gradient.dart';
+// import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class ModifiedGenreCard extends StatelessWidget {
@@ -36,36 +36,36 @@ class ModifiedGenreCard extends StatelessWidget {
               height: 210,
               width: size.width,
             ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Container(
-                decoration: const BoxDecoration(
-                    gradient: CFGradient.topToBottomGradient),
-              ),
-            ),
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyles.cardHeading,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      subTitle,
-                      style: TextStyles.smallSubText,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(5),
+            //   child: Container(
+            //     decoration: const BoxDecoration(
+            //         gradient: CFGradient.topToBottomGradient),
+            //   ),
+            // ),
+            // SizedBox(
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         Text(
+            //           title,
+            //           style: TextStyles.cardHeading,
+            //           maxLines: 2,
+            //           overflow: TextOverflow.ellipsis,
+            //         ),
+            //         Text(
+            //           subTitle,
+            //           style: TextStyles.smallSubText,
+            //           maxLines: 1,
+            //           overflow: TextOverflow.ellipsis,
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

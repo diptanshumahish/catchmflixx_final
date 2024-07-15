@@ -2,6 +2,7 @@
 
 import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
+import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
