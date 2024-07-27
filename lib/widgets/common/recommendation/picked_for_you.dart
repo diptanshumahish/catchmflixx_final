@@ -5,6 +5,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/search.list.model.dart';
 import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -108,20 +109,15 @@ class _PickedForYouState extends State<PickedForYou> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        navigateToPage(
                           context,
-                          PageTransition(
-                              child: _cList.results?.data![nu].type == "movie"
-                                  ? MovieScreen(
-                                      uuid:
-                                          _cList.results?.data![nu].uuid ?? "",
-                                    )
-                                  : SeriesScreen(
-                                      uuid:
-                                          _cList.results?.data![nu].uuid ?? "",
-                                    ),
-                              type: PageTransitionType.rightToLeft,
-                              curve: Curves.easeInOut),
+                          _cList.results?.data![nu].type == "movie"
+                              ? MovieScreen(
+                                  uuid: _cList.results?.data![nu].uuid ?? "",
+                                )
+                              : SeriesScreen(
+                                  uuid: _cList.results?.data![nu].uuid ?? "",
+                                ),
                         );
                       },
                       child: const Padding(

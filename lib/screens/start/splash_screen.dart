@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/loader_spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -22,13 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Timer(const Duration(seconds: 4), () {
-      Navigator.pushAndRemoveUntil(
-          context,
-          PageTransition(
-              child: const CheckLoggedIn(),
-              type: PageTransitionType.fade,
-              curve: Curves.easeInCubic),
-          (route) => false);
+      navigateToPage(context, const CheckLoggedIn(),
+          removeUntil: true, predicate: (r) => false);
     });
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
@@ -86,24 +82,27 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
           Positioned(
               bottom: 10,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: const Center(
-                  child: Column(
-                    children: [
-                      LoaderSpinner(),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        "Loading",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Text(
-                        ConstantTexts.versionInfo,
-                        style: TextStyle(color: Colors.white30),
-                      )
-                    ],
+              child: SafeArea(
+                bottom: true,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: const Center(
+                    child: Column(
+                      children: [
+                        LoaderSpinner(),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Loading",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          ConstantTexts.versionInfo,
+                          style: TextStyle(color: Colors.white30),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ))

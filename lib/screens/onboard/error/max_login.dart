@@ -5,6 +5,7 @@ import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/datetime/format_date.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
@@ -34,10 +35,8 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
               ),
               leading: IconButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (ctx) => const OnboardScreen()));
+                    navigateToPage(context, const OnboardScreen(),
+                        isReplacement: true);
                   },
                   icon: const Icon(
                     Icons.chevron_left,
@@ -72,21 +71,19 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
                                       e.id.toString(), context, false);
 
                               if (res == 200) {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageTransition(
-                                      child: const CheckLoggedIn(),
-                                      type: PageTransitionType.rightToLeft,
-                                    ),
-                                    (r) => false);
+                                navigateToPage(
+                                  context,
+                                  const CheckLoggedIn(),
+                                  removeUntil: true,
+                                  predicate: (route) => false,
+                                );
                               } else if (res == 500) {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageTransition(
-                                      child: const BaseMain(),
-                                      type: PageTransitionType.rightToLeft,
-                                    ),
-                                    (r) => false);
+                                navigateToPage(
+                                  context,
+                                  const BaseMain(),
+                                  removeUntil: true,
+                                  predicate: (route) => false,
+                                );
                               }
                             },
                             child: Padding(

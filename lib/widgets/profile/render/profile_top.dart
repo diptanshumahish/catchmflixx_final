@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/main/main_screen/settings_screen.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -78,13 +79,7 @@ class ProfileTop extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Vibration.vibrate(duration: 50);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: const SettingsScreen(),
-                                type: PageTransitionType.bottomToTop,
-                                curve: Curves.easeInOut,
-                                isIos: true));
+                        navigateToPage(context, const SettingsScreen());
                       },
                       child: const Row(
                         mainAxisSize: MainAxisSize.max,
@@ -112,11 +107,7 @@ class ProfileTop extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         Vibration.vibrate(duration: 50);
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: const ProfileManagement(),
-                                type: PageTransitionType.bottomToTop));
+                        navigateToPage(context, const ProfileManagement());
                       },
                       child: const Row(
                         mainAxisSize: MainAxisSize.max,

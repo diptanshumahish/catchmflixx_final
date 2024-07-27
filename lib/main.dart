@@ -1,8 +1,10 @@
+import 'dart:io' show Platform; // Import Platform to check the operating system
 import 'package:catchmflixx/firebase_options.dart';
 import 'package:catchmflixx/screens/start/splash_screen.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/theme/theme_catchmflixx.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,26 +33,48 @@ class CatchMFlixxApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final langSet = ref.watch(languageProvider);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Catchmflixx',
-      theme: CatchMFLixxTheme.theme,
-      locale: langSet.loc,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate
-      ],
-      home: const SplashScreen(),
-      supportedLocales: const [
-        Locale("en"),
-        Locale("hi"),
-        Locale("kn"),
-        Locale("ml"),
-        Locale("te"),
-        Locale("ta")
-      ],
-    );
+    return _buildApp(context, langSet.loc);
+  }
+
+  Widget _buildApp(BuildContext context, Locale? locale) {
+    const localizationsDelegates = [
+      AppLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ];
+
+    const supportedLocales = [
+      Locale("en"),
+      Locale("hi"),
+      Locale("kn"),
+      Locale("ml"),
+      Locale("te"),
+      Locale("ta"),
+    ];
+
+    if (Platform.isIOS) {
+      return CupertinoApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Catchmflixx',
+        theme: const CupertinoThemeData(
+          primaryColor: CupertinoColors.activeBlue,
+        ),
+        locale: locale,
+        localizationsDelegates: localizationsDelegates,
+        supportedLocales: supportedLocales,
+        home: const SplashScreen(),
+      );
+    } else {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Catchmflixx',
+        theme: CatchMFLixxTheme.theme,
+        locale: locale,
+        localizationsDelegates: localizationsDelegates,
+        supportedLocales: supportedLocales,
+        home: const SplashScreen(),
+      );
+    }
   }
 }

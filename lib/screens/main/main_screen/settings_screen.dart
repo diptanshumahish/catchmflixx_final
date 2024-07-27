@@ -12,6 +12,7 @@ import 'package:catchmflixx/screens/start/choose_content_screen.dart';
 import 'package:catchmflixx/screens/start/later_verify.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/Info/info_container.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/settings/settings_button.dart';
@@ -232,13 +233,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               icon: PhosphorIconsDuotone.userSwitch,
               fn: () {
                 if (!_isEntirelyNew && !_verificationIssue) {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageTransition(
-                        child: const CheckLoggedIn(),
-                        type: PageTransitionType.leftToRight,
-                      ),
-                      (route) => false);
+                  navigateToPage(
+                    context,
+                    const CheckLoggedIn(),
+                    removeUntil: true,
+                    predicate: (route) => false,
+                  );
                 }
               },
               color: Colors.orangeAccent),

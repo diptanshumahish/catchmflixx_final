@@ -3,6 +3,7 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/api/user/profile/profile_response_model.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/main/home_main.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +40,12 @@ class ProfileIcon extends StatelessWidget {
           var res = await pro.useProfileLogin(hash, "");
           if (res.success!) {
             ToastShow.returnToast("${translation.welcomeBack} $profileName");
-            Navigator.pushAndRemoveUntil(
-                context,
-                PageTransition(
-                    child: const BaseMain(),
-                    type: PageTransitionType.rightToLeft,
-                    isIos: true),
-                (route) => false);
+            navigateToPage(
+              context,
+              const BaseMain(),
+              removeUntil: true,
+              predicate: (route) => false,
+            );
           } else {
             ToastShow.returnToast(translation.wrongPin);
           }
@@ -80,13 +80,12 @@ class ProfileIcon extends StatelessWidget {
                               if (res.success!) {
                                 Navigator.pop(dialogContext);
                                 ToastShow.returnToast(translation.welcomeBack);
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageTransition(
-                                        child: const BaseMain(),
-                                        type: PageTransitionType.rightToLeft,
-                                        isIos: true),
-                                    (route) => false);
+                                navigateToPage(
+                                  context,
+                                  const BaseMain(),
+                                  removeUntil: true,
+                                  predicate: (route) => false,
+                                );
                               } else {
                                 ToastShow.returnToast(translation.wrongPin);
                               }

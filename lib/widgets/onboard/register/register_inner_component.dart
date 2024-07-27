@@ -2,6 +2,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/state/provider.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/password/password_strength.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
@@ -200,16 +201,14 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                     prefs.setString("temp_login_mail", _emailController.text);
                     prefs.setString(
                         "temp_login_password", _passwordController.text);
-
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                          child: VerifyEmail(
-                              emailId: _emailController.text,
-                              password: _passwordController.text),
-                          type: PageTransitionType.rightToLeft,
-                        ),
-                        (r) => false);
+                    navigateToPage(
+                      context,
+                      VerifyEmail(
+                          emailId: _emailController.text,
+                          password: _passwordController.text),
+                      removeUntil: true,
+                      predicate: (route) => false,
+                    );
                   } else if (res == 400) {
                     ToastShow.returnToast(translation.err);
                   } else {
@@ -224,13 +223,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                 content: translation.changeLanguage,
                 icon: const Icon(Icons.language),
                 fn: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const LanguageScreen(),
-                        type: PageTransitionType.rightToLeft,
-                        isIos: true),
-                  );
+                  navigateToPage(context, const LanguageScreen());
                 })
           ], space: 20),
         ),

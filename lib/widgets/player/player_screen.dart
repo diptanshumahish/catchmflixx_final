@@ -1,5 +1,6 @@
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
+import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,6 +51,42 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.playLink == "" || widget.playLink == null) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                CatchMFlixxImages.nope,
+                height: 90,
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              const Text(
+                "Error in playback",
+                style: TextStyles.cardHeading,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                  width: 120,
+                  child: OffsetFullButton(
+                      content: "Go back",
+                      fn: () {
+                        Navigator.pop(context);
+                      }))
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(

@@ -6,6 +6,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
 import 'package:catchmflixx/screens/list/my_to_watch_list.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
 import 'package:catchmflixx/widgets/content/activity/watch_later_mini.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
@@ -82,11 +83,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   subHeading: "Check out your watch history",
                   icon: PhosphorIconsBold.arrowUpRight,
                   fn: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const HistoryListWidget(),
-                            type: PageTransitionType.bottomToTop));
+                    navigateToPage(context, const HistoryListWidget());
                   }),
             ),
           ),
@@ -102,11 +99,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   subHeading: "All the content you saved",
                   icon: PhosphorIconsBold.arrowUpRight,
                   fn: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            child: const MyToWatchList(),
-                            type: PageTransitionType.bottomToTop));
+                    navigateToPage(context, const MyToWatchList());
                   }),
             ),
           ),
@@ -122,13 +115,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             content: "Switch profile",
             icon: PhosphorIconsDuotone.userSwitch,
             fn: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  PageTransition(
-                    child: const CheckLoggedIn(),
-                    type: PageTransitionType.leftToRight,
-                  ),
-                  (route) => false);
+              navigateToPage(
+                context,
+                const CheckLoggedIn(),
+                removeUntil: true,
+                predicate: (route) => false,
+              );
             },
             color: Colors.orangeAccent),
         SettingsTextButton(

@@ -1,5 +1,6 @@
 import 'package:catchmflixx/constants/styles/gradient.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -20,18 +21,16 @@ class TrailerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        navigateToPage(
             context,
-            PageTransition(
-                child: PlayerScreen(
-                  act: () {},
-                  type: "Trailer",
-                  playLink: playId,
-                  title: title,
-                  details: "TRAILER",
-                  id: playId,
-                ),
-                type: PageTransitionType.leftToRight));
+            PlayerScreen(
+              act: () {},
+              type: "Trailer",
+              playLink: playId,
+              title: title,
+              details: "TRAILER",
+              id: playId,
+            ));
       },
       child: Container(
         margin: const EdgeInsets.only(right: 10),

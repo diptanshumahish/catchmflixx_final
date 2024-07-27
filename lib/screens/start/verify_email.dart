@@ -5,6 +5,7 @@ import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/screens/start/choose_content_screen.dart';
 import 'package:catchmflixx/screens/start/later_verify.dart';
 import 'package:catchmflixx/state/provider.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/CFXModal/custom_modal.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
@@ -80,40 +81,27 @@ class VerifyEmail extends ConsumerWidget {
                             if (res == 200) {
                               await prefs.remove("temp_login_mail");
                               await prefs.remove("temp_login_password");
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  PageTransition(
-                                    child: const ChooseGenresScreen(),
-                                    type: PageTransitionType.rightToLeft,
-                                  ),
-                                  (r) => false);
+                              navigateToPage(
+                                  context, const ChooseGenresScreen(),
+                                  removeUntil: true, predicate: (r) => false);
                             } else {
                               ToastShow.returnToast(translation.notverified);
-
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                  child: CustomModal(
+                              navigateToPage(
+                                  context,
+                                  CustomModal(
                                     detailedMessage:
                                         "We found out that you haven't verified your email address, to watch content you need to verify your account please verify the link sent to your mail (check your spam folder as well). You can still go ahead and check out content and verify later",
                                     mainMessage: "Are you sure?",
                                     primary: "I have verified, retry again",
                                     secondary: "Cancel",
                                     primaryFunction: () {
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: const LaterVerifyScreen(),
-                                              type: PageTransitionType
-                                                  .leftToRight));
+                                      navigateToPage(
+                                          context, const LaterVerifyScreen());
                                     },
                                     secondaryFunction: () {
                                       Navigator.pop(context);
                                     },
-                                  ),
-                                  type: PageTransitionType.fade,
-                                ),
-                              );
+                                  ));
                             }
                           }),
                     ),
@@ -124,11 +112,7 @@ class VerifyEmail extends ConsumerWidget {
                           content: translation.continueToApp,
                           fn: () {
                             ToastShow.returnToast(translation.remToVerify);
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: const BaseMain(),
-                                    type: PageTransitionType.leftToRight));
+                            navigateToPage(context, const BaseMain());
                           }),
                     ),
                   ],

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -80,13 +81,8 @@ class _ChooseGenresScreenState extends State<ChooseGenresScreen> {
               content: "Done",
               icon: Icons.flare_rounded,
               fn: () => {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                            child: const CheckLoggedIn(),
-                            type: PageTransitionType.rightToLeft,
-                            isIos: true),
-                        (r) => false)
+                    navigateToPage(context, const CheckLoggedIn(),
+                        removeUntil: true, predicate: (route) => false)
                   }),
         ),
       ),

@@ -6,6 +6,7 @@ import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/start/later_verify.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/secondary_full_button.dart';
@@ -208,10 +209,9 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                       fn: () async {
                         if (user is LoadedUserLoginResponseState &&
                             user.userLoginResponse.isLoggedIn!) {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              child: PlayerScreen(
+                          navigateToPage(
+                              context,
+                              PlayerScreen(
                                 act: () {
                                   widget.act();
                                 },
@@ -223,10 +223,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                                 details: widget.subTitle,
                                 id: widget.id,
                                 playLink: widget.playId,
-                              ),
-                              type: PageTransitionType.leftToRight,
-                            ),
-                          );
+                              ));
                         } else {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
@@ -234,23 +231,12 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                           if (data != null) {
                             ToastShow.returnToast(
                                 "You have to verify your email to start watching, please verify it from your email");
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                child: const LaterVerifyScreen(),
-                                type: PageTransitionType.leftToRight,
-                              ),
-                            );
+                            navigateToPage(context, const LaterVerifyScreen());
+
                             return;
                           }
                           ToastShow.returnToast(translation.loginToView);
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              child: const OnboardScreen(),
-                              type: PageTransitionType.leftToRight,
-                            ),
-                          );
+                          navigateToPage(context, const OnboardScreen());
                         }
                       }),
                 ),
@@ -261,20 +247,18 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                   FullButton(
                     content: "Resume watching",
                     fn: () {
-                      Navigator.push(
+                      navigateToPage(
                           context,
-                          PageTransition(
-                              child: PlayerScreen(
-                                  title: _cw.data?.subTitle ?? "",
-                                  details: _cw.data?.subDescription ?? "",
-                                  playLink: _cw.data?.url ?? "",
-                                  id: _cw.data?.videoUuid ?? "",
-                                  seekTo: _cw.data?.progress ?? 0,
-                                  type: "series",
-                                  act: () {
-                                    getData();
-                                  }),
-                              type: PageTransitionType.fade));
+                          PlayerScreen(
+                              title: _cw.data?.subTitle ?? "",
+                              details: _cw.data?.subDescription ?? "",
+                              playLink: _cw.data?.url ?? "",
+                              id: _cw.data?.videoUuid ?? "",
+                              seekTo: _cw.data?.progress ?? 0,
+                              type: "series",
+                              act: () {
+                                getData();
+                              }));
                     },
                     icon: PhosphorIconsFill.play,
                   ),

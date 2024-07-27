@@ -3,6 +3,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/search.list.model.dart';
 import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -118,20 +119,14 @@ class _SearchResultsState extends State<SearchResults> {
                             child: GestureDetector(
                               onTap: () {
                                 Vibration.vibrate(amplitude: 30, duration: 50);
-                                Navigator.push(
+                                navigateToPage(
                                   context,
-                                  PageTransition(
-                                    duration: const Duration(milliseconds: 400),
-                                    isIos: true,
-                                    curve: Curves.bounceInOut,
-                                    child: cards[idx].type == "movie"
-                                        ? MovieScreen(
-                                            uuid: cards[idx].uuid ?? "",
-                                          )
-                                        : SeriesScreen(
-                                            uuid: cards[idx].uuid ?? ""),
-                                    type: PageTransitionType.leftToRight,
-                                  ),
+                                  cards[idx].type == "movie"
+                                      ? MovieScreen(
+                                          uuid: cards[idx].uuid ?? "",
+                                        )
+                                      : SeriesScreen(
+                                          uuid: cards[idx].uuid ?? ""),
                                 );
                               },
                               child: Column(

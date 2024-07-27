@@ -3,6 +3,7 @@ import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/state/provider.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
@@ -91,21 +92,19 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
                           _passwordController.text.toString(), context, false);
 
                   if (res == 200) {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                          child: const CheckLoggedIn(),
-                          type: PageTransitionType.rightToLeft,
-                        ),
-                        (r) => false);
+                    navigateToPage(
+                      context,
+                      const CheckLoggedIn(),
+                      removeUntil: true,
+                      predicate: (route) => false,
+                    );
                   } else if (res == 500) {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        PageTransition(
-                          child: const BaseMain(),
-                          type: PageTransitionType.rightToLeft,
-                        ),
-                        (r) => false);
+                    navigateToPage(
+                      context,
+                      const BaseMain(),
+                      removeUntil: true,
+                      predicate: (route) => false,
+                    );
                   }
                 } else {
                   ToastShow.returnToast("Please check all fields");
@@ -120,13 +119,7 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
                 content: translation.changeLanguage,
                 icon: const Icon(Icons.language),
                 fn: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        child: const LanguageScreen(),
-                        type: PageTransitionType.rightToLeft,
-                        isIos: true),
-                  );
+                  navigateToPage(context, const LanguageScreen());
                 }),
             Text.rich(TextSpan(style: TextStyles.smallSubText, children: [
               const TextSpan(

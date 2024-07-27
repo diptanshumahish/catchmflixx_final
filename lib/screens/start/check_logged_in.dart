@@ -7,6 +7,7 @@ import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/start/profile/profile_selection_screen.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
@@ -41,10 +42,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
     if (isNotVerified != null) {
       ToastShow.returnToast(
           "Please verify your previous email from settings to get full access");
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const BaseMain()),
-          (route) => false);
+      navigateToPage(context, const BaseMain(),
+          removeUntil: true, predicate: (route) => false);
     }
   }
 
@@ -127,22 +126,13 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                             delay: Duration(milliseconds: 100))
                                       ],
                                       child: OffsetFullButton(
-                                        content: translation.login,
-                                        icon: Icons.account_circle,
-                                        fn: () => Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            child: const OnboardScreen(
-                                              change: 1,
-                                            ),
-                                            type:
-                                                PageTransitionType.bottomToTop,
-                                            curve: Curves.easeInCubic,
-                                            duration: const Duration(
-                                                milliseconds: 400),
-                                          ),
-                                        ),
-                                      ),
+                                          content: translation.login,
+                                          icon: Icons.account_circle,
+                                          fn: () => navigateToPage(
+                                              context,
+                                              const OnboardScreen(
+                                                change: 1,
+                                              ))),
                                     ),
                                     const SizedBox(
                                       height: 10,
@@ -155,20 +145,11 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                       child: OffsetFullButton(
                                         content: translation.register,
                                         icon: PhosphorIconsBold.personSimpleRun,
-                                        fn: () => Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            child: const OnboardScreen(
+                                        fn: () => navigateToPage(
+                                            context,
+                                            const OnboardScreen(
                                               change: 0,
-                                            ),
-                                            type:
-                                                PageTransitionType.bottomToTop,
-                                            curve: Curves.easeIn,
-                                            opaque: true,
-                                            duration: const Duration(
-                                                milliseconds: 400),
-                                          ),
-                                        ),
+                                            )),
                                       ),
                                     ),
                                     const SizedBox(
@@ -185,12 +166,10 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                           ),
                                           content: translation.tryA,
                                           fn: () {
-                                            Navigator.pushAndRemoveUntil(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        const BaseMain()),
-                                                (route) => false);
+                                            navigateToPage(
+                                                context, const BaseMain(),
+                                                removeUntil: true,
+                                                predicate: (r) => false);
                                           }),
                                     ),
                                     const SizedBox(
@@ -206,14 +185,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                           icon: const Icon(
                                               PhosphorIconsBold.translate),
                                           fn: () {
-                                            Navigator.push(
-                                              context,
-                                              PageTransition(
-                                                  child: const LanguageScreen(),
-                                                  type: PageTransitionType
-                                                      .rightToLeft,
-                                                  isIos: true),
-                                            );
+                                            navigateToPage(context,
+                                                const LanguageScreen());
                                           }),
                                     )
                                   ],
@@ -256,14 +229,10 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                         fn: () async {
                                           ProfileApi pro = ProfileApi();
                                           final res = await pro.fetchProfiles();
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              PageTransition(
-                                                  child: ProfilesSelection(res),
-                                                  type: PageTransitionType
-                                                      .rightToLeft,
-                                                  isIos: true),
-                                              (route) => false);
+                                          navigateToPage(
+                                              context, ProfilesSelection(res),
+                                              removeUntil: true,
+                                              predicate: (route) => false);
                                         },
                                       ),
                                     ),

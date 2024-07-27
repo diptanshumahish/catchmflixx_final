@@ -5,6 +5,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/utils/datetime/format_watched_date.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
@@ -94,21 +95,15 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
                         ],
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                duration: const Duration(milliseconds: 400),
-                                isIos: true,
-                                curve: Curves.bounceInOut,
-                                child: _wl.data?[idx].contentType == "movie"
+                            navigateToPage(
+                                context,
+                                _wl.data?[idx].contentType == "movie"
                                     ? MovieScreen(
                                         uuid: _wl.data?[idx].contentUuid ?? "",
                                       )
                                     : SeriesScreen(
-                                        uuid: _wl.data?[idx].contentUuid ?? ""),
-                                type: PageTransitionType.leftToRight,
-                              ),
-                            );
+                                        uuid:
+                                            _wl.data?[idx].contentUuid ?? ""));
                           },
                           child: Row(
                             mainAxisAlignment: size.width > 540

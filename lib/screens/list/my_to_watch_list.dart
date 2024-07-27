@@ -4,6 +4,7 @@ import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -118,21 +119,14 @@ class _MyToWatchListState extends State<MyToWatchList> {
                         ],
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                duration: const Duration(milliseconds: 400),
-                                isIos: true,
-                                curve: Curves.bounceInOut,
-                                child: _wl.data?[idx].type == "movie"
+                            navigateToPage(
+                                context,
+                                _wl.data?[idx].type == "movie"
                                     ? MovieScreen(
                                         uuid: _wl.data?[idx].uuid ?? "",
                                       )
                                     : SeriesScreen(
-                                        uuid: _wl.data?[idx].uuid ?? ""),
-                                type: PageTransitionType.leftToRight,
-                              ),
-                            );
+                                        uuid: _wl.data?[idx].uuid ?? ""));
                           },
                           child: Row(
                             mainAxisAlignment: size.width > 540

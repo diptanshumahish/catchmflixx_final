@@ -4,6 +4,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/movie/movie.model.dart';
 import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/utils/genres/return_genres.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/cast/cast_render.dart';
 
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
@@ -73,11 +74,7 @@ class _MovieScreenState extends State<MovieScreen> {
                 ),
                 leading: IconButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          PageTransition(
-                              child: const BaseMain(),
-                              type: PageTransitionType.leftToRight));
+                      navigateToPage(context, const BaseMain());
                     },
                     icon: const Icon(
                       Icons.arrow_back,

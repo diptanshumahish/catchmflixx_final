@@ -7,6 +7,7 @@ import 'package:catchmflixx/models/content/search.list.model.dart';
 import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/full_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,11 +73,13 @@ class _TopBarBannerState extends State<TopBarBanner> {
             ),
           ),
           Positioned(
-              top: size.height / 30,
+              top: 10,
               left: size.height / 40,
-              child: SvgPicture.asset(
-                CatchMFlixxImages.textLogo,
-                height: 30,
+              child: SafeArea(
+                child: SvgPicture.asset(
+                  CatchMFlixxImages.textLogo,
+                  height: 30,
+                ),
               )),
           Container(
             decoration: const BoxDecoration(
@@ -130,10 +133,9 @@ class _TopBarBannerState extends State<TopBarBanner> {
                     child: FullButton(
                         content: "Know more",
                         fn: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              child: _cList.results?.data![rand].type == "movie"
+                          navigateToPage(
+                              context,
+                              _cList.results?.data![rand].type == "movie"
                                   ? MovieScreen(
                                       uuid: _cList.results?.data![rand].uuid ??
                                           "",
@@ -141,10 +143,7 @@ class _TopBarBannerState extends State<TopBarBanner> {
                                   : SeriesScreen(
                                       uuid: _cList.results?.data![rand].uuid ??
                                           "",
-                                    ),
-                              type: PageTransitionType.leftToRight,
-                            ),
-                          );
+                                    ));
                         }),
                   ),
                 ],
@@ -152,39 +151,35 @@ class _TopBarBannerState extends State<TopBarBanner> {
             ),
           ),
           Positioned(
-              top: size.height / 29,
+              top: 10,
               right: size.height / 40,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      child: const PaymentsPlansScreen(),
-                      type: PageTransitionType.leftToRight,
-                    ),
-                  );
+                  navigateToPage(context, const PaymentsPlansScreen());
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white38),
-                      borderRadius: BorderRadius.circular(9)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "Subscribe",
-                          style: TextStyles.cardHeading,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.spa,
-                          color: Colors.white,
-                          size: 15,
-                        )
-                      ],
+                child: SafeArea(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white38),
+                        borderRadius: BorderRadius.circular(9)),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Subscribe",
+                            style: TextStyles.cardHeading,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.spa,
+                            color: Colors.white,
+                            size: 15,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/profiles/profile.model.dart';
 import 'package:catchmflixx/models/profiles/profile_creation_sucess.model.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
@@ -221,24 +222,21 @@ class _ProfileManagementState extends ConsumerState<ProfileManagement> {
                                                         padding:
                                                             EdgeInsets.zero,
                                                         onPressed: () {
-                                                          Navigator.push(
+                                                          navigateToPage(
                                                               context,
-                                                              PageTransition(
-                                                                  child: EditProfile(
-                                                                      profileId:
-                                                                          e.uuid ??
-                                                                              "",
-                                                                      avatar:
-                                                                          e.avatar ??
-                                                                              "",
-                                                                      avatarId:
-                                                                          e.avatar_id ??
-                                                                              0,
-                                                                      profileName:
-                                                                          e.name ??
-                                                                              ""),
-                                                                  type: PageTransitionType
-                                                                      .rightToLeft));
+                                                              EditProfile(
+                                                                  profileId:
+                                                                      e.uuid ??
+                                                                          "",
+                                                                  avatar:
+                                                                      e.avatar ??
+                                                                          "",
+                                                                  avatarId:
+                                                                      e.avatar_id ??
+                                                                          0,
+                                                                  profileName:
+                                                                      e.name ??
+                                                                          ""));
                                                         },
                                                         icon:
                                                             const PhosphorIcon(

@@ -2,6 +2,7 @@ import 'package:catchmflixx/constants/styles/gradient.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
@@ -101,10 +102,9 @@ class ContentCard extends ConsumerWidget {
                   onTap: () {
                     if (user is LoadedUserLoginResponseState &&
                         user.userLoginResponse.isLoggedIn!) {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          child: PlayerScreen(
+                      navigateToPage(
+                          context,
+                          PlayerScreen(
                             act: () {},
                             type: "",
                             title: title,
@@ -112,10 +112,7 @@ class ContentCard extends ConsumerWidget {
                             details: subTitle,
                             playLink: playLink,
                             seekTo: progress,
-                          ),
-                          type: PageTransitionType.rightToLeft,
-                        ),
-                      );
+                          ));
                     } else {
                       ToastShow.returnToast("Please login to view content");
                     }

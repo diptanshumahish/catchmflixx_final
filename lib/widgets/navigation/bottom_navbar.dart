@@ -1,7 +1,5 @@
 //✅ translated
-
 import 'dart:ui';
-
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
 import 'package:catchmflixx/widgets/navigation/navbar_content.dart';
