@@ -16,6 +16,10 @@ jobs:
           architecture: x64
       - run: flutter pub get
       
+      # Add a step to set the minimum iOS version in the Podfile
+      - name: Set minimum iOS version
+        run: |
+          sed -i '' 's/platform :ios, '[^']*'/platform :ios, '13.0'/g' ios/Podfile
 
       - run: pod repo update
         working-directory: ios
