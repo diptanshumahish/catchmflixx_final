@@ -3,10 +3,9 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/main/main_screen/settings_screen.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vibration/vibration.dart';
 
 class ProfileTop extends StatelessWidget {
   final String settingsText;
@@ -77,8 +76,8 @@ class ProfileTop extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        Vibration.vibrate(duration: 50);
+                      onTap: () async {
+                        await vibrateTap();
                         navigateToPage(context, const SettingsScreen());
                       },
                       child: const Row(
@@ -105,8 +104,8 @@ class ProfileTop extends StatelessWidget {
                       width: 20,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Vibration.vibrate(duration: 50);
+                      onTap: () async {
+                        await vibrateTap();
                         navigateToPage(context, const ProfileManagement());
                       },
                       child: const Row(

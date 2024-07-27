@@ -2,7 +2,6 @@
 
 import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
@@ -93,14 +92,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ? InfoContainer(
                         data: translation.notVerifiedEM,
                         fn: () {
-                          Navigator.of(context).push(
-                            PageTransition(
-                              child: const LaterVerifyScreen(),
-                              type: PageTransitionType.fade,
-                              duration: const Duration(milliseconds: 600),
-                              curve: Curves.easeInCubic,
-                            ),
-                          );
+                          navigateToPage(context, const LaterVerifyScreen());
                         },
                         action: translation.ver,
                         icon: Icons.verified,
@@ -110,14 +102,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ? InfoContainer(
                         data: translation.notSignIn,
                         fn: () {
-                          Navigator.of(context).push(
-                            PageTransition(
-                              child: const OnboardScreen(),
-                              type: PageTransitionType.leftToRight,
-                              duration: const Duration(milliseconds: 600),
-                              curve: Curves.easeInCubic,
-                            ),
-                          );
+                          navigateToPage(context, const OnboardScreen());
                         },
                         action: translation.loginOrRegister,
                         icon: Icons.person,
@@ -132,13 +117,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subHeading: translation.checkPlans,
                     icon: PhosphorIconsDuotone.money,
                     fn: () {
-                      Navigator.of(context).push(
-                        PageTransition(
-                            child: const PaymentsPlansScreen(),
-                            type: PageTransitionType.rightToLeft,
-                            curve: Curves.bounceOut,
-                            isIos: true),
-                      );
+                      navigateToPage(context, const PaymentsPlansScreen());
                     }),
                 SettingsButton(
                     headingName: translation.profilemanagement,
@@ -147,23 +126,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     fn: () {
                       if (_verificationIssue == false &&
                           _isEntirelyNew == false) {
-                        Navigator.of(context).push(
-                          PageTransition(
-                              child: const ProfileManagement(),
-                              type: PageTransitionType.rightToLeft,
-                              curve: Curves.easeInCubic,
-                              isIos: true),
-                        );
+                        navigateToPage(context, const ProfileManagement());
+
                         return;
                       }
                       if (_isEntirelyNew == true) {
-                        Navigator.of(context).push(
-                          PageTransition(
-                              child: const OnboardScreen(),
-                              type: PageTransitionType.rightToLeft,
-                              curve: Curves.easeIn,
-                              isIos: true),
-                        );
+                        navigateToPage(context, const OnboardScreen());
                       }
                     }),
                 SettingsButton(
@@ -171,26 +139,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subHeading: translation.settingsLangChose,
                     icon: PhosphorIconsDuotone.translate,
                     fn: () {
-                      Navigator.of(context).push(
-                        PageTransition(
-                            child: const LanguageScreen(),
-                            type: PageTransitionType.rightToLeft,
-                            curve: Curves.bounceOut,
-                            isIos: true),
-                      );
+                      navigateToPage(context, const LanguageScreen());
                     }),
                 SettingsButton(
                     headingName: translation.prefferedGenres,
                     subHeading: translation.chooseGenres,
                     icon: PhosphorIconsDuotone.option,
                     fn: () {
-                      Navigator.of(context).push(
-                        PageTransition(
-                            child: const ChooseGenresScreen(),
-                            type: PageTransitionType.rightToLeft,
-                            curve: Curves.bounceOut,
-                            isIos: true),
-                      );
+                      navigateToPage(context, const ChooseGenresScreen());
                     }),
                 const Divider(
                   color: Colors.white30,

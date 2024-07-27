@@ -1,6 +1,6 @@
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
 
 class OffsetSecondaryFullButton extends StatelessWidget {
   final String content;
@@ -66,8 +66,8 @@ class OffsetSecondaryFullButton extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () {
-          Vibration.vibrate(duration: 50);
+        onPressed: () async {
+          await vibrateTap();
           fn();
         });
   }

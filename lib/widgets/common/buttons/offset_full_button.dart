@@ -1,7 +1,6 @@
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:haptic_feedback/haptic_feedback.dart';
-import 'package:vibration/vibration.dart';
 
 class OffsetFullButton extends StatelessWidget {
   final String content;
@@ -77,13 +76,7 @@ class OffsetFullButton extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          final canVibrate = await Haptics.canVibrate();
-          if (canVibrate) {
-            await Haptics.vibrate(HapticsType.soft);
-          } else {
-            Vibration.vibrate(duration: 50);
-          }
-
+          await vibrateTap();
           fn();
         });
   }

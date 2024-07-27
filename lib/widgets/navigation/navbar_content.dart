@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/state/provider.dart';
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vibration/vibration.dart';
 
 class NavbarContent extends ConsumerWidget {
   final IconData icon;
@@ -29,12 +28,7 @@ class NavbarContent extends ConsumerWidget {
     final selectedTab = ref.watch(tabsProvider);
     return GestureDetector(
       onTap: () async {
-        final canVibrate = await Haptics.canVibrate();
-        if (canVibrate) {
-          await Haptics.vibrate(HapticsType.soft);
-        } else {
-          Vibration.vibrate(duration: 50);
-        }
+        await vibrateTap();
 
         onLanguageChange(ref, idx);
       },

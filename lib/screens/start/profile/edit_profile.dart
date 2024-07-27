@@ -5,6 +5,7 @@ import 'package:catchmflixx/models/message/message_model.dart';
 import 'package:catchmflixx/models/profiles/avatar_list.model.dart';
 import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
@@ -12,8 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:vibration/vibration.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final TextEditingController _editNameController = TextEditingController();
@@ -134,8 +133,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         children: (_avatarList.data != null)
                             ? _avatarList.data!.map((e) {
                                 return GestureDetector(
-                                  onTap: () {
-                                    Vibration.vibrate(duration: 50);
+                                  onTap: () async {
+                                    await vibrateTap();
                                     setState(() {
                                       _av = e.avatar!;
                                       _avId = e.id!;

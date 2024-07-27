@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
 import 'package:catchmflixx/utils/player/return_quality.dart';
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/duration_extensions.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/screen_size_extensions.dart';
@@ -17,11 +18,9 @@ import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/widget_bottombar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:http/http.dart' as http;
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vibration/vibration.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -219,8 +218,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     return VideoControls(
       controller: controller,
       showControls: showMenu,
-      onPlayButtonTap: () {
-        Vibration.vibrate(duration: 30);
+      onPlayButtonTap: () async {
+        await vibrateTap();
         togglePlay();
       },
     );

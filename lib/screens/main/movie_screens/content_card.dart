@@ -7,7 +7,6 @@ import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class ContentCard extends ConsumerWidget {

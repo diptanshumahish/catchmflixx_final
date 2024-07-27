@@ -4,15 +4,14 @@ import 'package:catchmflixx/models/content/search.list.model.dart';
 import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:async';
 
-import 'package:page_transition/page_transition.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:vibration/vibration.dart';
 
 ContentList _contentList = ContentList(count: 0);
 bool _searching = true;
@@ -117,8 +116,8 @@ class _SearchResultsState extends State<SearchResults> {
                                   delay: Duration(milliseconds: (idx) * 50))
                             ],
                             child: GestureDetector(
-                              onTap: () {
-                                Vibration.vibrate(amplitude: 30, duration: 50);
+                              onTap: () async {
+                                await vibrateTap();
                                 navigateToPage(
                                   context,
                                   cards[idx].type == "movie"
