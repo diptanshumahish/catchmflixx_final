@@ -51,11 +51,6 @@ class _BaseMainState extends ConsumerState<BaseMain> {
             },
             child: screens[activeIndex.tab]),
         extendBody: true,
-        bottomNavigationBar: SizedBox(
-          child: Padding(
-            padding: EdgeInsets.all(size.height / 50),
-            child: const BottomNavbar(),
-          ),
-        ));
+        bottomNavigationBar: const BottomNavbar());
   }
 }

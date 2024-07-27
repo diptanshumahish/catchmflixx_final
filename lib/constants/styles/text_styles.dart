@@ -8,12 +8,14 @@ abstract class TextStyles {
       height: 1.1,
       fontSize: 26,
       color: Colors.white,
+      fontFamily: "Kollektif",
       fontWeight: FontWeight.w700);
 
   static const headingMobileSmallScreens = TextStyle(
       height: 1.1,
       fontSize: 26 - _smallScreenAdjustment,
       color: Colors.white,
+      fontFamily: "Kollektif",
       fontWeight: FontWeight.w700);
 
   static const detailsMobile = TextStyle(
@@ -23,8 +25,11 @@ abstract class TextStyles {
   );
   static const formSubTitle = TextStyle(
       fontSize: _baseFontSize, color: Colors.white, fontFamily: "Kollektif");
-  static const formSubTitleForSmallerScreens =
-      TextStyle(fontSize: _baseFontSize - 1, color: Colors.white);
+  static const formSubTitleForSmallerScreens = TextStyle(
+    fontSize: _baseFontSize - 1,
+    color: Colors.white,
+    fontFamily: "Kollektif",
+  );
 
   static const textInputText = TextStyle(
     fontSize: _baseFontSize,
@@ -52,6 +57,7 @@ abstract class TextStyles {
       fontSize: 24,
       color: Colors.white,
       height: 1.2,
+      fontFamily: "Kollektif",
       fontWeight: FontWeight.w600);
 
   static const headingsSecondaryMobileForSmallerScreens = TextStyle(
@@ -72,11 +78,19 @@ abstract class TextStyles {
   static const headingsForSectionsForSmallerScreens = TextStyle(
       fontSize: 20 - _smallScreenAdjustment,
       color: Colors.white,
+      fontFamily: "Kollektif",
       fontWeight: FontWeight.w600);
 
-  static const smallSubText = TextStyle(fontSize: 12, color: Colors.white54);
-  static const smallSubTextActive =
-      TextStyle(fontSize: 12, color: Colors.white);
+  static const smallSubText = TextStyle(
+    fontSize: 12,
+    color: Colors.white54,
+    fontFamily: "Kollektif",
+  );
+  static const smallSubTextActive = TextStyle(
+    fontSize: 12,
+    color: Colors.white,
+    fontFamily: "Kollektif",
+  );
 
   static const cardHeading = TextStyle(
     fontSize: 14,
@@ -94,8 +108,10 @@ abstract class TextStyles {
   );
 
   static const cardHeadingForSmallerScreens = TextStyle(
-      fontSize: 14 - _smallScreenAdjustment,
-      color: Colors.white,
-      height: 1.2,
-      fontWeight: FontWeight.w500);
+    fontSize: 14 - _smallScreenAdjustment,
+    color: Colors.white,
+    height: 1.2,
+    fontWeight: FontWeight.w500,
+    fontFamily: "Kollektif",
+  );
 }
