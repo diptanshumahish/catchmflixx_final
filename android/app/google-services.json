@@ -1,29 +1,29 @@
 {
-  "project_info": {
-    "project_number": "1069539956036",
-    "project_id": "catchmflixxapp",
-    "storage_bucket": "catchmflixxapp.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1069539956036:android:7a87bdd547b18301c67311",
-        "android_client_info": {
-          "package_name": "com.catchmflixx.catchmflixxapp"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
+    "project_info": {
+        "project_number": "1069539956036",
+        "project_id": "catchmflixxapp",
+        "storage_bucket": "catchmflixxapp.appspot.com"
+    },
+    "client": [
         {
-          "current_key": "AIzaSyDcG4Ox_Q7d6e3hNR2aacy6K2Wtl_z9Rfw"
+            "client_info": {
+                "mobilesdk_app_id": "1:1069539956036:android:7a87bdd547b18301c67311",
+                "android_client_info": {
+                    "package_name": "com.catchmflixx.catchmflixxappapp"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyDcG4Ox_Q7d6e3hNR2aacy6K2Wtl_z9Rfw"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
+            }
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    ],
+    "configuration_version": "1"
 }

@@ -1,11 +1,15 @@
-/// The data of the m3u8 file
 class M3U8Data {
-  /// The quality of the video
   final String? dataQuality;
-
-  /// The video's url
   final String? dataURL;
+  final List<AudioTrack> audioTracks;
 
-  /// Constructor
-  M3U8Data({this.dataURL, this.dataQuality});
+  M3U8Data({this.dataQuality, this.dataURL, this.audioTracks = const []});
+}
+
+class AudioTrack {
+  final String language;
+  final String name;
+  final String url;
+
+  AudioTrack({required this.language, required this.name, required this.url});
 }

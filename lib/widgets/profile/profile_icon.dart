@@ -18,171 +18,166 @@ class ProfileIcon extends StatelessWidget {
   final bool isProtected;
   final bool isAdult;
   final String hash;
-
-  const ProfileIcon({
-    super.key,
-    required this.uniqueId,
-    required this.isAdult,
-    required this.isProtected,
-    required this.hash,
-    required this.avatar,
-    required this.profileName,
-  });
+  const ProfileIcon(
+      {super.key,
+      required this.uniqueId,
+      required this.isAdult,
+      required this.isProtected,
+      required this.hash,
+      required this.avatar,
+      required this.profileName});
 
   @override
   Widget build(BuildContext context) {
     final translation = AppLocalizations.of(context)!;
 
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
-      onTap: () => _handleProfileTap(context, translation),
+      borderRadius: BorderRadius.circular(5),
+      onTap: () async {
+        ProfileApi pro = ProfileApi();
+        if (isProtected == false) {
+          var res = await pro.useProfileLogin(hash, "");
+          if (res.success!) {
+            ToastShow.returnToast("${translation.welcomeBack} $profileName");
+            Navigator.pushAndRemoveUntil(
+                context,
+                PageTransition(
+                    child: const BaseMain(),
+                    type: PageTransitionType.rightToLeft,
+                    isIos: true),
+                (route) => false);
+          } else {
+            ToastShow.returnToast(translation.wrongPin);
+          }
+        } else {
+          showDialog(
+              context: context,
+              builder: (BuildContext dialogContext) => AlertDialog(
+                    backgroundColor: Colors.black,
+                    title: Text(
+                      translation.enterYourPin,
+                      style: MediaQuery.of(context).size.height > 840
+                          ? TextStyles.headingsForSections
+                          : TextStyles.headingsForSectionsForSmallerScreens,
+                      textAlign: TextAlign.center,
+                    ),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        OtpTextField(
+                          showFieldAsBox: true,
+                          obscureText: true,
+                          clearText: true,
+                          autoFocus: true,
+                          onSubmit: (String val) async {
+                            if (val.length == 4) {
+                              ProfileLoginResponse res =
+                                  await pro.useProfileLogin(hash, val);
+
+                              if (res.success!) {
+                                Navigator.pop(dialogContext);
+                                ToastShow.returnToast(translation.welcomeBack);
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    PageTransition(
+                                        child: const BaseMain(),
+                                        type: PageTransitionType.rightToLeft,
+                                        isIos: true),
+                                    (route) => false);
+                              } else {
+                                ToastShow.returnToast(translation.wrongPin);
+                              }
+                            }
+                          },
+                          styles: const [
+                            TextStyles.headingsSecondaryMobile,
+                            TextStyles.headingsSecondaryMobile,
+                            TextStyles.headingsSecondaryMobile,
+                            TextStyles.headingsSecondaryMobile
+                          ],
+                          numberOfFields: 4,
+                          borderColor: Colors.black38,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        CupertinoButton(
+                            child: Text(
+                              translation.forgotPassword,
+                              style: TextStyles.formSubTitle,
+                            ),
+                            onPressed: () {}),
+                      ],
+                    ),
+                  ));
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Row(
           children: [
-            _buildProfileImage(),
-            const SizedBox(width: 20),
-            _buildProfileInfo(context, translation),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(90),
-      child: CachedNetworkImage(
-        imageUrl: avatar ?? '',
-        height: 90,
-        width: 90,
-        fit: BoxFit.cover,
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            const Padding(
-          padding: EdgeInsets.all(20.0),
-          child: CupertinoActivityIndicator(
-            color: Colors.white,
-            radius: 8,
-          ),
-        ),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
-      ),
-    );
-  }
-
-  Widget _buildProfileInfo(BuildContext context, AppLocalizations translation) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          profileName,
-          style: MediaQuery.of(context).size.height > 840
-              ? TextStyles.headingsSecondaryMobile
-              : TextStyles.headingsSecondaryMobileForSmallerScreens,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Row(
-          children: [
-            Icon(
-              isProtected
-                  ? PhosphorIconsFill.lockSimple
-                  : PhosphorIconsRegular.lockSimpleOpen,
-              color: Colors.white54,
-              size: 12,
+            ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: CachedNetworkImage(
+                  imageUrl: avatar!,
+                  height: 90,
+                  width: 90,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      const Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: CupertinoActivityIndicator(
+                      color: Colors.white,
+                      radius: 8,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                )),
+            const SizedBox(
+              width: 20,
             ),
-            const SizedBox(width: 5),
-            Text(
-              isAdult ? translation.adult : translation.kids,
-              style: TextStyles.smallSubText,
-            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  profileName,
+                  style: MediaQuery.of(context).size.height > 840
+                      ? TextStyles.headingsSecondaryMobile
+                      : TextStyles.headingsSecondaryMobileForSmallerScreens,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    isProtected
+                        ? const Icon(
+                            PhosphorIconsFill.lockSimple,
+                            color: Colors.white54,
+                            size: 12,
+                          )
+                        : const Icon(
+                            PhosphorIconsRegular.lockSimpleOpen,
+                            color: Colors.white54,
+                            size: 12,
+                          ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      isAdult ? translation.adult : translation.kids,
+                      style: TextStyles.smallSubText,
+                    ),
+                  ],
+                ),
+              ],
+            )
           ],
         ),
-      ],
-    );
-  }
-
-  Future<void> _handleProfileTap(
-      BuildContext context, AppLocalizations translation) async {
-    if (isProtected) {
-      _showPinDialog(context, translation);
-    } else {
-      await _loginProfile(context, translation, "");
-    }
-  }
-
-  Future<void> _loginProfile(
-      BuildContext context, AppLocalizations translation, String pin) async {
-    final ProfileApi profileApi = ProfileApi();
-    final res = await profileApi.useProfileLogin(hash, pin);
-
-    if (res.success!) {
-      ToastShow.returnToast("${translation.welcomeBack} $profileName");
-      Navigator.pushAndRemoveUntil(
-        context,
-        PageTransition(
-          child: const BaseMain(),
-          type: PageTransitionType.rightToLeft,
-        ),
-        (route) => false,
-      );
-    } else {
-      ToastShow.returnToast(translation.wrongPin);
-    }
-  }
-
-  void _showPinDialog(BuildContext context, AppLocalizations translation) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) => AlertDialog(
-        backgroundColor: Colors.black,
-        title: Text(
-          translation.enterYourPin,
-          style: MediaQuery.of(context).size.height > 840
-              ? TextStyles.headingsForSections
-              : TextStyles.headingsForSectionsForSmallerScreens,
-          textAlign: TextAlign.center,
-        ),
-        content: _buildPinInput(context, translation),
       ),
-    );
-  }
-
-  Widget _buildPinInput(BuildContext context, AppLocalizations translation) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 5),
-        OtpTextField(
-          keyboardType: TextInputType.number,
-          showFieldAsBox: true,
-          obscureText: true,
-          clearText: true,
-          autoFocus: true,
-          onSubmit: (String pin) async {
-            if (pin.length == 4) {
-              await _loginProfile(context, translation, pin);
-              Navigator.pop(context);
-            }
-          },
-          styles: const [
-            TextStyles.headingsSecondaryMobile,
-            TextStyles.headingsSecondaryMobile,
-            TextStyles.headingsSecondaryMobile,
-            TextStyles.headingsSecondaryMobile,
-          ],
-          numberOfFields: 4,
-          borderColor: Colors.black38,
-        ),
-        const SizedBox(height: 5),
-        CupertinoButton(
-          child: Text(
-            translation.forgotPassword,
-            style: TextStyles.formSubTitle,
-          ),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }

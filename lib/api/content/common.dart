@@ -2,6 +2,7 @@ import 'package:catchmflixx/api/common/network.dart';
 import 'package:catchmflixx/models/cast/cast.model.dart';
 import 'package:catchmflixx/models/content/movie/movie.model.dart';
 import 'package:catchmflixx/models/content/search.list.model.dart';
+import 'package:catchmflixx/models/content/series/continue.watching.model.dart';
 import 'package:catchmflixx/models/content/series/episodes.model.dart';
 import 'package:catchmflixx/models/content/series/seasons.model.dart';
 import 'package:catchmflixx/models/language/lang.model.dart';
@@ -53,6 +54,13 @@ class ContentManager {
     return await networkManager.makeRequest<LanguageModel>(
       "$path/languages/$uuid",
       (data) => LanguageModel.fromJson(data),
+    );
+  }
+
+  Future<CurrentWatching> continueWatching(String uuid) async {
+    return await networkManager.makeRequest<CurrentWatching>(
+      "$path/continue-watching/$uuid",
+      (data) => CurrentWatching.fromJson(data),
     );
   }
 }

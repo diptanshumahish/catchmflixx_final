@@ -1,5 +1,7 @@
+import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
+import 'package:catchmflixx/models/content/series/continue.watching.model.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/start/later_verify.dart';
 import 'package:catchmflixx/state/provider.dart';
@@ -21,6 +23,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool _added = false;
+CurrentWatching _cw = CurrentWatching(success: false);
 
 class MovieTopBar extends ConsumerStatefulWidget {
   final String imgLink;
@@ -59,10 +62,22 @@ class MovieTopBar extends ConsumerStatefulWidget {
 class _MovieTopBarState extends ConsumerState<MovieTopBar> {
   @override
   void initState() {
+    getData();
     setState(() {
       _added = widget.addList;
     });
     super.initState();
+  }
+
+  getData() async {
+    ContentManager ct = ContentManager();
+
+    final dat = await ct.continueWatching(widget.id);
+    if (dat.success == true) {
+      setState(() {
+        _cw = dat;
+      });
+    }
   }
 
   @override
@@ -184,7 +199,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                     FadeEffect(delay: Duration(milliseconds: 600))
                   ],
                   child: FullButton(
-                      icon: PhosphorIconsFill.play,
+                      icon: PhosphorIconsFill.video,
                       content: widget.type == "series"
                           ? "Watch trailer"
                           : (progressSeconds > 0)
@@ -240,8 +255,33 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                       }),
                 ),
                 const SizedBox(
-                  height: 15,
+                  height: 5,
                 ),
+                if (_cw.success == true && widget.type == "series")
+                  FullButton(
+                    content: "Resume watching",
+                    fn: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              child: PlayerScreen(
+                                  title: _cw.data?.subTitle ?? "",
+                                  details: _cw.data?.subDescription ?? "",
+                                  playLink: _cw.data?.url ?? "",
+                                  id: _cw.data?.videoUuid ?? "",
+                                  seekTo: _cw.data?.progress ?? 0,
+                                  type: "series",
+                                  act: () {
+                                    getData();
+                                  }),
+                              type: PageTransitionType.fade));
+                    },
+                    icon: PhosphorIconsFill.play,
+                  ),
+                if (_cw.success == true && widget.type == "series")
+                  const SizedBox(
+                    height: 5,
+                  ),
                 Animate(
                   effects: const [
                     FadeEffect(delay: Duration(milliseconds: 700))

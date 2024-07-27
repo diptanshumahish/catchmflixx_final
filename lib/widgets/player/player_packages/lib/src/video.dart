@@ -544,124 +544,108 @@ class _YoYoPlayerState extends State<YoYoPlayer>
   }
 
   Future<M3U8s?> m3u8Video(String? videoUrl) async {
-    yoyo.add(M3U8Data(dataQuality: "Auto", dataURL: videoUrl));
-
-    // RegExp regExpAudio = RegExp(
-    //   RegexResponse.regexMEDIA,
-    //   caseSensitive: false,
-    //   multiLine: true,
-    // );
-    RegExp regExp = RegExp(
-      RegexResponse.regexM3U8Resolution,
-      caseSensitive: false,
-      multiLine: true,
-    );
-
-    if (m3u8Content != null) {
-      setState(() {
-        print("--- HLS Old Data ----\n$m3u8Content");
-        m3u8Content = null;
-      });
-    }
-
     if (m3u8Content == null && videoUrl != null) {
       http.Response response =
           await http.get(Uri.parse(videoUrl), headers: widget.headers);
       if (response.statusCode == 200) {
         m3u8Content = utf8.decode(response.bodyBytes);
 
-        List<File> cachedFiles = [];
-        int index = 0;
+        print("--- HLS Data ----\n$m3u8Content");
 
-        List<RegExpMatch> matches =
-            regExp.allMatches(m3u8Content ?? '').toList();
-        // List<RegExpMatch> audioMatches =
-        //     regExpAudio.allMatches(m3u8Content ?? '').toList();
-        print(
-            "--- HLS Data ----\n$m3u8Content \nTotal length: ${yoyo.length} \nFinish!!!");
+        List<M3U8Data> videoTracks = [];
 
-        for (RegExpMatch regExpMatch in matches) {
-          String quality = (regExpMatch.group(1)).toString();
-          String sourceURL = (regExpMatch.group(3)).toString();
-          final netRegex = RegExp(RegexResponse.regexHTTP);
-          final netRegex2 = RegExp(RegexResponse.regexURL);
-          final isNetwork = netRegex.hasMatch(sourceURL);
-          final match = netRegex2.firstMatch(videoUrl);
-          String url;
-          if (isNetwork) {
-            url = sourceURL;
-          } else {
-            print(
-                'Match: ${match?.pattern} --- ${match?.groupNames} --- ${match?.input}');
-            final dataURL = match?.group(0);
-            url = "$dataURL$sourceURL";
-            print("--- HLS child url integration ---\nChild url :$url");
-          }
-          for (RegExpMatch regExpMatch2 in matches) {
-            String audioURL = (regExpMatch2.group(1)).toString();
-            final isNetwork = netRegex.hasMatch(audioURL);
-            final match = netRegex2.firstMatch(videoUrl);
-            String auURL = audioURL;
+        // Split the content into lines
+        List<String> lines = m3u8Content!.split('\n');
+        String currentBandwidth = '';
+        String currentResolution = '';
+        String currentUri = '';
 
-            if (!isNetwork) {
+        for (int i = 0; i < lines.length; i++) {
+          String line = lines[i].trim();
+
+          // Check for video tracks
+          if (line.startsWith('#EXT-X-STREAM-INF')) {
+            Map<String, String> attributes = parseAttributes(line);
+            currentResolution = attributes['RESOLUTION'] ?? '';
+            currentBandwidth = attributes['BANDWIDTH'] ?? '';
+
+            // The next line should be the URI
+            if (i + 1 < lines.length) {
+              currentUri = lines[i + 1].trim();
+              if (!currentUri.startsWith('http')) {
+                currentUri = resolveUrl(videoUrl, currentUri);
+              }
+
+              // Fetch and parse the quality-specific m3u8 file
+              List<AudioTrack> audioTracks =
+                  await fetchAudioTracksFromQualityM3U8(currentUri);
+
               print(
-                  'Match: ${match?.pattern} --- ${match?.groupNames} --- ${match?.input}');
-              final auDataURL = match!.group(0);
-              auURL = "$auDataURL$audioURL";
-              print("Url network audio  $url $audioURL");
-            }
-
-            audioList.add(AudioModel(url: auURL));
-            print(audioURL);
-          }
-
-          String audio = "";
-          print("-- Audio ---\nAudio list length: ${audio.length}");
-          if (audioList.isNotEmpty) {
-            audio =
-                """#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="audio-medium",NAME="audio",AUTOSELECT=YES,DEFAULT=YES,CHANNELS="2",
-                  URI="${audioList.last.url}"\n""";
-          } else {
-            audio = "";
-          }
-
-          if (widget.allowCacheFile) {
-            try {
-              var file = await FileUtils.cacheFileUsingWriteAsString(
-                contents:
-                    """#EXTM3U\n#EXT-X-INDEPENDENT-SEGMENTS\n$audio#EXT-X-STREAM-INF:CLOSED-CAPTIONS=NONE,BANDWIDTH=1469712,
-                  RESOLUTION=$quality,FRAME-RATE=30.000\n$url""",
-                quality: quality,
-                videoUrl: url,
-              );
-
-              cachedFiles.add(file);
-
-              if (index < matches.length) {
-                index++;
-              }
-
-              if (widget.allowCacheFile && index == matches.length) {
-                widget.onCacheFileCompleted
-                    ?.call(cachedFiles.isEmpty ? null : cachedFiles);
-              }
-            } catch (e) {
-              print("Couldn't write file: $e");
-              widget.onCacheFileFailed?.call(e);
+                  "Video track found: Resolution=$currentResolution, Bandwidth=$currentBandwidth, URI=$currentUri");
+              videoTracks.add(M3U8Data(
+                  dataQuality: currentResolution,
+                  dataURL: currentUri,
+                  audioTracks: audioTracks));
             }
           }
-
-          yoyo.add(M3U8Data(dataQuality: quality, dataURL: url));
         }
+
+        yoyo = videoTracks;
+
         M3U8s m3u8s = M3U8s(m3u8s: yoyo);
 
-        print(
-            "--- m3u8 File write --- ${yoyo.map((e) => e.dataQuality == e.dataURL).toList()} --- length : ${yoyo.length} --- Success");
+        print("Total M3U8 entries: ${yoyo.length}");
+        for (var track in yoyo) {
+          print(
+              "Quality: ${track.dataQuality}, Audio tracks: ${track.audioTracks.length}");
+          for (var audio in track.audioTracks) {
+            print(" - Language: ${audio.language}, Name: ${audio.name}");
+          }
+        }
+
         return m3u8s;
       }
     }
 
     return null;
+  }
+
+  Future<List<AudioTrack>> fetchAudioTracksFromQualityM3U8(String url) async {
+    List<AudioTrack> audioTracks = [];
+    http.Response response =
+        await http.get(Uri.parse(url), headers: widget.headers);
+    if (response.statusCode == 200) {
+      String content = utf8.decode(response.bodyBytes);
+      List<String> lines = content.split('\n');
+
+      for (String line in lines) {
+        if (line.contains('#EXT-X-MEDIA:TYPE=AUDIO')) {
+          Map<String, String> attributes = parseAttributes(line);
+          String language = attributes['LANGUAGE'] ?? '';
+          String name = attributes['NAME'] ?? '';
+
+          audioTracks.add(AudioTrack(language: language, name: name, url: ''));
+        }
+      }
+    }
+    return audioTracks;
+  }
+
+  Map<String, String> parseAttributes(String line) {
+    Map<String, String> attributes = {};
+    RegExp attributeRegex = RegExp(r'(\w+)=("([^"]*)"|[^,]*)');
+    Iterable<RegExpMatch> matches = attributeRegex.allMatches(line);
+    for (var match in matches) {
+      String key = match.group(1)!;
+      String value = match.group(3) ?? match.group(2)!;
+      attributes[key] = value.replaceAll('"', '');
+    }
+    return attributes;
+  }
+
+  String resolveUrl(String base, String relative) {
+    Uri baseUri = Uri.parse(base);
+    return baseUri.resolve(relative).toString();
   }
 
 // Init video controller

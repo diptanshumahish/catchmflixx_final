@@ -111,6 +111,7 @@ class ContentCard extends ConsumerWidget {
                             id: fullDetailsId,
                             details: subTitle,
                             playLink: playLink,
+                            seekTo: progress,
                           ),
                           type: PageTransitionType.rightToLeft,
                         ),
