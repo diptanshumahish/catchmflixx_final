@@ -60,6 +60,7 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
           backgroundColor: Colors.black,
           body: SafeArea(
             bottom: true,
+            top: false,
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(

@@ -44,10 +44,10 @@ class _BottomNavbarState extends State<BottomNavbar> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
             child: Container(
-              height: 70,
+              height: Platform.isIOS ? 100 : 70,
               decoration: BoxDecoration(
                   color: Platform.isIOS
-                      ? Color.fromARGB(213, 29, 28, 28)
+                      ? const Color.fromARGB(221, 29, 28, 28)
                       : const Color.fromARGB(108, 40, 41, 43),
                   border: Border.all(
                       color: Platform.isIOS
@@ -55,25 +55,28 @@ class _BottomNavbarState extends State<BottomNavbar> {
                           : const Color.fromARGB(52, 255, 255, 255)),
                   borderRadius: BorderRadius.circular(8)),
               child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    NavbarContent(
-                      icon: PhosphorIconsDuotone.house,
-                      name: translation.navHome,
-                      idx: 0,
-                    ),
-                    NavbarContent(
-                        icon: PhosphorIconsDuotone.magnifyingGlass,
-                        name: translation.navDiscover,
-                        idx: 1),
-                    NavbarContent(
-                        icon: PhosphorIconsDuotone.userCircle,
-                        image: _currentProfile.avatar ??
-                            "https://img.playbook.com/Axh_gEkgZbsvB1VDuXm4GNvbjXXu2RUUqwToXJEJ8ZQ/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzM5NTk3ODYx/LWQ1MzItNDZmMC1i/ZDhmLTQ2NjRiYjcz/NjZmMQ",
-                        name: _currentProfile.name ?? "user",
-                        idx: 2)
-                  ],
+                child: SafeArea(
+                  bottom: Platform.isIOS ? true : false,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      NavbarContent(
+                        icon: PhosphorIconsDuotone.house,
+                        name: translation.navHome,
+                        idx: 0,
+                      ),
+                      NavbarContent(
+                          icon: PhosphorIconsDuotone.magnifyingGlass,
+                          name: translation.navDiscover,
+                          idx: 1),
+                      NavbarContent(
+                          icon: PhosphorIconsDuotone.userCircle,
+                          image: _currentProfile.avatar ??
+                              "https://img.playbook.com/Axh_gEkgZbsvB1VDuXm4GNvbjXXu2RUUqwToXJEJ8ZQ/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzM5NTk3ODYx/LWQ1MzItNDZmMC1i/ZDhmLTQ2NjRiYjcz/NjZmMQ",
+                          name: _currentProfile.name ?? "user",
+                          idx: 2)
+                    ],
+                  ),
                 ),
               ),
             ),
