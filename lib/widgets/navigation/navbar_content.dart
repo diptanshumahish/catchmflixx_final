@@ -3,6 +3,7 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:vibration/vibration.dart';
 
@@ -27,8 +28,14 @@ class NavbarContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedTab = ref.watch(tabsProvider);
     return GestureDetector(
-      onTap: () {
-        Vibration.vibrate(duration: 40, amplitude: 20);
+      onTap: () async {
+        final canVibrate = await Haptics.canVibrate();
+        if (canVibrate) {
+          await Haptics.vibrate(HapticsType.soft);
+        } else {
+          Vibration.vibrate(duration: 50);
+        }
+
         onLanguageChange(ref, idx);
       },
       child: Column(

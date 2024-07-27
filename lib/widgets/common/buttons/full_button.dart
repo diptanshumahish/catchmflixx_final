@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:vibration/vibration.dart';
 
 class FullButton extends StatelessWidget {
@@ -61,8 +62,14 @@ class FullButton extends StatelessWidget {
                   ),
           ),
         ),
-        onPressed: () {
-          Vibration.vibrate(duration: 15);
+        onPressed: () async {
+          final canVibrate = await Haptics.canVibrate();
+
+          if (canVibrate) {
+            await Haptics.vibrate(HapticsType.soft);
+          } else {
+            Vibration.vibrate(duration: 50);
+          }
           fn();
         });
   }
