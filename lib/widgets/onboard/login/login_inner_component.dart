@@ -9,11 +9,11 @@ import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
+import 'package:catchmflixx/widgets/onboard/forgot/forgot_password.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -114,7 +114,9 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
             OffsetSecondaryFullButton(
                 content: translation.forgotPassword,
                 icon: const Icon(Icons.question_mark),
-                fn: () {}),
+                fn: () {
+                  navigateToPage(context, const ForgotPasswordScreen());
+                }),
             OffsetSecondaryFullButton(
                 content: translation.changeLanguage,
                 icon: const Icon(Icons.language),

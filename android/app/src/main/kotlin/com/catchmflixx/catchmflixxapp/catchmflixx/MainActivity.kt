@@ -1,5 +1,5 @@
-package com.catchmflixx.catchmflixxappapp
+package com.catchmflixx.catchmflixxapp
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity: FlutterActivity()
+class MainActivity : FlutterActivity()
