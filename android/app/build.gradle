@@ -7,6 +7,16 @@ plugins {
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
 }
+dependencies {
+
+  // Import the Firebase BoM
+
+  implementation platform('com.google.firebase:firebase-bom:33.1.2')
+
+
+}
+
+
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")

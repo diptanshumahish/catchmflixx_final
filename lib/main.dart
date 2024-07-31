@@ -3,6 +3,7 @@ import 'package:catchmflixx/firebase_options.dart';
 import 'package:catchmflixx/screens/start/splash_screen.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/theme/theme_catchmflixx.dart';
+import 'package:catchmflixx/utils/firebase/firebase_api.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
   await ScreenProtector.protectDataLeakageOn();
   if (Platform.isIOS) {
     await ScreenProtector.protectDataLeakageWithColor(Colors.black);
