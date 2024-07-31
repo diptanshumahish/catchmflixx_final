@@ -64,6 +64,10 @@ class ForgotPasswordScreen extends StatelessWidget {
                     OffsetFullButton(
                         content: "Send reset link",
                         fn: () async {
+                          if (_emailController.text.isEmpty) {
+                            ToastShow.returnToast("No email");
+                            return;
+                          }
                           ResetPassword rs = ResetPassword();
                           final res =
                               await rs.addResetSent(_emailController.text);
