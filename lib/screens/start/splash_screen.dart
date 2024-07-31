@@ -1,14 +1,14 @@
 import 'dart:async';
-
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
+import 'package:catchmflixx/screens/version/version_screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/version/version_check.dart';
 import 'package:catchmflixx/widgets/common/loader_spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,8 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Timer(const Duration(seconds: 4), () {
-      navigateToPage(context, const CheckLoggedIn(),
-          removeUntil: true, predicate: (r) => false);
+      checkData();
     });
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
@@ -32,6 +31,19 @@ class _SplashScreenState extends State<SplashScreen> {
         _loading = false;
       });
     });
+  }
+
+  checkData() async {
+    final data = await isVersionUpToDate();
+    if (data == true) {
+      navigateToPage(context, const CheckLoggedIn(),
+          removeUntil: true, predicate: (r) => false);
+    } else {
+      navigateToPage(
+        context,
+        const VersionScreen(),
+      );
+    }
   }
 
   @override

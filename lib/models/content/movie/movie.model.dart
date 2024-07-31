@@ -28,6 +28,8 @@ class Data {
   String? censor;
   String? releaseDate;
   Videos? videos;
+  bool? userRented;
+  bool? free;
 
   Data(
       {this.uuid,
@@ -37,7 +39,9 @@ class Data {
       this.contentmeta,
       this.censor,
       this.releaseDate,
-      this.videos});
+      this.videos,
+      this.userRented,
+      this.free});
 
   Data.fromJson(Map<String, dynamic> json) {
     uuid = json['uuid'];
@@ -55,6 +59,8 @@ class Data {
     censor = json['censor'];
     releaseDate = json['release_date'];
     videos = json['videos'] != null ? Videos.fromJson(json['videos']) : null;
+    userRented = json['user_rented'];
+    free = json['free'];
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +79,8 @@ class Data {
     if (videos != null) {
       data['videos'] = videos!.toJson();
     }
+    data['user_rented'] = userRented;
+    data['free'] = free;
     return data;
   }
 }

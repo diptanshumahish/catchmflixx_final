@@ -150,40 +150,40 @@ class _TopBarBannerState extends State<TopBarBanner> {
               ),
             ),
           ),
-          Positioned(
-              top: 10,
-              right: size.height / 40,
-              child: GestureDetector(
-                onTap: () {
-                  navigateToPage(context, const PaymentsPlansScreen());
-                },
-                child: SafeArea(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white38),
-                        borderRadius: BorderRadius.circular(9)),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Subscribe",
-                            style: TextStyles.cardHeading,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.spa,
-                            color: Colors.white,
-                            size: 15,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )),
+          // Positioned(
+          //     top: 10,
+          //     right: size.height / 40,
+          //     child: GestureDetector(
+          //       onTap: () {
+          //         navigateToPage(context, const PaymentsPlansScreen());
+          //       },
+          //       child: SafeArea(
+          //         child: Container(
+          //           decoration: BoxDecoration(
+          //               border: Border.all(color: Colors.white38),
+          //               borderRadius: BorderRadius.circular(9)),
+          //           child: const Padding(
+          //             padding: EdgeInsets.all(8.0),
+          //             child: Row(
+          //               children: [
+          //                 Text(
+          //                   "Subscribe",
+          //                   style: TextStyles.cardHeading,
+          //                 ),
+          //                 SizedBox(
+          //                   width: 5,
+          //                 ),
+          //                 Icon(
+          //                   Icons.spa,
+          //                   color: Colors.white,
+          //                   size: 15,
+          //                 )
+          //               ],
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     )),
         ],
       ));
     } else {

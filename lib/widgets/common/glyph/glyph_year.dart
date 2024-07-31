@@ -20,7 +20,7 @@ class GlyphYear extends StatelessWidget {
           width: 5,
         ),
         Text(
-          year,
+          year.split("-")[0].toString(),
           style: const TextStyle(
               color: Colors.white70, fontWeight: FontWeight.w500, fontSize: 14),
         )

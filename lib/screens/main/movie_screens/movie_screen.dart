@@ -85,6 +85,8 @@ class _MovieScreenState extends State<MovieScreen> {
                   act: () {
                     getData();
                   },
+                  isFree: _movies.data?.free ?? true,
+                  userRented: _movies.data?.userRented ?? false,
                   movieID: _movies.data?.uuid ?? "",
                   id: _movies.data?.videos?.videoUuid ?? "",
                   censor: _movies.data?.censor ?? "UA",

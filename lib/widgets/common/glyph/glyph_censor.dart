@@ -10,7 +10,7 @@ class GlyphSensor extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.white70, borderRadius: BorderRadius.circular(3)),
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.symmetric(horizontal: 2),
         child: Text(
           censorType,
           style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),

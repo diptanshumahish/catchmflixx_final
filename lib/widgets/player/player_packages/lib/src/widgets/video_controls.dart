@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/video_controller_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +45,7 @@ class VideoControls extends StatelessWidget {
                       child: const PhosphorIcon(
                         PhosphorIconsFill.clockCounterClockwise,
                         color: Colors.white,
+                        size: 32,
                       )),
                 ),
                 const SizedBox(
@@ -54,10 +57,14 @@ class VideoControls extends StatelessWidget {
                     onTap: onPlayButtonTap,
                     child: () {
                       if (controller.value.isBuffering) {
-                        return const CupertinoActivityIndicator(
-                          color: Colors.white,
-                          radius: 30,
-                        );
+                        return (Platform.isIOS)
+                            ? const CupertinoActivityIndicator(
+                                color: Colors.white,
+                                radius: 30,
+                              )
+                            : const CircularProgressIndicator(
+                                color: Colors.white,
+                              );
                       }
                       var defaultIcon = PhosphorIcon(
                         controller.value.isPlaying
@@ -85,8 +92,11 @@ class VideoControls extends StatelessWidget {
                         onFastForward?.call(controller.value);
                       });
                     },
-                    child: const PhosphorIcon(PhosphorIconsFill.clockClockwise,
-                        color: Colors.white),
+                    child: const PhosphorIcon(
+                      PhosphorIconsFill.clockClockwise,
+                      color: Colors.white,
+                      size: 32,
+                    ),
                   ),
                 ),
               ],

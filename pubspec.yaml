@@ -38,7 +38,6 @@ dependencies:
     flutter_slidable: ^3.1.1
     url_launcher: ^6.3.0
     cupertino_icons: ^1.0.8
-    upgrader: ^10.3.0
     haptic_feedback: ^0.5.1+1
 
 dev_dependencies:

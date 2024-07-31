@@ -238,53 +238,24 @@ class _YoYoPlayerState extends State<YoYoPlayer>
                 horizontal: 8.0,
                 vertical: 8.0,
               ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Animate(
-                effects: const [FadeEffect(delay: Duration(milliseconds: 100))],
-                child: VideoQualityWidget(
-                  key: videoQualityKey,
-                  videoStyle: widget.videoStyle,
-                  onTap: () {
-                    setState(() {
-                      m3u8Show = !m3u8Show;
-
-                      if (m3u8Show) {
-                        showOverlay();
-                      } else {
-                        removeOverlay();
-                      }
-                    });
-                  },
-                  child: Row(
-                    children: [
-                      const PhosphorIcon(
-                        PhosphorIconsRegular.gearFine,
-                        color: Colors.white,
-                        size: 14,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text("Quality ${returnQuality(m3u8Quality)}",
-                          style: widget.videoStyle.qualityStyle),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Animate(
-                effects: const [FadeEffect(delay: Duration(milliseconds: 200))],
-                child: VideoSpeedWidget(
+          child: SafeArea(
+            bottom: true,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Animate(
+                  effects: const [
+                    FadeEffect(delay: Duration(milliseconds: 100))
+                  ],
+                  child: VideoQualityWidget(
+                    key: videoQualityKey,
+                    videoStyle: widget.videoStyle,
                     onTap: () {
                       setState(() {
-                        playBackShow = !playBackShow;
+                        m3u8Show = !m3u8Show;
 
-                        if (playBackShow) {
-                          showSpeedOverLay();
+                        if (m3u8Show) {
+                          showOverlay();
                         } else {
                           removeOverlay();
                         }
@@ -293,19 +264,55 @@ class _YoYoPlayerState extends State<YoYoPlayer>
                     child: Row(
                       children: [
                         const PhosphorIcon(
-                          PhosphorIconsRegular.speedometer,
+                          PhosphorIconsRegular.gearFine,
                           color: Colors.white,
                           size: 14,
                         ),
                         const SizedBox(
                           width: 5,
                         ),
-                        Text("Speed ${controller.value.playbackSpeed}",
+                        Text("Quality ${returnQuality(m3u8Quality)}",
                             style: widget.videoStyle.qualityStyle),
                       ],
-                    )),
-              ),
-            ],
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Animate(
+                  effects: const [
+                    FadeEffect(delay: Duration(milliseconds: 200))
+                  ],
+                  child: VideoSpeedWidget(
+                      onTap: () {
+                        setState(() {
+                          playBackShow = !playBackShow;
+
+                          if (playBackShow) {
+                            showSpeedOverLay();
+                          } else {
+                            removeOverlay();
+                          }
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          const PhosphorIcon(
+                            PhosphorIconsRegular.speedometer,
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text("Speed ${controller.value.playbackSpeed}",
+                              style: widget.videoStyle.qualityStyle),
+                        ],
+                      )),
+                ),
+              ],
+            ),
           ),
         ),
       ),

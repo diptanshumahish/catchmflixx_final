@@ -11,7 +11,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:upgrader/upgrader.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +21,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await Upgrader.clearSavedSettings();
   await ScreenProtector.protectDataLeakageOn();
+  if (Platform.isIOS) {
+    await ScreenProtector.protectDataLeakageWithColor(Colors.black);
+  }
   runApp(const ProviderScope(child: CatchMFlixxApp()));
 }
 
