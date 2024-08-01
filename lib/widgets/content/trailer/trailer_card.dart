@@ -4,6 +4,7 @@ import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class TrailerCard extends StatelessWidget {
   final String title;
@@ -73,6 +74,12 @@ class TrailerCard extends StatelessWidget {
                   ),
                 ),
               ),
+              const Center(
+                child: PhosphorIcon(
+                  PhosphorIconsFill.play,
+                  color: Colors.white,
+                ),
+              )
             ],
           ),
         ),

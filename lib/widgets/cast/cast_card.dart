@@ -52,6 +52,8 @@ class CastCard extends StatelessWidget {
             ),
             Text(
               role,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: TextStyles.formSubTitle,
             ),
           ],

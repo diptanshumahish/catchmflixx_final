@@ -24,7 +24,7 @@ class _MyToWatchListState extends State<MyToWatchList> {
 
   getData() async {
     ProfileApi p = ProfileApi();
-    WatchLaterList data = await p.gatWatchLater();
+    WatchLaterList data = await p.getWatchLater();
     if (data.success!) {
       setState(() {
         _wl = data;

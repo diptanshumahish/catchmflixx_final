@@ -26,7 +26,7 @@ class _HistoryListWidgetState extends State<HistoryListWidget> {
 
   getData() async {
     UserActivity u = UserActivity();
-    final data = await u.gatWatchHistory();
+    final data = await u.getWatchHistory();
     if (data.success!) {
       setState(() {
         _wl = data;

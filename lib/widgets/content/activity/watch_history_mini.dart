@@ -1,38 +1,22 @@
-import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
-import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/widgets/common/cards/watched_card.dart';
 import 'package:catchmflixx/widgets/common/section/section_component.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-UserActivityHistory _wl = UserActivityHistory();
-
-class WatchHistoryComponent extends StatefulWidget {
+class WatchHistoryComponent extends ConsumerStatefulWidget {
   const WatchHistoryComponent({super.key});
 
   @override
-  State<WatchHistoryComponent> createState() => _WatchHistoryComponentState();
+  ConsumerState<WatchHistoryComponent> createState() =>
+      _WatchHistoryComponentState();
 }
 
-class _WatchHistoryComponentState extends State<WatchHistoryComponent> {
-  @override
-  void initState() {
-    getData();
-    super.initState();
-  }
-
-  getData() async {
-    UserActivity ua = UserActivity();
-    UserActivityHistory data = await ua.gatWatchHistory();
-    if (data.success!) {
-      setState(() {
-        _wl = data;
-      });
-    }
-  }
-
+class _WatchHistoryComponentState extends ConsumerState<WatchHistoryComponent> {
   @override
   Widget build(BuildContext context) {
-    if (_wl.success == false || _wl.success == null) {
+    final data = ref.watch(watchHistoryProvider);
+    if (data.success == false || data.success == null) {
       return SliverToBoxAdapter(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -45,14 +29,14 @@ class _WatchHistoryComponentState extends State<WatchHistoryComponent> {
         ),
       );
     }
-    if (_wl.success == true && _wl.data!.isEmpty) {
+    if (data.success == true && data.data!.isEmpty) {
       return const SliverToBoxAdapter();
     }
     return Section(
       sectionDetails: "Check out what you have been watching so far",
       sectionHeading: "Watch History",
       showMore: "",
-      watchedCards: _wl.data!
+      watchedCards: data.data!
           .map((e) => WatchedCard(
               duration: ((e.durationMinutes) ?? 0) * 60,
               type: e.contentType ?? "movie",

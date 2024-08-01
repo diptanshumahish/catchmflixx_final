@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/player/return_quality.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player.dart';
@@ -19,6 +20,7 @@ import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/widge
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:video_player/video_player.dart';
@@ -28,7 +30,7 @@ import 'model/models.dart';
 import 'responses/regex_response.dart';
 import 'widgets/video_quality_picker.dart';
 
-class YoYoPlayer extends StatefulWidget {
+class YoYoPlayer extends ConsumerStatefulWidget {
   final String url;
   final VideoStyle videoStyle;
   final VideoLoadingStyle videoLoadingStyle;
@@ -83,10 +85,10 @@ class YoYoPlayer extends StatefulWidget {
   });
 
   @override
-  State<YoYoPlayer> createState() => _YoYoPlayerState();
+  ConsumerState<YoYoPlayer> createState() => _YoYoPlayerState();
 }
 
-class _YoYoPlayerState extends State<YoYoPlayer>
+class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
     with SingleTickerProviderStateMixin {
   String? playType;
   late AnimationController controlBarAnimationController;
@@ -207,7 +209,8 @@ class _YoYoPlayerState extends State<YoYoPlayer>
     return VideoTopBar(
       title: widget.title,
       details: widget.details,
-      act: () {
+      act: () async {
+        await ref.read(watchHistoryProvider.notifier).updateState();
         Navigator.of(context).pop();
       },
       showBar: showMenu,

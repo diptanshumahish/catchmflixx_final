@@ -21,7 +21,6 @@ import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -70,7 +69,9 @@ class MovieTopBar extends ConsumerStatefulWidget {
 class _MovieTopBarState extends ConsumerState<MovieTopBar> {
   @override
   void initState() {
-    getData();
+    if (widget.type == "series") {
+      getData();
+    }
     setState(() {
       _added = widget.addList;
     });
@@ -79,7 +80,6 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
 
   getData() async {
     ContentManager ct = ContentManager();
-
     final dat = await ct.continueWatching(widget.id);
     if (dat.success == true) {
       setState(() {
@@ -303,6 +303,9 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                         await p.addToWatchLater(widget.movieID != null
                             ? widget.movieID!
                             : widget.id);
+                        await ref
+                            .read(watchLaterProvider.notifier)
+                            .updateState();
                         setState(() {
                           _added = true;
                         });
@@ -310,6 +313,9 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                         await p.removeFromWatchLater(widget.movieID != null
                             ? widget.movieID!
                             : widget.id);
+                        await ref
+                            .read(watchLaterProvider.notifier)
+                            .updateState();
                         setState(() {
                           _added = false;
                         });

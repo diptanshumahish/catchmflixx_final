@@ -1,9 +1,12 @@
 //language provider
 
-import 'package:catchmflixx/models/language/language.model.dart';
+import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart';
+import 'package:catchmflixx/api/user/user_activity/watch_later_list.dart';
+import 'package:catchmflixx/models/language/language.model.dart' as lang;
 import 'package:catchmflixx/models/tabs/tabselector.model.dart';
 import 'package:catchmflixx/state/language/language.state.dart';
 import 'package:catchmflixx/state/tabs/tabs.state.dart';
+import 'package:catchmflixx/state/user/activity/user_activity.dart';
 import 'package:catchmflixx/state/user/details/user_details.state.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/state/user/register/register.response.state.dart';
@@ -11,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // ? Language switching
-final languageProvider = StateNotifierProvider<LanguageNotifier, Language>(
-    (ref) => LanguageNotifier(const Language(loc: Locale("en"))));
+final languageProvider = StateNotifierProvider<LanguageNotifier, lang.Language>(
+    (ref) => LanguageNotifier(const lang.Language(loc: Locale("en"))));
 
 // ? Bottom tabs switching
 final tabsProvider = StateNotifierProvider<TabNotifier, TabSelector>(
@@ -31,6 +34,13 @@ final userRegisterProvider =
 final userDetailsProvider =
     StateNotifierProvider<UserDetailsNotifier, UserDetailsState>(
         (ref) => UserDetailsNotifier());
+
+final watchHistoryProvider =
+    StateNotifierProvider<UserWatchHistoryNotifier, UserActivityHistory>(
+        (ref) => UserWatchHistoryNotifier());
+final watchLaterProvider =
+    StateNotifierProvider<UserWatchLaterNotifier, WatchLaterList>(
+        (ref) => UserWatchLaterNotifier());
 
 // final internetConnectivityProvider =
 //     StateNotifierProvider<InternetCheckerNotifier, InternetStatus>(

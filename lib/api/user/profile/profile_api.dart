@@ -110,7 +110,7 @@ class ProfileApi {
     }
   }
 
-  Future<WatchLaterList> gatWatchLater() async {
+  Future<WatchLaterList> getWatchLater() async {
     try {
       return await networkManager.makeRequest<WatchLaterList>(
           "user/watch-later/", (data) => WatchLaterList.fromJson(data),

@@ -14,7 +14,7 @@ class UserActivity {
         method: "POST", data: data);
   }
 
-  Future<UserActivityHistory> gatWatchHistory() async {
+  Future<UserActivityHistory> getWatchHistory() async {
     return await networkManager.makeRequest<UserActivityHistory>(
         "content/watched-list", (p0) => UserActivityHistory.fromJson(p0));
   }

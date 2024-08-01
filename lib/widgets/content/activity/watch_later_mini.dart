@@ -1,38 +1,22 @@
-import 'package:catchmflixx/api/user/profile/profile_api.dart';
-import 'package:catchmflixx/api/user/user_activity/watch_later_list.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/widgets/common/cards/section_card.dart';
 import 'package:catchmflixx/widgets/common/section/section_component.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-WatchLaterList _wl = WatchLaterList();
-
-class WatchLaterComponent extends StatefulWidget {
+class WatchLaterComponent extends ConsumerStatefulWidget {
   const WatchLaterComponent({super.key});
 
   @override
-  State<WatchLaterComponent> createState() => _WatchLaterComponentState();
+  ConsumerState<WatchLaterComponent> createState() =>
+      _WatchLaterComponentState();
 }
 
-class _WatchLaterComponentState extends State<WatchLaterComponent> {
-  @override
-  void initState() {
-    getData();
-    super.initState();
-  }
-
-  getData() async {
-    ProfileApi p = ProfileApi();
-    WatchLaterList data = await p.gatWatchLater();
-    if (data.success!) {
-      setState(() {
-        _wl = data;
-      });
-    }
-  }
-
+class _WatchLaterComponentState extends ConsumerState<WatchLaterComponent> {
   @override
   Widget build(BuildContext context) {
-    if (_wl.success == false || _wl.success == null) {
+    final data = ref.watch(watchLaterProvider);
+    if (data.success == false || data.success == null) {
       return SliverToBoxAdapter(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -45,14 +29,14 @@ class _WatchLaterComponentState extends State<WatchLaterComponent> {
         ),
       );
     }
-    if (_wl.success == true && _wl.data!.isEmpty) {
+    if (data.success == true && data.data!.isEmpty) {
       return const SliverToBoxAdapter();
     }
     return Section(
       sectionDetails: "Check out what you have been watching so far",
       sectionHeading: "Added to watch Later",
       showMore: "",
-      sectionCards: _wl.data!
+      sectionCards: data.data!
           .map((e) => SectionCard(
               type: e.type ?? "movie",
               playLink: e.uuid ?? "",

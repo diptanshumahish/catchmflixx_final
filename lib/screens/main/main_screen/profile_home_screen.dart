@@ -1,11 +1,10 @@
 import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
-import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
-import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
 import 'package:catchmflixx/screens/list/my_to_watch_list.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
 import 'package:catchmflixx/widgets/content/activity/watch_later_mini.dart';
@@ -23,7 +22,6 @@ import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 LoggedInCurrentProfile _currentProfile = LoggedInCurrentProfile();
-UserActivityHistory _wl = UserActivityHistory();
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -36,13 +34,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   getData() async {
     ProfileApi p = ProfileApi();
     final data = await p.getCurrentProfile();
-    UserActivity ua = UserActivity();
-    UserActivityHistory data1 = await ua.gatWatchHistory();
-    if (data1.success!) {
-      setState(() {
-        _wl = data1;
-      });
-    }
     setState(() {
       _currentProfile = data;
     });
