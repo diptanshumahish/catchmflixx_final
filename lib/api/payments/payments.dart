@@ -16,7 +16,7 @@ class PaymentsManager {
 
   Future<PhonePeInit> phonePeInitMovie(String search) async {
     return await networkManager.makeRequest<PhonePeInit>(
-        "$path/rent/movie", (data) => PhonePeInit.fromJson(data),
-        data: FormData.fromMap({"id": search}), method: "POST");
+        "/movie?id=${search}", (data) => PhonePeInit.fromJson(data),
+        method: "POST", useSecondaryDio: true);
   }
 }

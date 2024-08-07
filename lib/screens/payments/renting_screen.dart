@@ -135,14 +135,23 @@ class _RentingScreenState extends State<RentingScreen> {
                                             final data =
                                                 await p.phonePeInitMovie(
                                                     ele.id.toString());
-                                            if (data.success!) {
-                                              await launchUrl(Uri.parse(data
-                                                  .data!
-                                                  .data!
-                                                  .instrumentResponse!
-                                                  .redirectInfo!
-                                                  .url
-                                                  .toString()));
+
+                                            final url = data
+                                                .data
+                                                .details
+                                                .transactionData
+                                                .instrumentResponse
+                                                .redirectInfo
+                                                .url;
+
+                                            if (data.data.success) {
+                                              await launchUrl(
+                                                  Uri.parse(
+                                                      "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
+                                                  mode: LaunchMode
+                                                      .inAppBrowserView,
+                                                  webViewConfiguration:
+                                                      WebViewConfiguration());
                                             }
                                           })
                                     ],

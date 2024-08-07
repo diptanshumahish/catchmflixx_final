@@ -1,113 +1,126 @@
 class PhonePeInit {
-  bool? success;
-  Data? data;
+  String message;
+  PhonePeData data;
 
-  PhonePeInit({this.success, this.data});
+  PhonePeInit({required this.message, required this.data});
 
-  PhonePeInit.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
-  }
+  PhonePeInit.fromJson(Map<String, dynamic> json)
+      : message = json['message'] ?? '',
+        data = PhonePeData.fromJson(json['data'] ?? {});
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = success;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
+    final Map<String, dynamic> data = {};
+    data['message'] = message;
+    data['data'] = this.data.toJson();
     return data;
   }
 }
 
-class Data {
-  bool? success;
-  String? code;
-  String? message;
-  NData? data;
+class PhonePeData {
+  bool success;
+  PhonePeDetails details;
 
-  Data({this.success, this.code, this.message, this.data});
+  PhonePeData({required this.success, required this.details});
 
-  Data.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    code = json['code'];
-    message = json['message'];
-    data = json['data'] != null ? NData.fromJson(json['data']) : null;
-  }
+  PhonePeData.fromJson(Map<String, dynamic> json)
+      : success = json['success'] ?? false,
+        details = PhonePeDetails.fromJson(json['data'] ?? {});
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     data['success'] = success;
+    data['data'] = details.toJson();
+    return data;
+  }
+}
+
+class PhonePeDetails {
+  String code;
+  String message;
+  PhonePeTransactionData transactionData;
+
+  PhonePeDetails({
+    required this.code,
+    required this.message,
+    required this.transactionData,
+  });
+
+  PhonePeDetails.fromJson(Map<String, dynamic> json)
+      : code = json['code'] ?? '',
+        message = json['message'] ?? '',
+        transactionData = PhonePeTransactionData.fromJson(json['data'] ?? {});
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
     data['code'] = code;
     data['message'] = message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
+    data['data'] = transactionData.toJson();
     return data;
   }
 }
 
-class NData {
-  String? merchantId;
-  String? merchantTransactionId;
-  InstrumentResponse? instrumentResponse;
+class PhonePeTransactionData {
+  String merchantId;
+  String merchantTransactionId;
+  InstrumentResponse instrumentResponse;
 
-  NData({this.merchantId, this.merchantTransactionId, this.instrumentResponse});
+  PhonePeTransactionData({
+    required this.merchantId,
+    required this.merchantTransactionId,
+    required this.instrumentResponse,
+  });
 
-  NData.fromJson(Map<String, dynamic> json) {
-    merchantId = json['merchantId'];
-    merchantTransactionId = json['merchantTransactionId'];
-    instrumentResponse = json['instrumentResponse'] != null
-        ? InstrumentResponse.fromJson(json['instrumentResponse'])
-        : null;
-  }
+  PhonePeTransactionData.fromJson(Map<String, dynamic> json)
+      : merchantId = json['merchantId'] ?? '',
+        merchantTransactionId = json['merchantTransactionId'] ?? '',
+        instrumentResponse =
+            InstrumentResponse.fromJson(json['instrumentResponse'] ?? {});
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     data['merchantId'] = merchantId;
     data['merchantTransactionId'] = merchantTransactionId;
-    if (instrumentResponse != null) {
-      data['instrumentResponse'] = instrumentResponse!.toJson();
-    }
+    data['instrumentResponse'] = instrumentResponse.toJson();
     return data;
   }
 }
 
 class InstrumentResponse {
-  String? type;
-  RedirectInfo? redirectInfo;
+  String type;
+  RedirectInfo redirectInfo;
 
-  InstrumentResponse({this.type, this.redirectInfo});
+  InstrumentResponse({
+    required this.type,
+    required this.redirectInfo,
+  });
 
-  InstrumentResponse.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    redirectInfo = json['redirectInfo'] != null
-        ? RedirectInfo.fromJson(json['redirectInfo'])
-        : null;
-  }
+  InstrumentResponse.fromJson(Map<String, dynamic> json)
+      : type = json['type'] ?? '',
+        redirectInfo = RedirectInfo.fromJson(json['redirectInfo'] ?? {});
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     data['type'] = type;
-    if (redirectInfo != null) {
-      data['redirectInfo'] = redirectInfo!.toJson();
-    }
+    data['redirectInfo'] = redirectInfo.toJson();
     return data;
   }
 }
 
 class RedirectInfo {
-  String? url;
-  String? method;
+  String url;
+  String method;
 
-  RedirectInfo({this.url, this.method});
+  RedirectInfo({
+    required this.url,
+    required this.method,
+  });
 
-  RedirectInfo.fromJson(Map<String, dynamic> json) {
-    url = json['url'];
-    method = json['method'];
-  }
+  RedirectInfo.fromJson(Map<String, dynamic> json)
+      : url = json['url'] ?? '',
+        method = json['method'] ?? '';
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = {};
     data['url'] = url;
     data['method'] = method;
     return data;

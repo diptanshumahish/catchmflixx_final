@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/models/message/message_model.dart';
 import 'package:catchmflixx/utils/deviceinfo/device_info.dart';
@@ -10,23 +9,12 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NetworkManager {
-  final Dio mainDio;
-  final Dio secondaryDio;
-  PersistCookieJar? cookieJar;
+class WebNetworkManager {
+  Dio dio;
 
-  NetworkManager()
-      : mainDio = Dio(BaseOptions(
-          baseUrl: "https://api.catchmflixx.com/api/",
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 10),
-          contentType: "application/json",
-          headers: {
-            'Accept': 'application/json',
-          },
-        )),
-        secondaryDio = Dio(BaseOptions(
-          baseUrl: "https://www.catchmflixx.com/api/",
+  WebNetworkManager()
+      : dio = Dio(BaseOptions(
+          baseUrl: "https://catchmflixx.com/api/",
           connectTimeout: const Duration(seconds: 10),
           receiveTimeout: const Duration(seconds: 10),
           contentType: "application/json",
@@ -47,22 +35,17 @@ class NetworkManager {
 
   Future<void> addInterceptors() async {
     Directory tempDir = await getApplicationCacheDirectory();
-    cookieJar = PersistCookieJar(
+    final cookieJar = PersistCookieJar(
         storage: FileStorage(tempDir.path), ignoreExpires: true);
 
     String agent = await returnDeviceInfo();
 
-    mainDio.interceptors.add(CookieManager(cookieJar!));
-    secondaryDio.interceptors.add(CookieManager(cookieJar!));
+    dio.interceptors.add(CookieManager(cookieJar));
 
-    final requestInterceptor =
-        InterceptorsWrapper(onRequest: (options, handler) {
+    dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
       options.headers["user-agent"] = agent;
       return handler.next(options);
-    });
-
-    mainDio.interceptors.add(requestInterceptor);
-    secondaryDio.interceptors.add(requestInterceptor);
+    }));
   }
 
   Future<T> makeRequest<T>(
@@ -70,12 +53,9 @@ class NetworkManager {
     T Function(Map<String, dynamic>) fromJson, {
     String method = 'GET',
     FormData? data,
-    bool useSecondaryDio = false,
   }) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     APIManager api = APIManager();
-
-    Dio dioInstance = useSecondaryDio ? secondaryDio : mainDio;
 
     await addInterceptors();
 
@@ -85,21 +65,20 @@ class NetworkManager {
           : {'Authorization': 'Bearer $token'};
       switch (method.toUpperCase()) {
         case 'POST':
-          return await dioInstance.post(endpoint,
+          return await dio.post(endpoint,
               data: data, options: Options(headers: headers));
         case 'PUT':
-          return await dioInstance.put(endpoint,
+          return await dio.put(endpoint,
               data: data, options: Options(headers: headers));
         case 'PATCH':
-          return await dioInstance.patch(endpoint,
+          return await dio.patch(endpoint,
               data: data, options: Options(headers: headers));
         case 'DELETE':
-          return await dioInstance.delete(endpoint,
+          return await dio.delete(endpoint,
               data: data, options: Options(headers: headers));
         case 'GET':
         default:
-          return await dioInstance.get(endpoint,
-              options: Options(headers: headers));
+          return await dio.get(endpoint, options: Options(headers: headers));
       }
     }
 

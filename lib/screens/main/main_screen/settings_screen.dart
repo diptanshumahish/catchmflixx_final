@@ -4,7 +4,7 @@ import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
-import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
+// import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/screens/start/choose_content_screen.dart';
@@ -15,12 +15,12 @@ import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/Info/info_container.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/settings/settings_button.dart';
-import 'package:catchmflixx/widgets/settings/settings_switch.dart';
+// import 'package:catchmflixx/widgets/settings/settings_switch.dart';
 import 'package:catchmflixx/widgets/settings/settings_text_button.dart';
 import 'package:catchmflixx/widgets/settings/settings_top.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
+// import 'package:page_transition/page_transition.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:restart_app/restart_app.dart';
@@ -112,13 +112,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   translation.accountSettings,
                   style: TextStyles.smallSubText,
                 ),
-                SettingsButton(
-                    headingName: translation.pricingPlans,
-                    subHeading: translation.checkPlans,
-                    icon: PhosphorIconsDuotone.money,
-                    fn: () {
-                      navigateToPage(context, const PaymentsPlansScreen());
-                    }),
+                // SettingsButton(
+                //     headingName: translation.pricingPlans,
+                //     subHeading: translation.checkPlans,
+                //     icon: PhosphorIconsDuotone.money,
+                //     fn: () {
+                //       navigateToPage(context, const PaymentsPlansScreen());
+                //     }),
                 SettingsButton(
                     headingName: translation.profilemanagement,
                     subHeading: translation.settingsEditProfile,
@@ -148,31 +148,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     fn: () {
                       navigateToPage(context, const ChooseGenresScreen());
                     }),
-                const Divider(
-                  color: Colors.white30,
-                ),
-                Text(
-                  translation.exp,
-                  style: TextStyles.smallSubText,
-                ),
-                SettingsSwitch(
-                    heading: translation.settingshaptics,
-                    subHeading: translation.settingschose,
-                    switchBool: _hapticsEnabled,
-                    fn: (val) {
-                      setState(() {
-                        _hapticsEnabled = val;
-                      });
-                    }),
-                SettingsSwitch(
-                    heading: translation.settingsreceive,
-                    subHeading: translation.settingsUpdates,
-                    switchBool: _updatesReceive,
-                    fn: (val) {
-                      setState(() {
-                        _updatesReceive = val;
-                      });
-                    }),
+                // const Divider(
+                //   color: Colors.white30,
+                // ),
+                // Text(
+                //   translation.exp,
+                //   style: TextStyles.smallSubText,
+                // ),
+                // SettingsSwitch(
+                //     heading: translation.settingshaptics,
+                //     subHeading: translation.settingschose,
+                //     switchBool: _hapticsEnabled,
+                //     fn: (val) {
+                //       setState(() {
+                //         _hapticsEnabled = val;
+                //       });
+                //     }),
+                // SettingsSwitch(
+                //     heading: translation.settingsreceive,
+                //     subHeading: translation.settingsUpdates,
+                //     switchBool: _updatesReceive,
+                //     fn: (val) {
+                //       setState(() {
+                //         _updatesReceive = val;
+                //       });
+                //     }),
               ], space: 2),
             ),
           ),
