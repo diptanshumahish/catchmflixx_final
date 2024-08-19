@@ -1,10 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final List<Map<String, String>> genreList = [
@@ -81,8 +79,7 @@ class _ChooseGenresScreenState extends State<ChooseGenresScreen> {
               content: "Done",
               icon: Icons.flare_rounded,
               fn: () => {
-                    navigateToPage(context, const CheckLoggedIn(),
-                        removeUntil: true, predicate: (route) => false)
+                    navigateToPage(context, "/check-login", isReplacement: true)
                   }),
         ),
       ),

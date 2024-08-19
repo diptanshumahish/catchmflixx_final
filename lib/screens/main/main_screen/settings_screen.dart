@@ -2,13 +2,9 @@
 
 import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/language/language_screen.dart';
-import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
+
 // import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
-import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
-import 'package:catchmflixx/screens/start/choose_content_screen.dart';
-import 'package:catchmflixx/screens/start/later_verify.dart';
+
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
@@ -27,8 +23,8 @@ import 'package:restart_app/restart_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-bool _hapticsEnabled = true;
-bool _updatesReceive = true;
+// bool _hapticsEnabled = true;
+// bool _updatesReceive = true;
 bool _verificationIssue = false;
 bool _isEntirelyNew = false;
 
@@ -92,7 +88,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ? InfoContainer(
                         data: translation.notVerifiedEM,
                         fn: () {
-                          navigateToPage(context, const LaterVerifyScreen());
+                          // navigateToPage(context, const LaterVerifyScreen());
                         },
                         action: translation.ver,
                         icon: Icons.verified,
@@ -102,7 +98,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     ? InfoContainer(
                         data: translation.notSignIn,
                         fn: () {
-                          navigateToPage(context, const OnboardScreen());
+                          navigateToPage(context, "/onboard");
                         },
                         action: translation.loginOrRegister,
                         icon: Icons.person,
@@ -126,12 +122,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     fn: () {
                       if (_verificationIssue == false &&
                           _isEntirelyNew == false) {
-                        navigateToPage(context, const ProfileManagement());
+                        navigateToPage(context, "/user/profile-management");
 
                         return;
                       }
                       if (_isEntirelyNew == true) {
-                        navigateToPage(context, const OnboardScreen());
+                        navigateToPage(context, "/onboard");
                       }
                     }),
                 SettingsButton(
@@ -139,15 +135,15 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     subHeading: translation.settingsLangChose,
                     icon: PhosphorIconsDuotone.translate,
                     fn: () {
-                      navigateToPage(context, const LanguageScreen());
+                      navigateToPage(context, "/languages");
                     }),
-                SettingsButton(
-                    headingName: translation.prefferedGenres,
-                    subHeading: translation.chooseGenres,
-                    icon: PhosphorIconsDuotone.option,
-                    fn: () {
-                      navigateToPage(context, const ChooseGenresScreen());
-                    }),
+                // SettingsButton(
+                //     headingName: translation.prefferedGenres,
+                //     subHeading: translation.chooseGenres,
+                //     icon: PhosphorIconsDuotone.option,
+                //     fn: () {
+                //       navigateToPage(context, const ChooseGenresScreen());
+                //     }),
                 // const Divider(
                 //   color: Colors.white30,
                 // ),
@@ -189,12 +185,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               icon: PhosphorIconsDuotone.userSwitch,
               fn: () {
                 if (!_isEntirelyNew && !_verificationIssue) {
-                  navigateToPage(
-                    context,
-                    const CheckLoggedIn(),
-                    removeUntil: true,
-                    predicate: (route) => false,
-                  );
+                  navigateToPage(context, "/check-login", isReplacement: true);
                 }
               },
               color: Colors.orangeAccent),

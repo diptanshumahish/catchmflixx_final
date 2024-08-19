@@ -112,12 +112,8 @@ class _PickedForYouState extends State<PickedForYou> {
                         navigateToPage(
                           context,
                           _cList.results?.data![nu].type == "movie"
-                              ? MovieScreen(
-                                  uuid: _cList.results?.data![nu].uuid ?? "",
-                                )
-                              : SeriesScreen(
-                                  uuid: _cList.results?.data![nu].uuid ?? "",
-                                ),
+                              ? "/movie/${_cList.results?.data![nu].uuid ?? ""}"
+                              : "/series/${_cList.results?.data![nu].uuid ?? ""}",
                         );
                       },
                       child: const Padding(

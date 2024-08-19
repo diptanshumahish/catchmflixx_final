@@ -3,7 +3,6 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/message/message_model.dart';
 import 'package:catchmflixx/models/profiles/avatar_list.model.dart';
-import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
@@ -223,8 +222,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                               _changePass);
 
                           if (res.success!) {
-                            navigateToPage(context, const BaseMain(),
-                                removeUntil: true, predicate: (r) => false);
+                            navigateToPage(context, "/base",
+                                isReplacement: true);
                           }
                         })
                   ],

@@ -3,13 +3,11 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
-import 'package:catchmflixx/screens/list/my_to_watch_list.dart';
-import 'package:catchmflixx/state/provider.dart';
+
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
 import 'package:catchmflixx/widgets/content/activity/watch_later_mini.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
-import 'package:catchmflixx/screens/list/history_list.dart';
+
 import 'package:catchmflixx/widgets/content/activity/watch_history_mini.dart';
 import 'package:catchmflixx/widgets/profile/render/profile_top.dart';
 import 'package:catchmflixx/widgets/settings/settings_button.dart';
@@ -73,7 +71,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   subHeading: "Check out your watch history",
                   icon: PhosphorIconsBold.arrowUpRight,
                   fn: () {
-                    navigateToPage(context, const HistoryListWidget());
+                    navigateToPage(context, "/user/history");
                   }),
             ),
           ),
@@ -89,7 +87,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   subHeading: "All the content you saved",
                   icon: PhosphorIconsBold.arrowUpRight,
                   fn: () {
-                    navigateToPage(context, const MyToWatchList());
+                    navigateToPage(context, "/user/watch-list");
                   }),
             ),
           ),
@@ -105,12 +103,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             content: "Switch profile",
             icon: PhosphorIconsDuotone.userSwitch,
             fn: () {
-              navigateToPage(
-                context,
-                const CheckLoggedIn(),
-                removeUntil: true,
-                predicate: (route) => false,
-              );
+              navigateToPage(context, "/check-login", isReplacement: true);
             },
             color: Colors.orangeAccent),
         SettingsTextButton(

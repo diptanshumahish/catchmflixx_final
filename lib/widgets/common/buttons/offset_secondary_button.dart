@@ -58,6 +58,7 @@ class OffsetSecondaryFullButton extends StatelessWidget {
                     fontFamily: "Kollektif",
                     fontSize: size.height > 840 ? 15 : 14,
                     color: Colors.white,
+                    letterSpacing: 0.4,
                   ),
                   textAlign: TextAlign.center,
                   maxLines: 1,

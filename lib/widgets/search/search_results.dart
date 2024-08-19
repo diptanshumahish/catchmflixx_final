@@ -1,8 +1,6 @@
 import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/search.list.model.dart';
-import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
-import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/cupertino.dart';
@@ -119,14 +117,10 @@ class _SearchResultsState extends State<SearchResults> {
                               onTap: () async {
                                 await vibrateTap();
                                 navigateToPage(
-                                  context,
-                                  cards[idx].type == "movie"
-                                      ? MovieScreen(
-                                          uuid: cards[idx].uuid ?? "",
-                                        )
-                                      : SeriesScreen(
-                                          uuid: cards[idx].uuid ?? ""),
-                                );
+                                    context,
+                                    cards[idx].type == "movie"
+                                        ? "/movie/${cards[idx].uuid ?? ""}"
+                                        : "/series/${cards[idx].uuid ?? ""}");
                               },
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,

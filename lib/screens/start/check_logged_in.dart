@@ -1,14 +1,10 @@
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/language/language_screen.dart';
-import 'package:catchmflixx/screens/main/home_main.dart';
-import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
-import 'package:catchmflixx/screens/start/profile/profile_selection_screen.dart';
+import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
-import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
 import 'package:flutter/material.dart';
@@ -36,12 +32,12 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
   Future<void> getHalfLoggedInState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? isNotVerified = prefs.getString("temp_login_mail");
+    final String? isNotVerifiedPass = prefs.getString("temp_login_password");
 
     if (isNotVerified != null) {
-      ToastShow.returnToast(
-          "Please verify your previous email from settings to get full access");
-      navigateToPage(context, const BaseMain(),
-          removeUntil: true, predicate: (route) => false);
+      navigateToPage(context, "verify-email",
+          data: VerifyEmail(
+              emailId: isNotVerified, password: isNotVerifiedPass ?? ""));
     }
   }
 
@@ -73,7 +69,7 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                             ? size.height / 1.85
                             : size.height / 1.6),
                     decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 255, 236, 141),
+                      color: Color(0xFFFF986E),
                     ),
                     child: Center(
                       child: SvgPicture.asset(
@@ -103,7 +99,6 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                 children: [
                                   Text(
                                     translation.login,
-                                    // "${size.height}",
                                     style: TextStyles.headingMobile,
                                   ),
                                   const SizedBox(
@@ -125,10 +120,7 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                         content: translation.login,
                                         icon: Icons.account_circle,
                                         fn: () => navigateToPage(
-                                            context,
-                                            const OnboardScreen(
-                                              change: 1,
-                                            ))),
+                                            context, "/onboard/1")),
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -140,34 +132,31 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                     ],
                                     child: OffsetFullButton(
                                       content: translation.register,
-                                      icon: PhosphorIconsBold.personSimpleRun,
-                                      fn: () => navigateToPage(
-                                          context,
-                                          const OnboardScreen(
-                                            change: 0,
-                                          )),
+                                      icon: PhosphorIconsBold.book,
+                                      fn: () =>
+                                          navigateToPage(context, "/onboard/0"),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Animate(
-                                    effects: const [
-                                      FadeEffect(
-                                          delay: Duration(milliseconds: 300))
-                                    ],
-                                    child: OffsetSecondaryFullButton(
-                                        icon: const Icon(
-                                          PhosphorIconsBold.rocketLaunch,
-                                        ),
-                                        content: translation.tryA,
-                                        fn: () {
-                                          navigateToPage(
-                                              context, const BaseMain(),
-                                              removeUntil: true,
-                                              predicate: (r) => false);
-                                        }),
-                                  ),
+                                  // const SizedBox(
+                                  //   height: 10,
+                                  // ),
+                                  // Animate(
+                                  //   effects: const [
+                                  //     FadeEffect(
+                                  //         delay: Duration(milliseconds: 300))
+                                  //   ],
+                                  //   child: OffsetSecondaryFullButton(
+                                  //       icon: const Icon(
+                                  //         PhosphorIconsBold.rocketLaunch,
+                                  //       ),
+                                  //       content: translation.tryA,
+                                  //       fn: () {
+                                  //         navigateToPage(
+                                  //             context, const BaseMain(),
+                                  //             removeUntil: true,
+                                  //             predicate: (r) => false);
+                                  //       }),
+                                  // ),
                                   const SizedBox(
                                     height: 10,
                                   ),
@@ -181,8 +170,7 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                         icon: const Icon(
                                             PhosphorIconsBold.translate),
                                         fn: () {
-                                          navigateToPage(
-                                              context, const LanguageScreen());
+                                          navigateToPage(context, "/languages");
                                         }),
                                   )
                                 ],
@@ -226,9 +214,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                         ProfileApi pro = ProfileApi();
                                         final res = await pro.fetchProfiles();
                                         navigateToPage(
-                                            context, ProfilesSelection(res),
-                                            removeUntil: true,
-                                            predicate: (route) => false);
+                                            context, "/user/profile-selection",
+                                            data: res, isReplacement: true);
                                       },
                                     ),
                                   ),

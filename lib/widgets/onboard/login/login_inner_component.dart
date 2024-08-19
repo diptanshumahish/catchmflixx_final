@@ -1,7 +1,4 @@
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/language/language_screen.dart';
-import 'package:catchmflixx/screens/main/home_main.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
@@ -9,7 +6,6 @@ import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
-import 'package:catchmflixx/widgets/onboard/forgot/forgot_password.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -92,18 +88,13 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
                           _passwordController.text.toString(), context, false);
 
                   if (res == 200) {
-                    navigateToPage(
-                      context,
-                      const CheckLoggedIn(),
-                      removeUntil: true,
-                      predicate: (route) => false,
-                    );
+                    navigateToPage(context, "/check-login",
+                        isReplacement: true);
                   } else if (res == 500) {
                     navigateToPage(
                       context,
-                      const BaseMain(),
-                      removeUntil: true,
-                      predicate: (route) => false,
+                      "/base",
+                      isReplacement: true,
                     );
                   }
                 } else {
@@ -115,13 +106,13 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
                 content: translation.forgotPassword,
                 icon: const Icon(Icons.question_mark),
                 fn: () {
-                  navigateToPage(context, const ForgotPasswordScreen());
+                  navigateToPage(context, "/forgot-password");
                 }),
             OffsetSecondaryFullButton(
                 content: translation.changeLanguage,
                 icon: const Icon(Icons.language),
                 fn: () {
-                  navigateToPage(context, const LanguageScreen());
+                  navigateToPage(context, "/languages");
                 }),
             Text.rich(TextSpan(style: TextStyles.smallSubText, children: [
               const TextSpan(

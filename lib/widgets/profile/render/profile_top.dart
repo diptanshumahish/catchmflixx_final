@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/main/main_screen/settings_screen.dart';
-import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +76,7 @@ class ProfileTop extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         await vibrateTap();
-                        navigateToPage(context, const SettingsScreen());
+                        navigateToPage(context, "/settings");
                       },
                       child: const Row(
                         mainAxisSize: MainAxisSize.max,
@@ -106,7 +104,7 @@ class ProfileTop extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         await vibrateTap();
-                        navigateToPage(context, const ProfileManagement());
+                        navigateToPage(context, "/user/profile-management");
                       },
                       child: const Row(
                         mainAxisSize: MainAxisSize.max,

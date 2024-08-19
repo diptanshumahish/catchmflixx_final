@@ -18,7 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -224,7 +223,8 @@ class _ProfileManagementState extends ConsumerState<ProfileManagement> {
                                                         onPressed: () {
                                                           navigateToPage(
                                                               context,
-                                                              EditProfile(
+                                                              "/user/profile/edit",
+                                                              data: EditProfile(
                                                                   profileId:
                                                                       e.uuid ??
                                                                           "",

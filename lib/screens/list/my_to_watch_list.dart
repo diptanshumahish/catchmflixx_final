@@ -2,8 +2,6 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/api/user/user_activity/watch_later_list.dart';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
-import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -121,11 +119,8 @@ class _MyToWatchListState extends State<MyToWatchList> {
                             navigateToPage(
                                 context,
                                 _wl.data?[idx].type == "movie"
-                                    ? MovieScreen(
-                                        uuid: _wl.data?[idx].uuid ?? "",
-                                      )
-                                    : SeriesScreen(
-                                        uuid: _wl.data?[idx].uuid ?? ""));
+                                    ? "/movie/${_wl.data?[idx].uuid ?? ""}"
+                                    : "/series/${_wl.data?[idx].uuid ?? ""}");
                           },
                           child: Row(
                             mainAxisAlignment: size.width > 540

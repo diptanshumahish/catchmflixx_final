@@ -2,7 +2,6 @@ import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/movie/movie.model.dart';
-import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/utils/genres/return_genres.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/cast/cast_render.dart';
@@ -10,13 +9,12 @@ import 'package:catchmflixx/widgets/cast/cast_render.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/content/movie/movie_top_bar.dart';
 import 'package:catchmflixx/widgets/content/trailer/trailer_card.dart';
-import 'package:catchmflixx/widgets/language/languages_available.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 
 bool _isLoading = true;
@@ -74,7 +72,7 @@ class _MovieScreenState extends State<MovieScreen> {
                 ),
                 leading: IconButton(
                     onPressed: () {
-                      navigateToPage(context, const BaseMain());
+                      navigateToPage(context, "/base");
                     },
                     icon: const Icon(
                       Icons.arrow_back,
@@ -153,7 +151,7 @@ class _MovieScreenState extends State<MovieScreen> {
                 ),
               ),
               CastRender(uuid: _movies.data?.uuid ?? ""),
-              LanguagesAvailable(uuid: _movies.data?.uuid ?? "")
+              // LanguagesAvailable(uuid: _movies.data?.uuid ?? "")
             ],
           ));
     } else {

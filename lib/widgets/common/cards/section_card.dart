@@ -1,10 +1,6 @@
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
-import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:page_transition/page_transition.dart';
 
 class SectionCard extends StatelessWidget {
   final String playLink;
@@ -30,11 +26,7 @@ class SectionCard extends StatelessWidget {
       onTap: () {
         navigateToPage(
           context,
-          type == "movie"
-              ? MovieScreen(
-                  uuid: fullDetailsId,
-                )
-              : SeriesScreen(uuid: fullDetailsId),
+          type == "movie" ? "/movie/$fullDetailsId" : "/series/$fullDetailsId",
         );
       },
       child: Container(

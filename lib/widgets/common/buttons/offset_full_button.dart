@@ -24,12 +24,12 @@ class OffsetFullButton extends StatelessWidget {
         child: Container(
           width: notFull == null ? size.width : size.width / 3,
           decoration: BoxDecoration(
-              color: const Color(0xFFFFF5A0),
+              color: Color(0xFFFF986E),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.black),
               boxShadow: const [
                 BoxShadow(
-                  color: Colors.white,
+                  color: Color.fromARGB(213, 255, 245, 193),
                   offset: Offset(2, 2),
                   blurRadius: 0,
                   spreadRadius: 0,
@@ -66,6 +66,7 @@ class OffsetFullButton extends StatelessWidget {
                             color: Colors.black,
                             fontWeight: FontWeight.w500,
                             fontFamily: "Kollektif",
+                            letterSpacing: 0.4,
                             fontSize: size.height > 840 ? 15 : 14),
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,

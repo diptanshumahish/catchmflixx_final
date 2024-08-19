@@ -1,14 +1,12 @@
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/user/maxlimit.response.model.dart';
-import 'package:catchmflixx/screens/main/home_main.dart';
-import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
+
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/datetime/format_date.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
+
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class MaxLogin extends ConsumerStatefulWidget {
@@ -35,8 +33,7 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
               ),
               leading: IconButton(
                   onPressed: () {
-                    navigateToPage(context, const OnboardScreen(),
-                        isReplacement: true);
+                    navigateToPage(context, "/onboard", isReplacement: true);
                   },
                   icon: const Icon(
                     Icons.chevron_left,
@@ -71,19 +68,11 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
                                       e.id.toString(), context, false);
 
                               if (res == 200) {
-                                navigateToPage(
-                                  context,
-                                  const CheckLoggedIn(),
-                                  removeUntil: true,
-                                  predicate: (route) => false,
-                                );
+                                navigateToPage(context, "/check-login",
+                                    isReplacement: true);
                               } else if (res == 500) {
-                                navigateToPage(
-                                  context,
-                                  const BaseMain(),
-                                  removeUntil: true,
-                                  predicate: (route) => false,
-                                );
+                                navigateToPage(context, "/base",
+                                    isReplacement: true);
                               }
                             },
                             child: Padding(

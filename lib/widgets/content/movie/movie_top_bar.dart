@@ -2,9 +2,7 @@ import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/series/continue.watching.model.dart';
-import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
-import 'package:catchmflixx/screens/start/later_verify.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
@@ -217,9 +215,8 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                             fn: () async {
                               if (user is LoadedUserLoginResponseState &&
                                   user.userLoginResponse.isLoggedIn!) {
-                                navigateToPage(
-                                    context,
-                                    PlayerScreen(
+                                navigateToPage(context, "/player",
+                                    data: PlayerScreen(
                                       act: () {
                                         widget.act();
                                       },
@@ -242,22 +239,21 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                                 if (data != null) {
                                   ToastShow.returnToast(
                                       "You have to verify your email to start watching, please verify it from your email");
-                                  navigateToPage(
-                                      context, const LaterVerifyScreen());
+                                  // navigateToPage(
+                                  //     context, const LaterVerifyScreen());
 
                                   return;
                                 }
                                 ToastShow.returnToast(translation.loginToView);
-                                navigateToPage(context, const OnboardScreen());
+                                navigateToPage(context, "/onboard");
                               }
                             }),
                       )
                     : FullButton(
                         content: "Rent to watch",
                         fn: () {
-                          navigateToPage(
-                              context,
-                              RentingScreen(
+                          navigateToPage(context, "/movie-rent",
+                              data: RentingScreen(
                                   act: () {},
                                   title: widget.title,
                                   img: widget.imgLink,
@@ -270,9 +266,8 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                   FullButton(
                     content: "Resume watching",
                     fn: () {
-                      navigateToPage(
-                          context,
-                          PlayerScreen(
+                      navigateToPage(context, "/player",
+                          data: PlayerScreen(
                               title: _cw.data?.subTitle ?? "",
                               details: _cw.data?.subDescription ?? "",
                               playLink: _cw.data?.url ?? "",

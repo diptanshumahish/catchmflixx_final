@@ -1,6 +1,5 @@
 import 'package:catchmflixx/api/user/reset/reset.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
@@ -73,7 +72,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                               await rs.addResetSent(_emailController.text);
                           if (res.success!) {
                             ToastShow.returnToast(res.data!.message!);
-                            navigateToPage(context, const CheckLoggedIn());
+                            navigateToPage(context, "/check-login");
                           }
                         }),
                     const SizedBox(
@@ -92,6 +91,5 @@ class ForgotPasswordScreen extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

@@ -101,9 +101,8 @@ class ContentCard extends ConsumerWidget {
                   onTap: () {
                     if (user is LoadedUserLoginResponseState &&
                         user.userLoginResponse.isLoggedIn!) {
-                      navigateToPage(
-                          context,
-                          PlayerScreen(
+                      navigateToPage(context, "player",
+                          data: PlayerScreen(
                             act: () {},
                             type: "",
                             title: title,

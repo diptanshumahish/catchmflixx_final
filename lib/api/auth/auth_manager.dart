@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:catchmflixx/models/error/error_model.dart';
 import 'package:catchmflixx/models/user/login/user.login.response.model.dart';
 import 'package:catchmflixx/models/user/maxlimit.response.model.dart';
 import 'package:catchmflixx/models/user/register/register.response.model.dart';
-import 'package:catchmflixx/screens/onboard/error/max_login.dart';
 import 'package:catchmflixx/utils/deviceinfo/device_info.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
@@ -166,8 +164,11 @@ class APIManager {
       ToastShow.returnToast(error.data?.message ?? "Error");
     } else if (e.response?.statusCode == statusLocked) {
       navigateToPage(
-          context, MaxLogin(limit: MaxLimit.fromJson(e.response?.data)),
-          isReplacement: true);
+        context,
+        '/max-login/',
+        data: MaxLimit.fromJson(e.response?.data),
+        isReplacement: true,
+      );
     } else {
       if (kDebugMode) {
         print(

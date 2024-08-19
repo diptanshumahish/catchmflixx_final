@@ -1,5 +1,4 @@
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
@@ -12,7 +11,6 @@ import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -201,14 +199,11 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                     prefs.setString("temp_login_mail", _emailController.text);
                     prefs.setString(
                         "temp_login_password", _passwordController.text);
-                    navigateToPage(
-                      context,
-                      VerifyEmail(
-                          emailId: _emailController.text,
-                          password: _passwordController.text),
-                      removeUntil: true,
-                      predicate: (route) => false,
-                    );
+                    navigateToPage(context, "/verify/email",
+                        data: VerifyEmail(
+                            emailId: _emailController.text,
+                            password: _passwordController.text),
+                        isReplacement: true);
                   } else if (res == 400) {
                     ToastShow.returnToast(translation.err);
                   } else {
@@ -223,7 +218,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                 content: translation.changeLanguage,
                 icon: const Icon(Icons.language),
                 fn: () {
-                  navigateToPage(context, const LanguageScreen());
+                  navigateToPage(context, "/languages");
                 })
           ], space: 20),
         ),

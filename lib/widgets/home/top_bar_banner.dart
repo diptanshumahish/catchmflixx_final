@@ -4,9 +4,6 @@ import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/search.list.model.dart';
-import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
-import 'package:catchmflixx/screens/main/series/series_screen.dart';
-import 'package:catchmflixx/screens/payments/payment_plans_screen.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/full_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shimmer/shimmer.dart';
 
 bool _isReady = false;
@@ -136,14 +132,8 @@ class _TopBarBannerState extends State<TopBarBanner> {
                           navigateToPage(
                               context,
                               _cList.results?.data![rand].type == "movie"
-                                  ? MovieScreen(
-                                      uuid: _cList.results?.data![rand].uuid ??
-                                          "",
-                                    )
-                                  : SeriesScreen(
-                                      uuid: _cList.results?.data![rand].uuid ??
-                                          "",
-                                    ));
+                                  ? "/movie/${_cList.results?.data![rand].uuid ?? ""}"
+                                  : "/series/${_cList.results?.data![rand].uuid ?? ""}");
                         }),
                   ),
                 ],

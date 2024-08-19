@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/text.dart';
-import 'package:catchmflixx/screens/start/check_logged_in.dart';
-import 'package:catchmflixx/screens/version/version_screen.dart';
+
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/version/version_check.dart';
 import 'package:catchmflixx/widgets/common/loader_spinner.dart';
@@ -36,12 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
   checkData() async {
     final data = await isVersionUpToDate();
     if (data == true) {
-      navigateToPage(context, const CheckLoggedIn(),
-          removeUntil: true, predicate: (r) => false);
+      navigateToPage(context, "/check-login", isReplacement: true);
     } else {
       navigateToPage(
         context,
-        const VersionScreen(),
+        "/version",
       );
     }
   }

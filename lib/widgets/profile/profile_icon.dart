@@ -2,13 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/api/user/profile/profile_response_model.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/main/home_main.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -42,9 +40,8 @@ class ProfileIcon extends StatelessWidget {
             ToastShow.returnToast("${translation.welcomeBack} $profileName");
             navigateToPage(
               context,
-              const BaseMain(),
-              removeUntil: true,
-              predicate: (route) => false,
+              "/base",
+              isReplacement: true,
             );
           } else {
             ToastShow.returnToast(translation.wrongPin);
@@ -80,12 +77,8 @@ class ProfileIcon extends StatelessWidget {
                               if (res.success!) {
                                 Navigator.pop(dialogContext);
                                 ToastShow.returnToast(translation.welcomeBack);
-                                navigateToPage(
-                                  context,
-                                  const BaseMain(),
-                                  removeUntil: true,
-                                  predicate: (route) => false,
-                                );
+                                navigateToPage(context, "/base",
+                                    isReplacement: true);
                               } else {
                                 ToastShow.returnToast(translation.wrongPin);
                               }

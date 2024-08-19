@@ -22,9 +22,8 @@ class TrailerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        navigateToPage(
-            context,
-            PlayerScreen(
+        navigateToPage(context, "/player",
+            data: PlayerScreen(
               act: () {},
               type: "Trailer",
               playLink: playId,
