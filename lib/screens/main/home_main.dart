@@ -28,8 +28,6 @@ class BaseMain extends ConsumerStatefulWidget {
 class _BaseMainState extends ConsumerState<BaseMain> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     final activeIndex = ref.watch(tabsProvider);
 
     return Scaffold(

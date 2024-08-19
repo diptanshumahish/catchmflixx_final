@@ -260,7 +260,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                                   id: widget.movieID!));
                         }),
                 const SizedBox(
-                  height: 5,
+                  height: 8,
                 ),
                 if (_cw.success == true && widget.type == "series")
                   FullButton(
@@ -326,7 +326,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                     FadeEffect(delay: Duration(milliseconds: 800))
                   ],
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       child: FlexItems(
                         widgetList: [
                           GlyphYear(year: widget.releaseDate),

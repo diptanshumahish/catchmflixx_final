@@ -1,6 +1,7 @@
 import 'dart:io';
 
 // import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -54,7 +55,9 @@ class FileUtils {
         '${dir.path}/${(fileName != null && fileName.isNotEmpty) ? fileName : DateTime.now().millisecondsSinceEpoch}.${fileExtension ?? 'm3u8'}',
       );
       await file.writeAsBytes(response.bodyBytes).then((f) async {
-        print('Write file success');
+        if (kDebugMode) {
+          print('Write file success');
+        }
         onSaveCompleted?.call(f);
       }).catchError((err) {
         onSaveFailed?.call(err);
@@ -122,7 +125,9 @@ class FileUtils {
     return await file.writeAsString(contents).then((f) {
       return f;
     }).catchError((err) {
-      // print('Write file error $err');
+      if (kDebugMode) {
+        print(err);
+      }
     });
   }
 

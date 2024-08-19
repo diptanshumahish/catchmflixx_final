@@ -8,77 +8,78 @@ class OffsetFullButton extends StatelessWidget {
   final VoidCallback fn;
   final bool? notFull;
   final bool? isLoading;
-  const OffsetFullButton(
-      {super.key,
-      this.isLoading = false,
-      required this.content,
-      required this.fn,
-      this.icon,
-      this.notFull});
+
+  const OffsetFullButton({
+    super.key,
+    this.isLoading = false,
+    required this.content,
+    required this.fn,
+    this.icon,
+    this.notFull,
+  });
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final buttonWidth = notFull == null ? size.width : size.width / 3;
+
     return CupertinoButton(
-        padding: EdgeInsets.zero,
-        child: Container(
-          width: notFull == null ? size.width : size.width / 3,
-          decoration: BoxDecoration(
-              color: Color(0xFFFF986E),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.black),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color.fromARGB(213, 255, 245, 193),
-                  offset: Offset(2, 2),
-                  blurRadius: 0,
-                  spreadRadius: 0,
-                ),
-              ]),
-          child: Padding(
-            padding:
-                EdgeInsets.symmetric(vertical: size.height > 840 ? 13.0 : 12),
-            child: isLoading == true
-                ? const Center(
-                    child: CircularProgressIndicator(
-                    color: Colors.black,
-                  ))
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      icon != null
-                          ? Icon(
-                              icon,
-                              color: Colors.black,
-                              size: size.height < 840 ? 15 : 18,
-                            )
-                          : const SizedBox.shrink(),
-                      icon != null
-                          ? const SizedBox(
-                              width: 5,
-                            )
-                          : const SizedBox.shrink(),
-                      Text(
-                        content,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "Kollektif",
-                            letterSpacing: 0.4,
-                            fontSize: size.height > 840 ? 15 : 14),
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ],
-                  ),
-          ),
+      padding: EdgeInsets.zero,
+      child: Container(
+        width: buttonWidth,
+        decoration: BoxDecoration(
+          color: Color(0xFFFFF5E1), // Light button color
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.black),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              offset: Offset(2, 2),
+              blurRadius: 4,
+              spreadRadius: 1,
+            ),
+          ],
         ),
-        onPressed: () async {
-          await vibrateTap();
-          fn();
-        });
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+          child: isLoading == true
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (icon != null)
+                      Icon(
+                        icon,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    if (icon != null) const SizedBox(width: 8),
+                    Text(
+                      content,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Kollektif",
+                        fontSize: 16,
+                        letterSpacing: 0.1,
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ],
+                ),
+        ),
+      ),
+      onPressed: () async {
+        await vibrateTap();
+        fn();
+      },
+    );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:catchmflixx/api/common/network.dart';
 import 'package:catchmflixx/models/payments/phonepe_init.model.dart';
 import 'package:catchmflixx/models/payments/renting_options.model.dart';
-import 'package:dio/dio.dart';
 
 class PaymentsManager {
   final NetworkManager networkManager = NetworkManager();
@@ -16,7 +15,7 @@ class PaymentsManager {
 
   Future<PhonePeInit> phonePeInitMovie(String search) async {
     return await networkManager.makeRequest<PhonePeInit>(
-        "/movie?id=${search}", (data) => PhonePeInit.fromJson(data),
+        "/movie?id=$search", (data) => PhonePeInit.fromJson(data),
         method: "POST", useSecondaryDio: true);
   }
 }

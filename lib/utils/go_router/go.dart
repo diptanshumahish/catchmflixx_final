@@ -9,6 +9,7 @@ import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/screens/onboard/error/max_login.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
+import 'package:catchmflixx/screens/payments/payment_success.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
@@ -178,6 +179,12 @@ GoRouter appRoute = GoRouter(
       path: "/settings",
       builder: (BuildContext context, GoRouterState state) {
         return const SettingsScreen();
+      },
+    ),
+    GoRoute(
+      path: '/payment-success',
+      builder: (BuildContext context, GoRouterState state) {
+        return const PaymentSuccessScreen();
       },
     ),
   ],

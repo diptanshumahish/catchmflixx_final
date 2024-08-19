@@ -8,7 +8,6 @@ import 'package:catchmflixx/widgets/cast/cast_render.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/content/movie/movie_top_bar.dart';
 import 'package:catchmflixx/widgets/content/trailer/trailer_card.dart';
-import 'package:catchmflixx/widgets/language/languages_available.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
