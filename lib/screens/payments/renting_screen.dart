@@ -1,6 +1,7 @@
 import 'package:catchmflixx/api/payments/payments.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/payments/renting_options.model.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:flutter/cupertino.dart';
@@ -145,15 +146,10 @@ class _RentingScreenState extends State<RentingScreen> {
                                                 .url;
 
                                             if (data.data.success) {
-                                              await launchUrl(
-                                                Uri.parse(
-                                                    "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
-                                                mode: LaunchMode
-                                                    .externalApplication,
-                                                webViewConfiguration:
-                                                    const WebViewConfiguration(
-                                                        enableJavaScript: true),
-                                              );
+                                              navigateToPage(
+                                                  context, "/payment-make",
+                                                  data:
+                                                      "https://www.catchmflixx.com/en/redirect?url=${url.toString()}");
                                             }
                                           })
                                     ],

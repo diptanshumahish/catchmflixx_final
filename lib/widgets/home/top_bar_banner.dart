@@ -5,11 +5,12 @@ import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/search.list.model.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
-import 'package:catchmflixx/widgets/common/buttons/full_button.dart';
+import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
 bool _isReady = false;
@@ -121,9 +122,9 @@ class _TopBarBannerState extends State<TopBarBanner> {
                     effects: const [
                       FadeEffect(delay: Duration(milliseconds: 400))
                     ],
-                    child: FullButton(
-                      icon: Icons.whatshot,
-                      content: "Know more",
+                    child: OffsetFullButton(
+                      icon: PhosphorIconsBold.video,
+                      content: "watch now",
                       fn: () {
                         navigateToPage(
                           context,

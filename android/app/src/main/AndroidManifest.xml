@@ -4,10 +4,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:label="catchmflixx"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -17,35 +19,63 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+
             <meta-data
-              android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
-            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+                android:name="io.flutter.embedding.android.NormalTheme"
+                android:resource="@style/NormalTheme" />
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="true" />
+
+            <!-- Intent filter for movie deep links -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="www.catchmflixx.com" />
+                <data
+                    android:scheme="https"
+                    android:host="www.catchmflixx.com"
+                    android:pathPrefix="/en/watch/watch-now/movie" />
             </intent-filter>
+
+            <!-- Intent filter for series deep links -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="www.catchmflixx.com" android:path="/en/payment-success" />
+                <data
+                    android:scheme="https"
+                    android:host="www.catchmflixx.com"
+                    android:pathPrefix="/en/watch/watch-now/series" />
             </intent-filter>
+
+            <!-- Intent filter for payment success deep link -->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="www.catchmflixx.com"
+                    android:path="/en/payment-success" />
+            </intent-filter>
+
+            <!-- Main launcher intent filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
         <meta-data
-        android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/ic_notif" />
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notif" />
     </application>
+
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>

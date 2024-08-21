@@ -7,7 +7,7 @@ import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
-import 'package:catchmflixx/widgets/common/buttons/full_button.dart';
+import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/secondary_full_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_catchmflixx_originals.dart';
@@ -21,6 +21,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool _added = false;
@@ -205,7 +206,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                         effects: const [
                           FadeEffect(delay: Duration(milliseconds: 600))
                         ],
-                        child: FullButton(
+                        child: OffsetFullButton(
                             icon: PhosphorIconsFill.video,
                             content: widget.type == "series"
                                 ? "Watch trailer"
@@ -249,7 +250,8 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                               }
                             }),
                       )
-                    : FullButton(
+                    : OffsetFullButton(
+                        icon: PhosphorIconsFill.sparkle,
                         content: "Rent to watch",
                         fn: () {
                           navigateToPage(context, "/movie-rent",
@@ -263,7 +265,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                   height: 8,
                 ),
                 if (_cw.success == true && widget.type == "series")
-                  FullButton(
+                  OffsetFullButton(
                     content: "Resume watching",
                     fn: () {
                       navigateToPage(context, "/player",
@@ -319,6 +321,26 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                     icon: Icon(_added
                         ? PhosphorIconsRegular.check
                         : PhosphorIconsRegular.playlist),
+                  ),
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Animate(
+                  effects: const [
+                    FadeEffect(delay: Duration(milliseconds: 900))
+                  ],
+                  child: SecondaryFullButton(
+                    content: "Share",
+                    fn: () async {
+                      final url = widget.type == "series"
+                          ? "https://www.catchmflixx.com/en/watch/watch-now/series?id=${widget.movieID}"
+                          : "https://www.catchmflixx.com/en/watch/watch-now/movie?id=${widget.movieID}";
+                      await Share.shareUri(
+                        Uri.parse(url),
+                      );
+                    },
+                    icon: const Icon(PhosphorIconsFill.share),
                   ),
                 ),
                 Animate(

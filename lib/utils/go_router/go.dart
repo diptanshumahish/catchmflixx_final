@@ -11,6 +11,7 @@ import 'package:catchmflixx/screens/onboard/error/max_login.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
 import 'package:catchmflixx/screens/payments/payment_success.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
+import 'package:catchmflixx/screens/payments/web_page.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/screens/start/profile/edit_profile.dart';
@@ -27,11 +28,26 @@ import 'package:go_router/go_router.dart';
 GoRouter appRoute = GoRouter(
   routes: <RouteBase>[
     GoRoute(
-      path: "/",
-      builder: (BuildContext context, GoRouterState state) {
-        return const SplashScreen();
-      },
-    ),
+        path: "/",
+        builder: (BuildContext context, GoRouterState state) {
+          return const SplashScreen();
+        },
+        routes: [
+          GoRoute(
+            path: 'en/watch/watch-now/movie',
+            builder: (context, state) {
+              final movieId = state.uri.queryParameters["id"];
+              return MovieScreen(uuid: movieId ?? "");
+            },
+          ),
+          GoRoute(
+            path: 'en/watch/watch-now/series',
+            builder: (context, state) {
+              final sId = state.uri.queryParameters["id"];
+              return SeriesScreen(uuid: sId ?? '');
+            },
+          ),
+        ]),
     GoRoute(
       path: "/splash",
       builder: (BuildContext context, GoRouterState state) {
@@ -65,6 +81,13 @@ GoRouter appRoute = GoRouter(
         // Retrieve query parameters
         final String? uuid = state.pathParameters['uuid'];
         return SeriesScreen(uuid: uuid ?? '');
+      },
+    ),
+    GoRoute(
+      path: '/payment-make',
+      builder: (context, state) {
+        final String url = state.extra as String;
+        return WebPage(url: url);
       },
     ),
     GoRoute(
