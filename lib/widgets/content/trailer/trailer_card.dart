@@ -23,6 +23,7 @@ class TrailerCard extends StatelessWidget {
       onTap: () {
         navigateToPage(context, "/player",
             data: PlayerScreen(
+              seekTo: 0,
               act: () {},
               type: "Trailer",
               playLink: playId,

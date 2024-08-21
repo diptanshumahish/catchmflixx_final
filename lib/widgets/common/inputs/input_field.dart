@@ -31,6 +31,7 @@ class CatchMFLixxInputField extends StatelessWidget {
       onChanged: onchange,
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
+        contentPadding: const EdgeInsets.all(22),
         errorMaxLines: 2,
         prefixIcon: Icon(icon),
         labelText: labelText,

@@ -35,7 +35,7 @@ class OffsetSecondaryFullButton extends StatelessWidget {
               ]),
           child: Padding(
             padding:
-                EdgeInsets.symmetric(vertical: size.height > 840 ? 13.0 : 12),
+                EdgeInsets.symmetric(vertical: size.height > 840 ? 16.0 : 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,

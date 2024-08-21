@@ -109,7 +109,7 @@ class ContentCard extends ConsumerWidget {
                             id: fullDetailsId,
                             details: subTitle,
                             playLink: playLink,
-                            seekTo: progress,
+                            seekTo: progress ?? 0,
                           ));
                     } else {
                       ToastShow.returnToast("Please login to view content");

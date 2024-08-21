@@ -6,6 +6,7 @@ import 'package:catchmflixx/utils/datetime/format_date.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
@@ -23,98 +24,156 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: Colors.black,
-              title: const Text(
-                "Maximum Login limit reached",
-                style: TextStyles.headingMobile,
-              ),
-              leading: IconButton(
-                  onPressed: () {
-                    navigateToPage(context, "/onboard", isReplacement: true);
-                  },
-                  icon: const Icon(
-                    Icons.chevron_left,
-                    color: Colors.white,
-                  )),
-            ),
-            const SliverToBoxAdapter(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container(
+            //   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+            //   decoration: BoxDecoration(
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.black.withOpacity(0.5),
+            //         blurRadius: 8,
+            //         spreadRadius: 1,
+            //       ),
+            //     ],
+            //   ),
+            //   child: Row(
+            //     children: [
+            //       IconButton(
+            //         onPressed: () {
+            //           navigateToPage(context, "/onboard", isReplacement: true);
+            //         },
+            //         icon: const Icon(
+            //           Icons.chevron_left,
+            //           color: Colors.white,
+            //         ),
+            //       ),
+            //       const Expanded(
+            //         child: Text(
+            //           "Maximum Login Limit Reached",
+            //           style: TextStyles.headingMobile,
+            //           textAlign: TextAlign.center,
+            //         ),
+            //       ),
+            //       const SizedBox(width: 48), // to balance the leading icon
+            //     ],
+            //   ),
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(16),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: GestureDetector(
+                        onTap: () {
+                          navigateToPage(context, "/", isReplacement: true);
+                        },
+                        child: const Row(
+                          children: [
+                            PhosphorIcon(
+                              PhosphorIconsBold.arrowLeft,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: 16,
+                            ),
+                            Text(
+                              "back",
+                              style: TextStyles
+                                  .headingsForSectionsForSmallerScreens,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                     Text(
-                      "You are already logged in at 3 different sessions, your current plan limits maximum of 3 sessions, kindly logout from any of the sessions below to proceeed.",
-                      style: TextStyles.formSubTitle,
+                      "Action needed",
+                      style: TextStyles.headingMobile
+                          .copyWith(fontSize: 42, color: Colors.blue[100]),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "You have logged in at more devices than in your plan",
+                      style: TextStyles.headingsForSections,
                     )
                   ],
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: widget.limit.data!.sessions!
-                      .map((e) => GestureDetector(
-                            onTap: () async {
-                              int res = await ref
-                                  .read(userLoginProvider.notifier)
-                                  .makeManualLogin(
-                                      e.id.toString(), context, false);
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                "You have reached the maximum login limit of 3 sessions for your current plan. Please log out from one of the sessions below to proceed.",
+                style: TextStyles.formSubTitle,
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                itemCount: widget.limit.data!.sessions!.length,
+                itemBuilder: (context, index) {
+                  final session = widget.limit.data!.sessions![index];
+                  return GestureDetector(
+                    onTap: () async {
+                      int res = await ref
+                          .read(userLoginProvider.notifier)
+                          .makeManualLogin(
+                              session.id.toString(), context, false);
 
-                              if (res == 200) {
-                                navigateToPage(context, "/check-login",
-                                    isReplacement: true);
-                              } else if (res == 500) {
-                                navigateToPage(context, "/base",
-                                    isReplacement: true);
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    color: Colors.white10,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(color: Colors.white24)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            e.userAgent ?? "",
-                                            style: TextStyles.cardHeading,
-                                          ),
-                                          Text(
-                                            formatDate(e.lastLogin ?? ""),
-                                            style: TextStyles.formSubTitle,
-                                          ),
-                                        ],
-                                      ),
-                                      const PhosphorIcon(
-                                        PhosphorIconsRegular.x,
-                                        color: Colors.red,
-                                      ),
-                                    ],
-                                  ),
+                      if (res == 200) {
+                        navigateToPage(context, "/check-login",
+                            isReplacement: true);
+                      } else if (res == 500) {
+                        navigateToPage(context, "/base", isReplacement: true);
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[850],
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey[700]!),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                session.userAgent ?? "",
+                                style: TextStyles.cardHeading,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                formatDate(session.lastLogin ?? ""),
+                                style: TextStyles.formSubTitle.copyWith(
+                                  color: Colors.white54,
                                 ),
                               ),
-                            ),
-                          ))
-                      .toList(),
-                ),
+                            ],
+                          ),
+                          const PhosphorIcon(
+                            PhosphorIconsRegular.x,
+                            color: Colors.redAccent,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],

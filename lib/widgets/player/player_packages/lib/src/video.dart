@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
 import 'package:catchmflixx/state/provider.dart';
+import 'package:catchmflixx/utils/ads/ads.dart';
 import 'package:catchmflixx/utils/player/return_quality.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player.dart';
@@ -22,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:video_player/video_player.dart';
@@ -119,6 +120,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
   GlobalKey videoQualityKey = GlobalKey();
   Duration? lastPlayedPos;
   bool isAtLivePosition = true;
+  late Timer _timer;
 
   @override
   void initState() {
@@ -138,10 +140,22 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
         widget.videoStyle.orientation ?? DeviceOrientation.values,
       );
     }
+
+    if (mounted) {
+      _timer = Timer.periodic(const Duration(seconds: 15), (Timer timer) {
+        if (controller.value.isPlaying) {
+          update();
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _timer.cancel();
+    if (showTime != null) {
+      showTime!.cancel();
+    }
     update();
     m3u8Clean();
     controller.dispose();
@@ -151,7 +165,17 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
 
   update() async {
     UserActivity ua = UserActivity();
-    await ua.addWatchProgress(widget.id, controller.value.position.inSeconds);
+    final res = await ua.addWatchProgress(
+        widget.id, controller.value.position.inSeconds);
+    if (res.data!.vidAd != null) {
+      if (res.data!.vidAd!.advertisement != null) {
+        controller.pause();
+        showFullScreenAd(context, res.data!.vidAd!.advertisement!,
+            res.data!.vidAd!.skippable!, res.data!.vidAd!.uuid!, () {
+          controller.play();
+        }, res.data!.vidAd!.title!);
+      }
+    }
   }
 
   @override
@@ -325,23 +349,28 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
 
   /// Video player BottomBar
   Widget bottomBar() {
-    return Visibility(
-      visible: showMenu,
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: PlayerBottomBar(
-          controller: controller,
-          videoSeek: videoSeek ?? '00:00:00',
-          videoDuration: videoDuration ?? '00:00:00',
-          videoStyle: widget.videoStyle,
-          showBottomBar: showMenu,
-          onPlayButtonTap: () => togglePlay(),
-          onFastForward: (value) {
-            widget.onFastForward?.call(value);
-          },
-          onRewind: (value) {
-            widget.onRewind?.call(value);
-          },
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Visibility(
+        visible: showMenu,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: PlayerBottomBar(
+            controller: controller,
+            videoSeek: videoSeek ?? '00:00:00',
+            videoDuration: videoDuration ?? '00:00:00',
+            videoStyle: widget.videoStyle,
+            showBottomBar: showMenu,
+            onPlayButtonTap: () => togglePlay(),
+            onFastForward: (value) {
+              widget.onFastForward?.call(value);
+            },
+            onRewind: (value) {
+              widget.onRewind?.call(value);
+            },
+          ),
         ),
       ),
     );
@@ -792,6 +821,8 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
   }
 
   void videoInit(String? url) {
+    print("✨✨✨✨✨✨✨");
+    print(widget.last!.inSeconds.toString());
     if (isOffline == false) {
       if (playType == "MP4" || playType == "WEBM") {
         // Play MP4 and WEBM video
@@ -958,9 +989,8 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
   }
 
   void seekToLastPlayingPosition() async {
-    if (lastPlayedPos != null) {
-      await controller.seekTo(lastPlayedPos!);
-
+    if (widget.last != null) {
+      await controller.seekTo(widget.last!);
       widget.onVideoInitCompleted?.call(controller);
       lastPlayedPos = null;
     }

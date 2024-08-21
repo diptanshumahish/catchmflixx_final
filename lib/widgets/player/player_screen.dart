@@ -13,7 +13,7 @@ class PlayerScreen extends StatefulWidget {
   final String details;
   final String playLink;
   final String id;
-  final int? seekTo;
+  final int seekTo;
   final String type;
   final VoidCallback act;
   const PlayerScreen(
@@ -22,7 +22,7 @@ class PlayerScreen extends StatefulWidget {
       required this.details,
       required this.playLink,
       required this.id,
-      this.seekTo,
+      required this.seekTo,
       required this.type,
       required this.act});
 
@@ -38,6 +38,8 @@ class _PlayerScreenState extends State<PlayerScreen> {
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
     ]);
+    // print("here we have 💵💵💵💵💵💵💵💵");
+    // print(widget.seekTo);
 
     super.initState();
   }

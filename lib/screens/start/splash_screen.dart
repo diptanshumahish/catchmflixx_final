@@ -4,6 +4,7 @@ import 'package:catchmflixx/constants/text.dart';
 
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/version/version_check.dart';
+import 'package:catchmflixx/widgets/common/loading/loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_svg/svg.dart';
@@ -98,9 +99,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   child: const Center(
                     child: Column(
                       children: [
-                        CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
+                        CoolLoadingIndicator(),
                         SizedBox(
                           height: 5,
                         ),

@@ -14,6 +14,15 @@ class UserActivity {
         method: "POST", data: data);
   }
 
+  Future<WatchProgress> acknowledgeAd(String id) async {
+    final FormData data = FormData.fromMap({
+      "uuid": id,
+    });
+    return await networkManager.makeRequest<WatchProgress>(
+        "content/vid-ad-acknowledge/", (p0) => WatchProgress.fromJson(p0),
+        method: "POST", data: data);
+  }
+
   Future<UserActivityHistory> getWatchHistory() async {
     return await networkManager.makeRequest<UserActivityHistory>(
         "content/watched-list", (p0) => UserActivityHistory.fromJson(p0));

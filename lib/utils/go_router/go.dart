@@ -28,26 +28,44 @@ import 'package:go_router/go_router.dart';
 GoRouter appRoute = GoRouter(
   routes: <RouteBase>[
     GoRoute(
-        path: "/",
-        builder: (BuildContext context, GoRouterState state) {
-          return const SplashScreen();
-        },
-        routes: [
-          GoRoute(
-            path: 'en/watch/watch-now/movie',
-            builder: (context, state) {
-              final movieId = state.uri.queryParameters["id"];
-              return MovieScreen(uuid: movieId ?? "");
-            },
-          ),
-          GoRoute(
-            path: 'en/watch/watch-now/series',
-            builder: (context, state) {
-              final sId = state.uri.queryParameters["id"];
-              return SeriesScreen(uuid: sId ?? '');
-            },
-          ),
-        ]),
+      path: "/",
+      builder: (BuildContext context, GoRouterState state) {
+        return const SplashScreen();
+      },
+    ),
+    GoRoute(
+      path: '/payment-make',
+      builder: (context, state) {
+        final String url = state.extra as String;
+        return WebPage(url: url);
+      },
+    ),
+    GoRoute(
+      path: '/payment-success',
+      builder: (BuildContext context, GoRouterState state) {
+        return const PaymentSuccessScreen();
+      },
+    ),
+    GoRoute(
+      path: "/forgot-password",
+      builder: (BuildContext context, GoRouterState state) {
+        return const ForgotPasswordScreen();
+      },
+    ),
+    GoRoute(
+      path: '/en/watch/watch-now/movie',
+      builder: (context, state) {
+        final movieId = state.uri.queryParameters["id"];
+        return MovieScreen(uuid: movieId ?? "");
+      },
+    ),
+    GoRoute(
+      path: '/en/watch/watch-now/series',
+      builder: (context, state) {
+        final sId = state.uri.queryParameters["id"];
+        return SeriesScreen(uuid: sId ?? '');
+      },
+    ),
     GoRoute(
       path: "/splash",
       builder: (BuildContext context, GoRouterState state) {
@@ -81,13 +99,6 @@ GoRouter appRoute = GoRouter(
         // Retrieve query parameters
         final String? uuid = state.pathParameters['uuid'];
         return SeriesScreen(uuid: uuid ?? '');
-      },
-    ),
-    GoRoute(
-      path: '/payment-make',
-      builder: (context, state) {
-        final String url = state.extra as String;
-        return WebPage(url: url);
       },
     ),
     GoRoute(
@@ -134,6 +145,7 @@ GoRouter appRoute = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
         final PlayerScreen? data = state.extra as PlayerScreen?;
         return PlayerScreen(
+            seekTo: data!.seekTo ?? 0,
             title: data!.title,
             details: data.details,
             playLink: data.playLink,
@@ -193,21 +205,9 @@ GoRouter appRoute = GoRouter(
       },
     ),
     GoRoute(
-      path: "/forgot-password",
-      builder: (BuildContext context, GoRouterState state) {
-        return const ForgotPasswordScreen();
-      },
-    ),
-    GoRoute(
       path: "/settings",
       builder: (BuildContext context, GoRouterState state) {
         return const SettingsScreen();
-      },
-    ),
-    GoRoute(
-      path: '/payment-success',
-      builder: (BuildContext context, GoRouterState state) {
-        return const PaymentSuccessScreen();
       },
     ),
   ],

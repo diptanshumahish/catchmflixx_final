@@ -68,6 +68,9 @@ class MovieTopBar extends ConsumerStatefulWidget {
 class _MovieTopBarState extends ConsumerState<MovieTopBar> {
   @override
   void initState() {
+    // print("well do we have it here?🙃🙃🙃🙃");
+    // print(widget.progress);
+
     if (widget.type == "series") {
       getData();
     }
