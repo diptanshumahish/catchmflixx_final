@@ -1,4 +1,4 @@
-import 'dart:io' show Platform; // Import Platform to check the operating system
+import 'dart:io' show Platform;
 import 'package:catchmflixx/firebase_options.dart';
 import 'package:catchmflixx/screens/start/splash_screen.dart';
 import 'package:catchmflixx/state/provider.dart';

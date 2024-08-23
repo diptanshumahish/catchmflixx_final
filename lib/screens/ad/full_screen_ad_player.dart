@@ -35,13 +35,11 @@ class _FullScreenAdPlayerState extends State<FullScreenAdPlayer> {
         });
       });
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 500), (Timer timer) {
       if (_controller.value.isCompleted) {
         widget.onClose();
         timer.cancel();
-      } else {
-        setState(() {});
-      }
+      } else {}
     });
   }
 
@@ -85,7 +83,7 @@ class _FullScreenAdPlayerState extends State<FullScreenAdPlayer> {
               ],
             ),
           ),
-          widget.skippable
+          (_controller.value.isCompleted || widget.skippable)
               ? Positioned(
                   top: 40,
                   right: 20,
@@ -106,7 +104,8 @@ class _FullScreenAdPlayerState extends State<FullScreenAdPlayer> {
                       _controller.value.duration.inSeconds
                   : 0,
               backgroundColor: Colors.white.withOpacity(0.3),
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
             ),
           ),
         ],

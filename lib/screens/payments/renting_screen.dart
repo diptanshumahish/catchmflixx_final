@@ -146,10 +146,9 @@ class _RentingScreenState extends State<RentingScreen> {
                                                 .url;
 
                                             if (data.data.success) {
-                                              navigateToPage(
-                                                  context, "/payment-make",
-                                                  data:
-                                                      "https://www.catchmflixx.com/en/redirect?url=${url.toString()}");
+                                              await launchUrl(Uri.parse(
+                                                  "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"));
+                                              navigateToPage(context, "/base");
                                             }
                                           })
                                     ],

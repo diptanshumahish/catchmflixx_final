@@ -1,6 +1,9 @@
 import 'package:catchmflixx/api/common/network.dart';
+import 'package:catchmflixx/models/payments/episode_phonepe_init.model.dart';
+import 'package:catchmflixx/models/payments/episode_rent_options.dart';
 import 'package:catchmflixx/models/payments/phonepe_init.model.dart';
 import 'package:catchmflixx/models/payments/renting_options.model.dart';
+import 'package:dio/dio.dart';
 
 class PaymentsManager {
   final NetworkManager networkManager = NetworkManager();
@@ -13,9 +16,25 @@ class PaymentsManager {
     );
   }
 
+  Future<EpisodeRentModel> getEpisodeRents(String search) async {
+    return await networkManager.makeRequest<EpisodeRentModel>(
+      "$path/episode-rents/$search/",
+      (data) => EpisodeRentModel.fromJson(data),
+    );
+  }
+
   Future<PhonePeInit> phonePeInitMovie(String search) async {
     return await networkManager.makeRequest<PhonePeInit>(
         "/movie?id=$search", (data) => PhonePeInit.fromJson(data),
         method: "POST", useSecondaryDio: true);
+  }
+
+  Future<EpisodePhonePeInit> phonePeInitEpisode(String search) async {
+    return await networkManager.makeRequest<EpisodePhonePeInit>(
+      "/payment/rent/episode",
+      data: FormData.fromMap({"id": search}),
+      (data) => EpisodePhonePeInit.fromJson(data),
+      method: "POST",
+    );
   }
 }

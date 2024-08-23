@@ -27,7 +27,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 bool _added = false;
 CurrentWatching _cw = CurrentWatching(success: false);
 
-class MovieTopBar extends ConsumerStatefulWidget {
+class SeriesTopBar extends ConsumerStatefulWidget {
   final String imgLink;
   final String title;
   final String subTitle;
@@ -43,7 +43,7 @@ class MovieTopBar extends ConsumerStatefulWidget {
   final VoidCallback act;
   final bool? userRented;
   final bool? isFree;
-  const MovieTopBar(
+  const SeriesTopBar(
       {super.key,
       this.movieID,
       required this.imgLink,
@@ -62,15 +62,13 @@ class MovieTopBar extends ConsumerStatefulWidget {
       required this.releaseDate});
 
   @override
-  ConsumerState<MovieTopBar> createState() => _MovieTopBarState();
+  ConsumerState<SeriesTopBar> createState() => _SeriesTopBarState();
 }
 
-class _MovieTopBarState extends ConsumerState<MovieTopBar> {
+class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   @override
   void initState() {
-    if (widget.type == "series") {
-      getData();
-    }
+    getData();
     setState(() {
       _added = widget.addList;
     });
@@ -92,13 +90,6 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
     final size = MediaQuery.of(context).size;
     final user = ref.read(userLoginProvider);
     final translation = AppLocalizations.of(context)!;
-
-    final totalDurationSeconds = (widget.duration ?? 0) * 60;
-    final progressSeconds = widget.progress ?? 0;
-    final remainingSeconds = totalDurationSeconds - progressSeconds;
-    final progressPercent = totalDurationSeconds > 0
-        ? (progressSeconds / totalDurationSeconds)
-        : 0.0;
 
     return FlexibleSpaceBar(
         background: Stack(
@@ -162,109 +153,51 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                 const SizedBox(
                   height: 10,
                 ),
-                (widget.progress != 0 && widget.progress != null)
-                    ? Animate(
-                        effects: const [
-                          FadeEffect(delay: Duration(milliseconds: 300))
-                        ],
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 4,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  color: Colors.white24,
-                                  borderRadius: BorderRadius.circular(2)),
-                              child: FractionallySizedBox(
-                                alignment: Alignment.topLeft,
-                                widthFactor: progressPercent,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              formatDuration(remainingSeconds),
-                              style: TextStyles.smallSubText,
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox.shrink(),
                 const SizedBox(
                   height: 5,
                 ),
-                (widget.isFree == true || widget.userRented == true)
-                    ? Animate(
-                        effects: const [
-                          FadeEffect(delay: Duration(milliseconds: 600))
-                        ],
-                        child: OffsetFullButton(
-                            icon: PhosphorIconsFill.video,
-                            content: widget.type == "series"
-                                ? "Watch trailer"
-                                : (progressSeconds > 0)
-                                    ? "Resume"
-                                    : translation.playNow,
-                            fn: () async {
-                              if (user is LoadedUserLoginResponseState &&
-                                  user.userLoginResponse.isLoggedIn!) {
-                                navigateToPage(context, "/player",
-                                    data: PlayerScreen(
-                                      act: () {
-                                        widget.act();
-                                      },
-                                      seekTo: widget.progress ?? 0,
-                                      type: widget.type == "series"
-                                          ? "Trailer"
-                                          : "",
-                                      title: widget.type == "series"
-                                          ? "Trailer"
-                                          : widget.title,
-                                      details: widget.subTitle,
-                                      id: widget.id,
-                                      playLink: widget.playId,
-                                    ));
-                              } else {
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                String? data =
-                                    prefs.getString("temp_login_mail");
-                                if (data != null) {
-                                  ToastShow.returnToast(
-                                      "You have to verify your email to start watching, please verify it from your email");
-                                  // navigateToPage(
-                                  //     context, const LaterVerifyScreen());
-
-                                  return;
-                                }
-                                ToastShow.returnToast(translation.loginToView);
-                                navigateToPage(context, "/onboard");
-                              }
-                            }),
-                      )
-                    : OffsetFullButton(
-                        icon: PhosphorIconsFill.sparkle,
-                        content: "Rent to watch",
-                        fn: () {
-                          navigateToPage(context, "/movie-rent",
-                              data: RentingScreen(
-                                  act: () {},
-                                  title: widget.title,
-                                  img: widget.imgLink,
-                                  id: widget.movieID!));
-                        }),
+                Animate(
+                  effects: const [
+                    FadeEffect(delay: Duration(milliseconds: 600))
+                  ],
+                  child: OffsetFullButton(
+                      icon: PhosphorIconsFill.video,
+                      content: "Watch trailer",
+                      fn: () async {
+                        if (user is LoadedUserLoginResponseState &&
+                            user.userLoginResponse.isLoggedIn!) {
+                          navigateToPage(context, "/player",
+                              data: PlayerScreen(
+                                act: () {
+                                  widget.act();
+                                },
+                                seekTo: widget.progress ?? 0,
+                                type: widget.type == "series" ? "Trailer" : "",
+                                title: widget.type == "series"
+                                    ? "Trailer"
+                                    : widget.title,
+                                details: widget.subTitle,
+                                id: widget.id,
+                                playLink: widget.playId,
+                              ));
+                        } else {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          String? data = prefs.getString("temp_login_mail");
+                          if (data != null) {
+                            ToastShow.returnToast(
+                                "You have to verify your email to start watching, please verify it from your email");
+                            return;
+                          }
+                          ToastShow.returnToast(translation.loginToView);
+                          navigateToPage(context, "/onboard");
+                        }
+                      }),
+                ),
                 const SizedBox(
                   height: 8,
                 ),
-                if (_cw.success == true && widget.type == "series")
+                if (_cw.success == true)
                   OffsetFullButton(
                     content: "Resume watching",
                     fn: () {
@@ -333,9 +266,9 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                   child: SecondaryFullButton(
                     content: "Share",
                     fn: () async {
-                      final url = widget.type == "series"
-                          ? "https://www.catchmflixx.com/en/watch/watch-now/series?id=${widget.movieID}"
-                          : "https://www.catchmflixx.com/en/watch/watch-now/movie?id=${widget.movieID}";
+                      final url =
+                          "https://www.catchmflixx.com/en/watch/watch-now/series?id=${widget.id}";
+
                       await Share.shareUri(
                         Uri.parse(url),
                       );
@@ -353,11 +286,11 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                         widgetList: [
                           GlyphYear(year: widget.releaseDate),
                           GlyphSensor(censorType: widget.censor),
-                          GlyphPrice(isPaid: widget.isFree ?? false),
-                          widget.isFree == true
-                              ? const SizedBox.shrink()
-                              : GlyphRented(
-                                  isRented: widget.userRented ?? false)
+                          // GlyphPrice(isPaid: widget.isFree ?? false),
+                          // widget.isFree == true
+                          //     ? const SizedBox.shrink()
+                          //     : GlyphRented(
+                          //         isRented: widget.userRented ?? false)
                         ],
                         space: 10,
                         horizontal: true,
@@ -369,14 +302,5 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
         ),
       ],
     ));
-  }
-
-  String formatDuration(int seconds) {
-    final hour = (seconds ~/ 60) ~/ 60;
-    final minutes = (hour > 0) ? (seconds / 60) ~/ 60 : seconds ~/ 60;
-    if (hour != 0) {
-      return '${hour}h ${minutes}m  remaining';
-    }
-    return '${minutes}m  remaining';
   }
 }

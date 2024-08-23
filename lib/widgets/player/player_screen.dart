@@ -104,7 +104,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
               onShowMenu: (show, _) {},
               url: widget.playLink,
               autoPlayVideoAfterInit: true,
-              allowCacheFile: true,
+              allowCacheFile: false,
               videoLoadingStyle: VideoLoadingStyle(
                   loadingBackgroundColor: Colors.black,
                   loading: Center(

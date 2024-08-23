@@ -8,8 +8,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 class TrailerCard extends StatelessWidget {
   final String title;
   final String playId;
-
   final String poster;
+
   const TrailerCard({
     super.key,
     required this.poster,
@@ -34,11 +34,19 @@ class TrailerCard extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.only(right: 10),
-        width: 300,
-        height: 190,
+        width: 280,
+        height: 160,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.white30),
-            borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Stack(
@@ -46,39 +54,46 @@ class TrailerCard extends StatelessWidget {
               Image.network(
                 poster,
                 fit: BoxFit.cover,
-                height: 190,
+                height: 160,
                 width: double.infinity,
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Container(
-                  decoration: const BoxDecoration(
-                      gradient: CFGradient.topToBottomGradient),
-                ),
-              ),
-              SizedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyles.cardHeading,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withOpacity(0.6),
+                      Colors.transparent,
                     ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                   ),
                 ),
               ),
-              const Center(
-                child: PhosphorIcon(
-                  PhosphorIconsFill.play,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyles.cardHeading.copyWith(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-              )
+              ),
+              Center(
+                child: Icon(
+                  Icons.play_circle_filled,
+                  color: Colors.white.withOpacity(0.8),
+                  size: 50,
+                ),
+              ),
             ],
           ),
         ),

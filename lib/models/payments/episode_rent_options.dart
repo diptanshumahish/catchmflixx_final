@@ -1,10 +1,10 @@
-class RentingOptions {
+class EpisodeRentModel {
   bool? success;
   List<Data>? data;
 
-  RentingOptions({this.success, this.data});
+  EpisodeRentModel({this.success, this.data});
 
-  RentingOptions.fromJson(Map<String, dynamic> json) {
+  EpisodeRentModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     if (json['data'] != null) {
       data = <Data>[];
@@ -26,25 +26,28 @@ class RentingOptions {
 
 class Data {
   int? id;
-  String? movie;
   int? days;
-  dynamic price;
+  num? price;
+  String? createdOn;
+  String? episode;
 
-  Data({this.id, this.movie, this.days, this.price});
+  Data({this.id, this.days, this.price, this.createdOn, this.episode});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    movie = json['movie'];
     days = json['days'];
     price = json['price'];
+    createdOn = json['created_on'];
+    episode = json['episode'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['movie'] = movie;
     data['days'] = days;
     data['price'] = price;
+    data['created_on'] = createdOn;
+    data['episode'] = episode;
     return data;
   }
 }

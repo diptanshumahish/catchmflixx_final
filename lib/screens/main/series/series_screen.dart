@@ -7,6 +7,7 @@ import 'package:catchmflixx/utils/genres/return_series_genre.dart';
 import 'package:catchmflixx/widgets/cast/cast_render.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/content/movie/movie_top_bar.dart';
+import 'package:catchmflixx/widgets/content/series/series_top_bar.dart';
 import 'package:catchmflixx/widgets/content/trailer/trailer_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +101,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                           color: Colors.white,
                         )),
                     expandedHeight: size.height / 1.3,
-                    flexibleSpace: MovieTopBar(
+                    flexibleSpace: SeriesTopBar(
                       act: () {
                         getData();
                       },

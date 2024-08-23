@@ -358,6 +358,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
         child: Align(
           alignment: Alignment.bottomCenter,
           child: PlayerBottomBar(
+            visible: showMenu,
             controller: controller,
             videoSeek: videoSeek ?? '00:00:00',
             videoDuration: videoDuration ?? '00:00:00',

@@ -57,7 +57,7 @@
                 <data
                     android:scheme="https"
                     android:host="www.catchmflixx.com"
-                    android:path="/en/payment-success" />
+                    android:pathPrefix="/en/payment-success" />
             </intent-filter>
 
             <!-- Main launcher intent filter -->

@@ -42,7 +42,7 @@ class _SeasonSectionState extends State<SeasonSection> {
         setState(() {
           _ep = data;
         });
-      } else {}
+      }
     } catch (e) {
       ToastShow.returnToast(e.toString());
     } finally {
@@ -57,7 +57,8 @@ class _SeasonSectionState extends State<SeasonSection> {
     final size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.all(size.height / 40),
+      padding: EdgeInsets.symmetric(
+          horizontal: size.width * 0.05, vertical: size.height * 0.02),
       child: isLoading
           ? SizedBox(
               height: size.height / 3,
@@ -70,30 +71,33 @@ class _SeasonSectionState extends State<SeasonSection> {
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        widget.sectionHeading,
-                        style: TextStyles.headingsForSections,
-                      ),
-                    ),
-                  ],
+                Text(
+                  widget.sectionHeading,
+                  style: TextStyles.headingsForSections.copyWith(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
+                const SizedBox(height: 4),
                 Text(
                   widget.sectionDetails,
-                  style: TextStyles.smallSubText,
+                  style: TextStyles.smallSubText.copyWith(
+                    color: Colors.white70,
+                    fontSize: 12,
+                  ),
                 ),
+                const SizedBox(height: 12),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: _ep.data?.episodes!
-                              .map((e) => ContentCard(
+                  child: Row(
+                    children: _ep.data?.episodes!
+                            .map((e) => Padding(
+                                  padding: const EdgeInsets.only(right: 12.0),
+                                  child: ContentCard(
+                                    episodeNumber: e.epNumber.toString() ?? "0",
+                                    isPaid: e.free ?? false,
+                                    userRented: e.userRented ?? false,
+                                    key: Key(e.videoUuid ?? ""),
                                     playLink: e.url ?? "",
                                     duration: e.durationMinutes ?? 0,
                                     poster: e.thumbnail ?? "",
@@ -101,12 +105,12 @@ class _SeasonSectionState extends State<SeasonSection> {
                                     title: e.subTitle ?? "",
                                     subTitle: e.subDescription ?? "",
                                     progress: e.progress ?? 0,
-                                  ))
-                              .toList() ??
-                          [],
-                    ),
+                                  ),
+                                ))
+                            .toList() ??
+                        [],
                   ),
-                )
+                ),
               ],
             ),
     );

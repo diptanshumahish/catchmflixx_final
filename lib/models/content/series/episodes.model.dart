@@ -23,15 +23,25 @@ class Data {
   int? number;
   String? suuid;
   String? content;
+  bool? watchlater;
   Seasonmeta? seasonmeta;
   List<Episodes>? episodes;
+  bool? userRented;
 
-  Data({this.number, this.suuid, this.content, this.seasonmeta, this.episodes});
+  Data(
+      {this.number,
+      this.suuid,
+      this.content,
+      this.watchlater,
+      this.seasonmeta,
+      this.episodes,
+      this.userRented});
 
   Data.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     suuid = json['suuid'];
     content = json['content'];
+    watchlater = json['watchlater'];
     seasonmeta = json['seasonmeta'] != null
         ? Seasonmeta.fromJson(json['seasonmeta'])
         : null;
@@ -41,6 +51,7 @@ class Data {
         episodes!.add(Episodes.fromJson(v));
       });
     }
+    userRented = json['user_rented'];
   }
 
   Map<String, dynamic> toJson() {
@@ -48,12 +59,14 @@ class Data {
     data['number'] = number;
     data['suuid'] = suuid;
     data['content'] = content;
+    data['watchlater'] = watchlater;
     if (seasonmeta != null) {
       data['seasonmeta'] = seasonmeta!.toJson();
     }
     if (episodes != null) {
       data['episodes'] = episodes!.map((v) => v.toJson()).toList();
     }
+    data['user_rented'] = userRented;
     return data;
   }
 }
@@ -108,6 +121,8 @@ class Language {
 class Episodes {
   String? videoUuid;
   int? epNumber;
+  int? videoViews;
+  int? seasonNumber;
   String? thumbnail;
   String? subTitle;
   String? subDescription;
@@ -115,41 +130,59 @@ class Episodes {
   String? trailer;
   int? durationMinutes;
   int? progress;
+  bool? rentable;
+  bool? userRented;
+  bool? free;
 
   Episodes(
       {this.videoUuid,
       this.epNumber,
+      this.videoViews,
+      this.seasonNumber,
       this.thumbnail,
       this.subTitle,
       this.subDescription,
       this.url,
       this.trailer,
+      this.durationMinutes,
       this.progress,
-      this.durationMinutes});
+      this.rentable,
+      this.userRented,
+      this.free});
 
   Episodes.fromJson(Map<String, dynamic> json) {
     videoUuid = json['video_uuid'];
     epNumber = json['ep_number'];
+    videoViews = json['video_views'];
+    seasonNumber = json['season_number'];
     thumbnail = json['thumbnail'];
     subTitle = json['sub_title'];
     subDescription = json['sub_description'];
     url = json['url'];
     trailer = json['trailer'];
-    progress = json['progress'];
     durationMinutes = json['duration_minutes'];
+    progress = json['progress'];
+    rentable = json['rentable'];
+    userRented = json['user_rented'];
+    free = json['free'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['video_uuid'] = videoUuid;
     data['ep_number'] = epNumber;
+    data['video_views'] = videoViews;
+    data['season_number'] = seasonNumber;
     data['thumbnail'] = thumbnail;
     data['sub_title'] = subTitle;
     data['sub_description'] = subDescription;
     data['url'] = url;
     data['trailer'] = trailer;
-    data['progress'] = progress;
     data['duration_minutes'] = durationMinutes;
+    data['progress'] = progress;
+    data['rentable'] = rentable;
+    data['user_rented'] = userRented;
+    data['free'] = free;
     return data;
   }
 }

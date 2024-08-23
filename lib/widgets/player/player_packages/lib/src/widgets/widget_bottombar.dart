@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:video_player/video_player.dart';
 
+bool _zeroUp = false;
+
 class PlayerBottomBar extends StatefulWidget {
   const PlayerBottomBar({
     super.key,
@@ -17,8 +19,9 @@ class PlayerBottomBar extends StatefulWidget {
     this.videoStyle = const VideoStyle(),
     this.onFastForward,
     this.onRewind,
+    required this.visible,
   });
-
+  final bool visible;
   final VideoPlayerController controller;
   final bool showBottomBar;
   final String videoSeek;
@@ -48,16 +51,22 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
   void initState() {
     super.initState();
     _sliderValueNotifier = ValueNotifier(0.0);
-    // widget.controller.addListener(_updateSliderValue);
-    _timer = Timer.periodic(const Duration(milliseconds: 5), (time) {
-      _updateSliderValue();
+    widget.controller.addListener(_updateSliderValue);
+    _timer = Timer.periodic(const Duration(seconds: 1), (time) {
+      if (widget.controller.value.isPlaying == false && _zeroUp == false) {
+        _updateSliderValue();
+        setState(() {
+          _zeroUp = true;
+        });
+      }
     });
   }
 
   @override
   void dispose() {
+    _zeroUp = false;
     _timer.cancel();
-    // widget.controller.removeListener(_updateSliderValue);
+    widget.controller.removeListener(_updateSliderValue);
     _sliderValueNotifier.dispose();
     super.dispose();
   }
@@ -76,9 +85,12 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
               thumbColor: Colors.white,
               value: value,
               onChangeStart: (newValue) {
-                widget.controller.pause();
+                // widget.controller.pause();
               },
               onChanged: (newValue) {
+                // setState(() {
+                //   value = newValue;
+                // });
                 _sliderValueNotifier.value = newValue;
               },
               onChangeEnd: (newValue) {
@@ -86,7 +98,9 @@ class _PlayerBottomBarState extends State<PlayerBottomBar> {
                   milliseconds: (newValue * duration.inMilliseconds).toInt(),
                 );
                 widget.controller.seekTo(seekTo);
-                widget.controller.play();
+                if (widget.controller.value.isPlaying) {
+                  widget.controller.play();
+                }
               },
             ),
           );

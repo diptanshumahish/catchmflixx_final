@@ -9,6 +9,7 @@ import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/screens/onboard/error/max_login.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
+import 'package:catchmflixx/screens/payments/episode_renting_screen.dart';
 import 'package:catchmflixx/screens/payments/payment_success.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
 import 'package:catchmflixx/screens/payments/web_page.dart';
@@ -24,6 +25,7 @@ import 'package:catchmflixx/widgets/onboard/forgot/forgot_password.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 GoRouter appRoute = GoRouter(
   routes: <RouteBase>[
@@ -37,11 +39,18 @@ GoRouter appRoute = GoRouter(
       path: '/payment-make',
       builder: (context, state) {
         final String url = state.extra as String;
-        return WebPage(url: url);
+
+        return BaseMain();
       },
     ),
     GoRoute(
       path: '/payment-success',
+      builder: (BuildContext context, GoRouterState state) {
+        return const PaymentSuccessScreen();
+      },
+    ),
+    GoRoute(
+      path: '/en/payment-success',
       builder: (BuildContext context, GoRouterState state) {
         return const PaymentSuccessScreen();
       },
@@ -202,6 +211,19 @@ GoRouter appRoute = GoRouter(
         final RentingScreen data = state.extra as RentingScreen;
         return RentingScreen(
             act: data.act, title: data.title, img: data.img, id: data.id);
+      },
+    ),
+    GoRoute(
+      path: "/episode-rent",
+      builder: (BuildContext context, GoRouterState state) {
+        final EpisodeRentingScreen data = state.extra as EpisodeRentingScreen;
+        return EpisodeRentingScreen(
+          act: data.act,
+          title: data.title,
+          img: data.img,
+          id: data.id,
+          episodeNumber: data.episodeNumber,
+        );
       },
     ),
     GoRoute(
