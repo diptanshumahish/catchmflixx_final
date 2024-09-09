@@ -61,8 +61,13 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               icon: Icons.person,
               controller: _nameController,
               type: TextInputType.text,
-              validator: (value) =>
-                  value!.length < 6 ? translation.nameVal : null,
+              validator: (value) {
+                if(value!.isEmpty){
+                  return "Please enter a name";
+                }
+                  if(value.length < 6) {return translation.nameVal; }
+                 return  null;
+              }
             ),
             CatchMFLixxInputField(
               labelText: translation.mob,
@@ -70,6 +75,9 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               controller: _phController,
               type: TextInputType.number,
               validator: (mob) {
+                if(mob!.isEmpty){
+                  return "Please enter mobile number";
+                }
                 final RegExp regExp = RegExp(r'^[6-9]\d{9}$');
                 if (regExp.hasMatch(mob!) == false) {
                   return translation.mobVal;
@@ -83,6 +91,9 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               controller: _emailController,
               type: TextInputType.emailAddress,
               validator: (value) {
+                if(value!.isEmpty){
+                  return "Please enter an email address";
+                }
                 RegExp emReg =
                     RegExp(r'^[\w\.-]+@[\w-]+\.\w{2,3}(\.\w{2,3})?$');
                 final match = emReg.hasMatch(value ?? '');
@@ -120,6 +131,9 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                     RegExp(r'^[0-9]{0,2}/?[0-9]{0,2}/?[0-9]{0,4}'))
               ],
               validator: (val) {
+                if(val!.isEmpty){
+                  return "Please enter your date of birth";
+                }
                 RegExp emReg = RegExp(
                     r'^(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[0-2])/\d{4}$');
                 final match = emReg.hasMatch(val ?? '');
@@ -146,7 +160,10 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                 LengthLimitingTextInputFormatter(6),
               ],
               validator: (val) {
-                if (val!.length < 6 || val.length > 6) {
+                if(val!.isEmpty){
+                  return "Please enter area pin code";
+                }
+                if (val.length < 6 || val.length > 6) {
                   return translation.pinVal;
                 }
                 return null;
@@ -158,6 +175,9 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               controller: _passwordController,
               type: TextInputType.text,
               validator: (value) {
+                if(value!.isEmpty){
+                  return "Please create a password to continue";
+                }
                 PasswordStrength strength = getPasswordStrength(value!);
                 if (strength == PasswordStrength.weak) {
                   return translation.passVal;

@@ -58,7 +58,7 @@ class VersionScreen extends StatelessWidget {
                     content: "Update now",
                     fn: () async {
                       await launchUrl(Uri.parse(
-                          "https://play.google.com/store/apps/details?id=com.catchmflixx.catchmflixxapp"));
+                          "https://play.google.com/store/apps/details?id=com.diptanshumahish.catchmflixxapp"));
                     }),
                 const SizedBox(
                   height: 10,

@@ -1,4 +1,4 @@
-package com.catchmflixx.catchmflixxapp
+package com.diptanshumahish.catchmflixxapp
 
 import io.flutter.embedding.android.FlutterActivity
 

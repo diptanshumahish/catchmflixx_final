@@ -2,7 +2,7 @@ name: catchmflixx
 description: "catchmflixx application"
 
 publish_to: "none"
-version: 1.2.1
+version: 1.0.2   #1.2.1 16
 
 environment:
     sdk: ">=3.4.3 <4.0.0"
@@ -44,6 +44,7 @@ dependencies:
     go_router: ^14.2.3
     webview_flutter: ^4.8.0
     share_plus: ^10.0.0
+    upgrader: ^10.3.0
 
 dev_dependencies:
     flutter_test:

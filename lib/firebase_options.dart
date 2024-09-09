@@ -41,46 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBjO71PsLOmMDo7OZT9w3c3nY5yikQIBCc',
-    appId: '1:1069539956036:web:c5c5274a2c8b70cbc67311',
-    messagingSenderId: '1069539956036',
-    projectId: 'catchmflixxapp',
-    authDomain: 'catchmflixxapp.firebaseapp.com',
-    storageBucket: 'catchmflixxapp.appspot.com',
+    apiKey: 'AIzaSyAStI8xSssftpdy33mq2QesN0OG82WUpQo',
+    appId: '1:1005279405528:web:b42ff6336333f90063fead',
+    messagingSenderId: '1005279405528',
+    projectId: 'cf-notif-72f77',
+    authDomain: 'cf-notif-72f77.firebaseapp.com',
+    storageBucket: 'cf-notif-72f77.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDcG4Ox_Q7d6e3hNR2aacy6K2Wtl_z9Rfw',
-    appId: '1:1069539956036:android:7a87bdd547b18301c67311',
-    messagingSenderId: '1069539956036',
-    projectId: 'catchmflixxapp',
-    storageBucket: 'catchmflixxapp.appspot.com',
+    apiKey: 'AIzaSyDMZqMrKamFPrSKi-5o7mjZfYnFwnM8kUk',
+    appId: '1:1005279405528:android:1ada329046380a2e63fead',
+    messagingSenderId: '1005279405528',
+    projectId: 'cf-notif-72f77',
+    storageBucket: 'cf-notif-72f77.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAMxuf-TTf1UU52IWoKO6D2o7KJY3IB2bo',
-    appId: '1:1069539956036:ios:4a243313c0841547c67311',
-    messagingSenderId: '1069539956036',
-    projectId: 'catchmflixxapp',
-    storageBucket: 'catchmflixxapp.appspot.com',
-    iosBundleId: 'com.catchmflixx.catchmflixxapp',
+    apiKey: 'AIzaSyDhUo4YLj40O9i871fmWkHcrqx7aqqEe4g',
+    appId: '1:1005279405528:ios:b6c944b8affc2f8163fead',
+    messagingSenderId: '1005279405528',
+    projectId: 'cf-notif-72f77',
+    storageBucket: 'cf-notif-72f77.appspot.com',
+    iosBundleId: 'com.diptanshumahish.catchmflixxapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAMxuf-TTf1UU52IWoKO6D2o7KJY3IB2bo',
-    appId: '1:1069539956036:ios:4a243313c0841547c67311',
-    messagingSenderId: '1069539956036',
-    projectId: 'catchmflixxapp',
-    storageBucket: 'catchmflixxapp.appspot.com',
-    iosBundleId: 'com.catchmflixx.catchmflixxapp',
+    apiKey: 'AIzaSyDhUo4YLj40O9i871fmWkHcrqx7aqqEe4g',
+    appId: '1:1005279405528:ios:b6c944b8affc2f8163fead',
+    messagingSenderId: '1005279405528',
+    projectId: 'cf-notif-72f77',
+    storageBucket: 'cf-notif-72f77.appspot.com',
+    iosBundleId: 'com.diptanshumahish.catchmflixxapp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyBjO71PsLOmMDo7OZT9w3c3nY5yikQIBCc',
-    appId: '1:1069539956036:web:4827bb7b07087ac8c67311',
-    messagingSenderId: '1069539956036',
-    projectId: 'catchmflixxapp',
-    authDomain: 'catchmflixxapp.firebaseapp.com',
-    storageBucket: 'catchmflixxapp.appspot.com',
+    apiKey: 'AIzaSyAStI8xSssftpdy33mq2QesN0OG82WUpQo',
+    appId: '1:1005279405528:web:3bb21ac6fd3e618063fead',
+    messagingSenderId: '1005279405528',
+    projectId: 'cf-notif-72f77',
+    authDomain: 'cf-notif-72f77.firebaseapp.com',
+    storageBucket: 'cf-notif-72f77.appspot.com',
   );
+
 }

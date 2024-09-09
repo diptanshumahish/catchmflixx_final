@@ -108,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> {
                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
-                          ConstantTexts.versionInfo,
+                          "version ${ConstantTexts.versionInfo}",
                           style: TextStyle(color: Colors.white30),
                         )
                       ],

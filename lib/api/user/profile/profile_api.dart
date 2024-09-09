@@ -20,6 +20,13 @@ class ProfileApi {
         "user/profile-login", (data) => ProfileLoginResponse.fromJson(data),
         data: data, method: "POST");
   }
+  Future<MessageModel> resetProfilePassword(
+      String hash, ) async {
+    final data = FormData.fromMap({"uuid": hash, });
+    return await networkManager.makeRequest<MessageModel>(
+        "user/request-reset-profile", (data) => MessageModel.fromJson(data),
+        data: data, method: "POST");
+  }
 
   Future<ProfileCreationResponse> addProfile(
       String name, String? password, ProfileType type, String? avatar) async {

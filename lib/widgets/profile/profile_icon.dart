@@ -101,7 +101,15 @@ class ProfileIcon extends StatelessWidget {
                               translation.forgotPassword,
                               style: TextStyles.formSubTitle,
                             ),
-                            onPressed: () {}),
+                            onPressed: () async{
+                              ProfileApi p = ProfileApi();
+                           final data=  await p.resetProfilePassword(uniqueId);
+                           if(data.success==true){
+                            ToastShow.returnToast("pin reset email sent, please check your email");
+                           }
+
+
+                            }),
                       ],
                     ),
                   ));
