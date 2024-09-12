@@ -153,7 +153,7 @@ class _MaxLoginState extends ConsumerState<MaxLogin> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                session.userAgent ?? "",
+                                session.userAgent=="Other Other"?"login ${index+1}":session.userAgent??"",
                                 style: TextStyles.cardHeading,
                               ),
                               const SizedBox(height: 4),
