@@ -2,7 +2,7 @@ name: catchmflixx
 description: "catchmflixx application"
 
 publish_to: "none"
-version: 1.0.4  #1.2.1 16
+version: 1.0.5  #1.2.1 16
 
 environment:
     sdk: ">=3.4.3 <4.0.0"
