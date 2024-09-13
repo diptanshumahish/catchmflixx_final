@@ -29,7 +29,7 @@ class VideoControls extends StatelessWidget {
         visible: showControls,
         child: Positioned.fill(
           child: Center(
-            child: Row(
+            child:controller.value.isCompleted?GestureDetector() : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Animate(
@@ -56,6 +56,7 @@ class VideoControls extends StatelessWidget {
                   child: GestureDetector(
                     onTap: onPlayButtonTap,
                     child: () {
+                     
                       if (controller.value.isBuffering) {
                         return (Platform.isIOS)
                             ? const CupertinoActivityIndicator(

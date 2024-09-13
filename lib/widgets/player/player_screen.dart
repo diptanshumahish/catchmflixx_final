@@ -34,9 +34,10 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
     // print("here we have 💵💵💵💵💵💵💵💵");
     // print(widget.seekTo);
@@ -57,7 +58,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
   Widget build(BuildContext context) {
     if (widget.playLink == "" || widget.playLink == null) {
       return Scaffold(
-        backgroundColor: Colors.black,
         body: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -92,48 +92,59 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
 
     return Scaffold(
+      // extendBody: true,
+      extendBodyBehindAppBar: true,
+
+    
       backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: YoYoPlayer(
-              last: Duration(seconds: widget.seekTo ?? 0),
-              id: widget.id,
-              title: widget.title,
-              details: widget.details,
-              onShowMenu: (show, _) {},
-              url: widget.playLink,
-              autoPlayVideoAfterInit: true,
-              allowCacheFile: false,
-              videoLoadingStyle: VideoLoadingStyle(
-                  loadingBackgroundColor: Colors.black,
-                  loading: Center(
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.transparent,
-                      highlightColor: Colors.white,
-                      period: const Duration(seconds: 2),
-                      child: SvgPicture.asset(
-                        CatchMFlixxImages.textLogo,
-                        height: 30,
+      body: SafeArea(
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+        child: Stack(
+          children: [
+            SizedBox.expand(
+              child: YoYoPlayer(
+                last: Duration(seconds: widget.seekTo ?? 0),
+                id: widget.id,
+                title: widget.title,
+                details: widget.details,
+                onShowMenu: (show, _) {},
+                url: widget.playLink,
+                autoPlayVideoAfterInit: true,
+                allowCacheFile: false,
+                videoLoadingStyle: VideoLoadingStyle(
+                    loadingBackgroundColor: Colors.black,
+                    loading: Center(
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.transparent,
+                        highlightColor: Colors.white,
+                        period: const Duration(seconds: 2),
+                        child: SvgPicture.asset(
+                          CatchMFlixxImages.textLogo,
+                          height: 30,
+                        ),
                       ),
-                    ),
-                  )),
-              videoStyle: const VideoStyle(
-                allowScrubbing: true,
-                actionBarPadding: EdgeInsets.all(15),
-                videoSeekStyle: TextStyles.cardHeading,
-                enableSystemOrientationsOverride: true,
-                progressIndicatorColors: VideoProgressColors(
-                    backgroundColor: Colors.white24,
-                    bufferedColor: Colors.white54,
-                    playedColor: Colors.white),
-                orientation: [DeviceOrientation.landscapeLeft],
-                spaceBetweenBottomBarButtons: 16,
+                    )),
+                videoStyle: const VideoStyle(
+                  allowScrubbing: true,
+                  actionBarPadding: EdgeInsets.all(15),
+                  videoSeekStyle: TextStyles.cardHeading,
+                  enableSystemOrientationsOverride: true,
+                  progressIndicatorColors: VideoProgressColors(
+                      backgroundColor: Colors.white24,
+                      bufferedColor: Colors.white54,
+                      playedColor: Colors.white),
+                  orientation: [DeviceOrientation.landscapeLeft],
+                  spaceBetweenBottomBarButtons: 16,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+     
     );
   }
 }

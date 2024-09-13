@@ -2,10 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
+import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/ads/ads.dart';
 import 'package:catchmflixx/utils/player/return_quality.dart';
+import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
+import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/duration_extensions.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/screen_size_extensions.dart';
@@ -121,6 +124,8 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
   Duration? lastPlayedPos;
   bool isAtLivePosition = true;
   late Timer _timer;
+  double _scaleFactor = 1.0; // Current scale factor
+  double _previousScaleFactor = 1.0; // Keeps track of previous scale
 
   @override
   void initState() {
@@ -134,12 +139,6 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
         .animate(controlBarAnimationController);
     controlBottomBarAnimation = Tween(begin: -(36.0 + 0.0 * 2), end: 0.0)
         .animate(controlBarAnimationController);
-
-    if (widget.videoStyle.enableSystemOrientationsOverride) {
-      SystemChrome.setPreferredOrientations(
-        widget.videoStyle.orientation ?? DeviceOrientation.values,
-      );
-    }
 
     if (mounted) {
       _timer = Timer.periodic(const Duration(seconds: 15), (Timer timer) {
@@ -180,12 +179,13 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: fullScreen
-          ? MediaQuery.of(context).size.calculateAspectRatio()
-          : widget.aspectRatio,
-      child: controller.value.isInitialized
-          ? Stack(
+    return controller.value.isInitialized
+        ? SafeArea(
+            bottom: false,
+            top: false,
+            left: false,
+            right: false,
+            child: Stack(
               children: <Widget>[
                 Positioned.fill(
                   child: GestureDetector(
@@ -197,14 +197,33 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                       togglePlay();
                       removeOverlay();
                     },
+                    onScaleStart: (ScaleStartDetails details) {
+                      _previousScaleFactor = _scaleFactor;
+                    },
+                    onScaleUpdate: (ScaleUpdateDetails details) {
+                      setState(() {
+                        _scaleFactor = (_previousScaleFactor * details.scale)
+                            .clamp(1.0, 1.5);
+                      });
+                    },
+                    onScaleEnd: (details) {
+                      if (_scaleFactor == 1.5) {
+                        vibrateTap();
+                      } else if (_scaleFactor == 1) {
+                        vibrateTap();
+                      }
+                    },
                     child: Animate(
                       effects: const [FadeEffect()],
                       child: Opacity(
                         opacity: showMenu ? 0.4 : 1,
                         child: Center(
-                          child: AspectRatio(
-                            aspectRatio: controller.value.aspectRatio,
-                            child: VideoPlayer(controller),
+                          child: Transform.scale(
+                            scale: _scaleFactor,
+                            child: AspectRatio(
+                              aspectRatio: controller.value.aspectRatio,
+                              child: VideoPlayer(controller),
+                            ),
                           ),
                         ),
                       ),
@@ -213,14 +232,74 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                 ),
                 ...videoBuiltInChildren(),
               ],
-            )
-          : VideoLoading(loadingStyle: widget.videoLoadingStyle),
-    );
+            ),
+          )
+        : VideoLoading(loadingStyle: widget.videoLoadingStyle);
   }
 
   List<Widget> videoBuiltInChildren() {
+    if (controller.value.isCompleted) {
+      return [
+        Container(
+          height: double.maxFinite,
+          width: double.infinity,
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Row(
+                  children: [
+                   PhosphorIcon(
+                      PhosphorIconsRegular.smiley,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                    SizedBox(width: 10,),
+                     PhosphorIcon(
+                      PhosphorIconsRegular.check,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10,),
+                const Text(
+                  "You have watched the full video 😊",
+                  style: TextStyles.headingMobileSmallScreens,
+                ),
+                const Text(
+                  "You can either watch this again or go back",
+                  style: TextStyles.cardHeading,
+                ),
+                const SizedBox(height: 10,),
+                Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 150,
+                      child: OffsetFullButton(content: "Go back", fn: (){
+                        Navigator.pop(context);
+                      }),
+                    ),
+                    const SizedBox(width: 10,),
+                     SizedBox(
+                      width: 200,
+                      child: OffsetFullButton(content: "watch again",  fn: (){
+                        controller.seekTo(const Duration(seconds: 0));
+                        controller.play();
+                      }),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ];
+    }
     return [
-      liveDirectButton(),
+      // liveDirectButton(),
       bottomBar(),
       actionBar(),
       controls(),
@@ -822,8 +901,6 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
   }
 
   void videoInit(String? url) {
-    print("✨✨✨✨✨✨✨");
-    print(widget.last!.inSeconds.toString());
     if (isOffline == false) {
       if (playType == "MP4" || playType == "WEBM") {
         // Play MP4 and WEBM video

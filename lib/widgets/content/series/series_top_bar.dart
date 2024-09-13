@@ -172,12 +172,11 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                                   widget.act();
                                 },
                                 seekTo: widget.progress ?? 0,
-                                type: widget.type == "series" ? "Trailer" : "",
-                                title: widget.type == "series"
-                                    ? "Trailer"
-                                    : widget.title,
-                                details: widget.subTitle,
-                                id: widget.id,
+                                type: "Trailer",
+                                title:
+                                     widget.title,
+                                details: "TRAILER",
+                                id: widget.playId,
                                 playLink: widget.playId,
                               ));
                         } else {
