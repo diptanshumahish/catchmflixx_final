@@ -19,6 +19,7 @@ import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video_quality_widget.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video_speed_widget.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video_topbar.dart';
+import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video_zoom_widget.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/widget_bottombar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -358,6 +359,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                     key: videoQualityKey,
                     videoStyle: widget.videoStyle,
                     onTap: () {
+                      vibrateTap();
                       setState(() {
                         m3u8Show = !m3u8Show;
 
@@ -393,6 +395,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                   ],
                   child: VideoSpeedWidget(
                       onTap: () {
+                        vibrateTap();
                         setState(() {
                           playBackShow = !playBackShow;
 
@@ -414,6 +417,46 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                             width: 5,
                           ),
                           Text("Speed ${controller.value.playbackSpeed}",
+                              style: widget.videoStyle.qualityStyle),
+                        ],
+                      )),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Animate(
+                  effects: const [
+                    FadeEffect(delay: Duration(milliseconds: 200))
+                  ],
+                  child: VideoZoomWidget(
+                      onTap: () {
+                        vibrateTap();
+                        setState(() {
+                          // playBackShow = !playBackShow;
+                          if(_scaleFactor==1.0){
+                            _scaleFactor=1.5;
+                          }else{
+                            _scaleFactor=1.0;
+                          }
+
+                          // if (playBackShow) {
+                          //   showSpeedOverLay();
+                          // } else {
+                          //   removeOverlay();
+                          // }
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          const PhosphorIcon(
+                            PhosphorIconsRegular.resize,
+                            color: Colors.white,
+                            size: 14,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text("Video zoom ${_scaleFactor==1.5?"Fill screen":"fit video"}",
                               style: widget.videoStyle.qualityStyle),
                         ],
                       )),
