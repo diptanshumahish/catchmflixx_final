@@ -15,6 +15,7 @@ class _GenerateSeasonSectionsState extends State<GenerateSeasonSections> {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
           children: widget.seasons
               .map((e) => SeasonSection(
                   sectionHeading: e.subTitle ?? "",

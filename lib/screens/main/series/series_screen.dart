@@ -162,6 +162,7 @@ class _SeriesScreenState extends State<SeriesScreen> {
                     ),
                   ),
                   GenerateSeasonSections(seasons: _movies.data?.seasons ?? []),
+                  
                   CastRender(uuid: _movies.data?.uuid ?? ""),
                   // LanguagesAvailable(uuid: _movies.data?.uuid ?? "")
                   // SliverToBoxAdapter(

@@ -129,7 +129,7 @@ class _RentingScreenState extends State<RentingScreen> {
                                         ],
                                       ),
                                       OffsetFullButton(
-                                          content: "Buy now",
+                                           content: "Buy now (phonepe gateway)",
                                           fn: () async {
                                             PaymentsManager p =
                                                 PaymentsManager();
@@ -146,6 +146,25 @@ class _RentingScreenState extends State<RentingScreen> {
                                                 .url;
 
                                             if (data.data.success) {
+                                              await launchUrl(Uri.parse(
+                                                  "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
+                                              navigateToPage(context, "/base");
+                                            }
+                                          }),
+                                         const SizedBox(height: 10,),
+                                          OffsetFullButton(
+                                          content: "Buy now (razorpay gateway)",
+                                          fn: () async {
+                                            PaymentsManager p =
+                                                PaymentsManager();
+                                            final data =
+                                                await p.rzPayInitMovie(
+                                                    ele.id.toString());
+
+                                            final url = data
+                                                .data.shortUrl;
+
+                                            if (data.success) {
                                               await launchUrl(Uri.parse(
                                                   "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
                                               navigateToPage(context, "/base");

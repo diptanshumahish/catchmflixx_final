@@ -132,6 +132,8 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
               "Available Options",
               style: TextStyles.cardHeading,
             ),
+             SizedBox(height: 5,),
+                              Text("you can use the phonepe or razorpay gateway for making payments securely, in case you face issues in any of the gateways, use the other",style: TextStyles.formSubTitle,),
             rt.data != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -160,9 +162,27 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                   ),
                                 ],
                               ),
+                              
+                              const SizedBox(height: 10,),
+                              OffsetFullButton(
+                                content: "Rent now (Razorpay)",
+                                fn: () async {
+                                  PaymentsManager p = PaymentsManager();
+                                  final data = await p
+                                      .razorPeInitEpisode(ele.id.toString());
+
+                                  final url = data.data.shortUrl;
+
+                                  if (data.success) {
+                                    await launchUrl(Uri.parse(
+                                        "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
+                                    navigateToPage(context, "/base");
+                                  }
+                                },
+                              ),
                               const SizedBox(height: 10),
                               OffsetFullButton(
-                                content: "Rent Now",
+                                content: "Rent Now (Phonepe)",
                                 fn: () async {
                                   PaymentsManager p = PaymentsManager();
                                   final data = await p
@@ -178,8 +198,10 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                   }
                                 },
                               ),
+                             
                             ],
                           ),
+                          
                         );
                       }).toList(),
                       space: 10,
