@@ -10,14 +10,15 @@ class FullScreenAdPlayer extends StatefulWidget {
   final String title;
 
   const FullScreenAdPlayer({
-    Key? key,
+    super.key,
     required this.skippable,
     required this.videoUrl,
     required this.onClose,
     required this.title,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _FullScreenAdPlayerState createState() => _FullScreenAdPlayerState();
 }
 
@@ -39,7 +40,16 @@ class _FullScreenAdPlayerState extends State<FullScreenAdPlayer> {
       if (_controller.value.isCompleted) {
         widget.onClose();
         timer.cancel();
-      } else {}
+      } else {
+        setState(() {
+        });
+      }
+    });
+
+    _controller.addListener(() {
+      if (_controller.value.isInitialized) {
+        setState(() {});
+      }
     });
   }
 
@@ -99,7 +109,8 @@ class _FullScreenAdPlayerState extends State<FullScreenAdPlayer> {
             left: 0,
             right: 0,
             child: LinearProgressIndicator(
-              value: _controller.value.isInitialized
+              value: _controller.value.isInitialized &&
+                      _controller.value.duration.inSeconds > 0
                   ? _controller.value.position.inSeconds /
                       _controller.value.duration.inSeconds
                   : 0,
