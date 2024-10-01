@@ -58,8 +58,9 @@ class ContentManager {
   }
 
   Future<CurrentWatching> continueWatching(String uuid) async {
+    final lang = await networkManager.getLang();
     return await networkManager.makeRequest<CurrentWatching>(
-      "$path/continue-watching/$uuid",
+      "$path$lang  /continue-watching/$uuid",
       (data) => CurrentWatching.fromJson(data),
     );
   }

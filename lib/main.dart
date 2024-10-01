@@ -5,6 +5,8 @@ import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/theme/theme_catchmflixx.dart';
 import 'package:catchmflixx/utils/firebase/firebase_api.dart';
 import 'package:catchmflixx/utils/go_router/go.dart';
+import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,23 +17,50 @@ import 'package:screen_protector/screen_protector.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //setup 120hz refresh rate.
-  await FlutterDisplayMode.setHighRefreshRate();
+  
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  try {
+    await FlutterDisplayMode.setHighRefreshRate();
+  } catch (e) {
+    debugPrint(e.toString());
+  }
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await FirebaseApi().initNotifications();
-  await ScreenProtector.protectDataLeakageOn();
+ await initializeFirebase();
+  try {
+  
   if (Platform.isIOS) {
     await ScreenProtector.protectDataLeakageWithColor(Colors.black);
+  }else{
+    await ScreenProtector.protectDataLeakageOn();
+  }
+  } catch (e) {
+    debugPrint(e.toString());
   }
   runApp(const ProviderScope(child: CatchMFlixxApp()));
+}
+
+
+Future<void> initializeFirebase() async {
+  int retries = 3;
+  while (retries > 0) {
+    try {
+      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await FirebaseApi().initNotifications();
+      break;
+    } catch (e) {
+      retries--;
+      debugPrint("Firebase initialization failed: $e");
+      if (retries == 0) {
+        debugPrint("Max retries reached. Firebase initialization failed.");
+        ToastShow.returnToast("Error in network");
+      }
+    }
+  }
 }
 
 class CatchMFlixxApp extends ConsumerWidget {

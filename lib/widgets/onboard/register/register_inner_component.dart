@@ -81,7 +81,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
           _nameController.text = user.displayName ?? '';
           _emailController.text = user.email ?? '';
           _phController.text = user.phoneNumber ?? '';
-          _googleSignedIn = true; // Set the sign-in flag to true
+          _googleSignedIn = true; 
         });
 
         // Show a SnackBar with success message

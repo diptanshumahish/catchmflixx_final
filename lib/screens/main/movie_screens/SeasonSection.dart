@@ -2,10 +2,12 @@ import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/series/episodes.model.dart';
 import 'package:catchmflixx/screens/main/movie_screens/content_card.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SeasonSection extends StatefulWidget {
+class SeasonSection extends ConsumerStatefulWidget {
   final String sectionHeading;
   final String sectionDetails;
   final String uuid;
@@ -18,10 +20,10 @@ class SeasonSection extends StatefulWidget {
   });
 
   @override
-  State<SeasonSection> createState() => _SeasonSectionState();
+  ConsumerState<SeasonSection> createState() => _SeasonSectionState();
 }
 
-class _SeasonSectionState extends State<SeasonSection> {
+class _SeasonSectionState extends ConsumerState<SeasonSection> {
   EpisodesModel _ep = EpisodesModel();
   bool isLoading = true;
 
@@ -38,7 +40,8 @@ class _SeasonSectionState extends State<SeasonSection> {
     try {
       ContentManager ct = ContentManager();
       EpisodesModel data = await ct.getEpisodes(widget.uuid);
-      if (data.success!) {
+      if (data.success!&&data.data!.episodes!.isNotEmpty) {
+      ref.watch(firstEpProvider.notifier).changeEp(data.data!.episodes!.first.url.toString());
         setState(() {
           _ep = data;
         });

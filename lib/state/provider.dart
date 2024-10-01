@@ -4,6 +4,7 @@ import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart
 import 'package:catchmflixx/api/user/user_activity/watch_later_list.dart';
 import 'package:catchmflixx/models/language/language.model.dart' as lang;
 import 'package:catchmflixx/models/tabs/tabselector.model.dart';
+import 'package:catchmflixx/state/first-ep/first_ep.dart';
 import 'package:catchmflixx/state/language/language.state.dart';
 import 'package:catchmflixx/state/tabs/tabs.state.dart';
 import 'package:catchmflixx/state/user/activity/user_activity.dart';
@@ -41,6 +42,10 @@ final watchHistoryProvider =
 final watchLaterProvider =
     StateNotifierProvider<UserWatchLaterNotifier, WatchLaterList>(
         (ref) => UserWatchLaterNotifier());
+
+final firstEpProvider =
+    StateNotifierProvider<FirstEpNotifier,String>(
+        (ref) => FirstEpNotifier(""));
 
 // final internetConnectivityProvider =
 //     StateNotifierProvider<InternetCheckerNotifier, InternetStatus>(

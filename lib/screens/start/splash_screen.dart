@@ -3,6 +3,7 @@ import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/text.dart';
 
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/utils/version/version_check.dart';
 import 'package:catchmflixx/widgets/common/loading/loading_indicator.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool _loading = true;
+  int max_tries = 3;
 
   @override
   void initState() {
@@ -33,14 +35,36 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   checkData() async {
-    final data = await isVersionUpToDate();
-    if (data == true) {
-      navigateToPage(context, "/check-login", isReplacement: true);
-    } else {
-      navigateToPage(
-        context,
-        "/version",
-      );
+    if (max_tries == 0) {
+      navigateToPage(context, "/error");
+      return null;
+    }
+    if (!mounted) return null;
+    if(max_tries>0){
+      try {
+      final data = await isVersionUpToDate();
+      if (data == true) {
+        if (mounted) {
+          navigateToPage(context, "/check-login", isReplacement: true);
+        }
+        return null;
+      } else {
+        if (mounted) {
+          navigateToPage(
+            context,
+            "/version",
+          );
+          return null;
+        }
+      }
+    } catch (e) {
+      max_tries--;
+      await Future.delayed(const Duration(seconds: 2));
+      ToastShow.returnToast(
+          "Error in newtork, retrying ($max_tries attempt remaining) ");
+      debugPrint(e.toString());
+      await checkData();
+    }
     }
   }
 

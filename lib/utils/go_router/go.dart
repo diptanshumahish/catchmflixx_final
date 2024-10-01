@@ -1,5 +1,6 @@
 import 'package:catchmflixx/models/profiles/profile.model.dart';
 import 'package:catchmflixx/models/user/maxlimit.response.model.dart';
+import 'package:catchmflixx/screens/error/error_screen.dart';
 import 'package:catchmflixx/screens/language/language_screen.dart';
 import 'package:catchmflixx/screens/list/history_list.dart';
 import 'package:catchmflixx/screens/list/my_to_watch_list.dart';
@@ -47,6 +48,12 @@ GoRouter appRoute = GoRouter(
       path: '/payment-success',
       builder: (BuildContext context, GoRouterState state) {
         return const PaymentSuccessScreen();
+      },
+    ),
+    GoRoute(
+      path: '/error',
+      builder: (BuildContext context, GoRouterState state) {
+        return const ErrorScreen();
       },
     ),
     GoRoute(

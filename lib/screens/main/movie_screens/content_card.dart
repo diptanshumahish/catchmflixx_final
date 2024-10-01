@@ -15,7 +15,7 @@ class ContentCard extends ConsumerWidget {
   final String fullDetailsId;
   final String title;
   final String subTitle;
-  final int? progress;
+  final int progress;
   final String poster;
   final int duration;
   final bool isPaid;
@@ -33,7 +33,7 @@ class ContentCard extends ConsumerWidget {
     required this.title,
     required this.subTitle,
     required this.isPaid,
-    this.progress,
+    required this.progress,
   });
 
   @override
@@ -41,7 +41,7 @@ class ContentCard extends ConsumerWidget {
     final user = ref.read(userLoginProvider);
 
     final progressPercent =
-        (progress ?? 0) > 0 ? (progress ?? 0 / (duration * 60)) : 0.0;
+   (progress / (duration * 60)) ;
 
     return Container(
       margin: const EdgeInsets.only(right: 10),
@@ -145,7 +145,7 @@ class ContentCard extends ConsumerWidget {
                         width: 5,
                       ),
                       Text(
-                        "${duration}m",
+                        "${duration}m ",
                         style: TextStyles.smallSubText,
                       ),
                     ],
@@ -202,7 +202,8 @@ class ContentCard extends ConsumerWidget {
                   ),
                   child: FractionallySizedBox(
                     alignment: Alignment.topLeft,
-                    widthFactor: progressPercent.toDouble(),
+                    widthFactor:progressPercent.toDouble(),
+
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.white,

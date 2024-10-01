@@ -21,6 +21,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // bool _hapticsEnabled = true;
@@ -137,6 +138,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     fn: () {
                       navigateToPage(context, "/languages");
                     }),
+                  
                 // SettingsButton(
                 //     headingName: translation.prefferedGenres,
                 //     subHeading: translation.chooseGenres,

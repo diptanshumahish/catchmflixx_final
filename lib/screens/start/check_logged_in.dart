@@ -49,8 +49,6 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
     final translation = AppLocalizations.of(context)!;
 
     return UpgradeAlert(
-      showLater: true,
-
       child: Scaffold(
           backgroundColor: Colors.black,
           body: SafeArea(

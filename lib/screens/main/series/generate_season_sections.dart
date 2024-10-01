@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class GenerateSeasonSections extends StatefulWidget {
   final List<Seasons> seasons;
+  
   const GenerateSeasonSections({super.key, required this.seasons});
 
   @override

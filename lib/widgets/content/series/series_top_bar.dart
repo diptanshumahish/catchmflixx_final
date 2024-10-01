@@ -2,32 +2,27 @@ import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/content/series/continue.watching.model.dart';
-import 'package:catchmflixx/screens/payments/renting_screen.dart';
 import 'package:catchmflixx/state/provider.dart';
-import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
-import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/secondary_full_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_catchmflixx_originals.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_censor.dart';
-import 'package:catchmflixx/widgets/common/glyph/glyph_price.dart';
-import 'package:catchmflixx/widgets/common/glyph/glyph_rented.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_year.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 bool _added = false;
 CurrentWatching _cw = CurrentWatching(success: false);
 
 class SeriesTopBar extends ConsumerStatefulWidget {
+  final int noEp;
   final String imgLink;
   final String title;
   final String subTitle;
@@ -45,8 +40,10 @@ class SeriesTopBar extends ConsumerStatefulWidget {
   final bool? isFree;
   const SeriesTopBar(
       {super.key,
+
       this.movieID,
       required this.imgLink,
+      required this.noEp,
       required this.id,
       required this.type,
       required this.title,
@@ -68,7 +65,9 @@ class SeriesTopBar extends ConsumerStatefulWidget {
 class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   @override
   void initState() {
-    getData();
+    if(widget.noEp>0){
+      getData();
+    }
     setState(() {
       _added = widget.addList;
     });
@@ -76,8 +75,11 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   }
 
   getData() async {
+    // print("we called this 🎉🎉🎉🎉");
+    // print(widget.noEp);
     ContentManager ct = ContentManager();
     final dat = await ct.continueWatching(widget.id);
+    // print(dat);
     if (dat.success == true) {
       setState(() {
         _cw = dat;
@@ -88,8 +90,9 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final user = ref.read(userLoginProvider);
-    final translation = AppLocalizations.of(context)!;
+    // final user = ref.read(userLoginProvider);
+    // final translation = AppLocalizations.of(context)!;
+    final firstEpUrl = ref.watch(firstEpProvider);
 
     return FlexibleSpaceBar(
         background: Stack(
@@ -156,43 +159,7 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                 const SizedBox(
                   height: 5,
                 ),
-                Animate(
-                  effects: const [
-                    FadeEffect(delay: Duration(milliseconds: 600))
-                  ],
-                  child: OffsetFullButton(
-                      icon: PhosphorIconsFill.video,
-                      content: "Watch trailer",
-                      fn: () async {
-                        if (user is LoadedUserLoginResponseState &&
-                            user.userLoginResponse.isLoggedIn!) {
-                          navigateToPage(context, "/player",
-                              data: PlayerScreen(
-                                act: () {
-                                  widget.act();
-                                },
-                                seekTo: widget.progress ?? 0,
-                                type: "Trailer",
-                                title:
-                                     widget.title,
-                                details: "TRAILER",
-                                id: widget.playId,
-                                playLink: widget.playId,
-                              ));
-                        } else {
-                          SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          String? data = prefs.getString("temp_login_mail");
-                          if (data != null) {
-                            ToastShow.returnToast(
-                                "You have to verify your email to start watching, please verify it from your email");
-                            return;
-                          }
-                          ToastShow.returnToast(translation.loginToView);
-                          navigateToPage(context, "/onboard");
-                        }
-                      }),
-                ),
+              
                 const SizedBox(
                   height: 8,
                 ),
@@ -214,7 +181,10 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                     },
                     icon: PhosphorIconsFill.play,
                   ),
-                if (_cw.success == true && widget.type == "series")
+                   if(_cw.success==false&& firstEpUrl=="")
+                    OffsetFullButton(content: firstEpUrl.toString(), fn: (){}),
+                 
+                if (_cw.success == true )
                   const SizedBox(
                     height: 5,
                   ),

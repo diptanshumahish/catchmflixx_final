@@ -27,8 +27,8 @@ class WatchedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final remainingSeconds = duration - progress;
-    final progressPercent = duration > 0 ? (remainingSeconds / duration) : 0.0;
+ 
+    final progressPercent = duration > 0 ? (progress / (duration)) : 0.0;
     return GestureDetector(
       onTap: () {
         navigateToPage(
@@ -63,7 +63,7 @@ class WatchedCard extends StatelessWidget {
               ),
               child: FractionallySizedBox(
                 alignment: Alignment.topLeft,
-                widthFactor: progressPercent,
+                widthFactor: progressPercent ,
                 child: Container(
                   decoration: const BoxDecoration(
                     color: Color(0xFFA7C7FF),
