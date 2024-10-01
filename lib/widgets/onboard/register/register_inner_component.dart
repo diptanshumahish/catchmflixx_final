@@ -6,12 +6,16 @@ import 'package:catchmflixx/utils/password/password_strength.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
+import 'package:catchmflixx/widgets/common/buttons/secondary_full_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //controllers
@@ -36,6 +40,86 @@ class RegisterInner extends ConsumerStatefulWidget {
 class _RegisterInnerState extends ConsumerState<RegisterInner> {
   int _currentLength = 0;
   final _formKey = GlobalKey<FormState>();
+  bool _googleSignedIn = false; // Add this variable to track sign-in status
+
+  Future<void> googleSignup() async {
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      // Sign out the current user if already signed in
+      await FirebaseAuth.instance.signOut();
+      await googleSignIn.signOut();
+
+      // Trigger the Google sign-in flow
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      // If the user cancels the sign-in
+      if (googleUser == null) {
+        print('User canceled Google sign-in');
+        return;
+      }
+
+      // Get Google account authentication
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // Create a new credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Sign in with the credential
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        // Populate fields with user's Google information
+        setState(() {
+          _nameController.text = user.displayName ?? '';
+          _emailController.text = user.email ?? '';
+          _phController.text = user.phoneNumber ?? '';
+          _googleSignedIn = true; // Set the sign-in flag to true
+        });
+
+        // Show a SnackBar with success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Google sign-in successful. Fields auto-filled."),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Authentication failed: ${e.message}, try again"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    } on PlatformException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Platform error: ${e.message}, try again"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("An unknown error occurred: $e"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +132,17 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
         child: Form(
           key: _formKey,
           child: FlexItems(widgetList: [
+            SecondaryFullButton(
+              content: "Sign up with google",
+              fn: () async {
+                await googleSignup();
+              },
+              icon: const PhosphorIcon(PhosphorIconsBold.googleLogo),
+            ),
+           _googleSignedIn? Text(
+              "we have filled up some fields from google, please fill up the remaining mandatory fields😊",
+              style: TextStyles.formSubTitle.copyWith(color: Colors.green),
+            ):const SizedBox.shrink(),
             Text(
               translation.createNew,
               style: TextStyles.headingMobile,
@@ -57,25 +152,26 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               style: TextStyles.detailsMobile,
             ),
             CatchMFLixxInputField(
-              labelText: translation.fullName,
-              icon: Icons.person,
-              controller: _nameController,
-              type: TextInputType.text,
-              validator: (value) {
-                if(value!.isEmpty){
-                  return "Please enter a name";
-                }
-                  if(value.length < 6) {return translation.nameVal; }
-                 return  null;
-              }
-            ),
+                labelText: translation.fullName,
+                icon: Icons.person,
+                controller: _nameController,
+                type: TextInputType.text,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return "Please enter a name";
+                  }
+                  if (value.length < 6) {
+                    return translation.nameVal;
+                  }
+                  return null;
+                }),
             CatchMFLixxInputField(
               labelText: translation.mob,
               icon: Icons.phone,
               controller: _phController,
               type: TextInputType.number,
               validator: (mob) {
-                if(mob!.isEmpty){
+                if (mob!.isEmpty) {
                   return "Please enter mobile number";
                 }
                 final RegExp regExp = RegExp(r'^[6-9]\d{9}$');
@@ -91,7 +187,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               controller: _emailController,
               type: TextInputType.emailAddress,
               validator: (value) {
-                if(value!.isEmpty){
+                if (value!.isEmpty) {
                   return "Please enter an email address";
                 }
                 RegExp emReg =
@@ -131,7 +227,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                     RegExp(r'^[0-9]{0,2}/?[0-9]{0,2}/?[0-9]{0,4}'))
               ],
               validator: (val) {
-                if(val!.isEmpty){
+                if (val!.isEmpty) {
                   return "Please enter your date of birth";
                 }
                 RegExp emReg = RegExp(
@@ -160,7 +256,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                 LengthLimitingTextInputFormatter(6),
               ],
               validator: (val) {
-                if(val!.isEmpty){
+                if (val!.isEmpty) {
                   return "Please enter area pin code";
                 }
                 if (val.length < 6 || val.length > 6) {
@@ -175,7 +271,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               controller: _passwordController,
               type: TextInputType.text,
               validator: (value) {
-                if(value!.isEmpty){
+                if (value!.isEmpty) {
                   return "Please create a password to continue";
                 }
                 PasswordStrength strength = getPasswordStrength(value!);
