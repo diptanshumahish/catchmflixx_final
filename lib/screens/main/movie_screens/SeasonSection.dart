@@ -41,7 +41,8 @@ class _SeasonSectionState extends ConsumerState<SeasonSection> {
       ContentManager ct = ContentManager();
       EpisodesModel data = await ct.getEpisodes(widget.uuid);
       if (data.success!&&data.data!.episodes!.isNotEmpty) {
-      ref.watch(firstEpProvider.notifier).changeEp(data.data!.episodes!.first.url.toString());
+      ref.watch(firstEpProvider.notifier).putAtFirstIndex(data.data!.episodes!.first.url.toString());
+      ref.watch(firstEpProvider.notifier).putAtSecondIndex(data.data!.episodes!.first.videoUuid.toString());
         setState(() {
           _ep = data;
         });

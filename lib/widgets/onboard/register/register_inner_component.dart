@@ -1,5 +1,5 @@
 import 'package:catchmflixx/constants/styles/text_styles.dart';
-import 'package:catchmflixx/screens/start/verify_email.dart';
+// import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/password/password_strength.dart';
@@ -27,6 +27,7 @@ final TextEditingController _cityController = TextEditingController();
 final TextEditingController _passwordController = TextEditingController();
 final TextEditingController _password2Controller = TextEditingController();
 final TextEditingController _dobController = TextEditingController();
+bool _loadingReg = false;
 
 class RegisterInner extends ConsumerStatefulWidget {
   const RegisterInner({
@@ -81,7 +82,7 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
           _nameController.text = user.displayName ?? '';
           _emailController.text = user.email ?? '';
           _phController.text = user.phoneNumber ?? '';
-          _googleSignedIn = true; 
+          _googleSignedIn = true;
         });
 
         // Show a SnackBar with success message
@@ -120,7 +121,6 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -139,10 +139,13 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               },
               icon: const PhosphorIcon(PhosphorIconsBold.googleLogo),
             ),
-           _googleSignedIn? Text(
-              "we have filled up some fields from google, please fill up the remaining mandatory fields😊",
-              style: TextStyles.formSubTitle.copyWith(color: Colors.green),
-            ):const SizedBox.shrink(),
+            _googleSignedIn
+                ? Text(
+                    "we have filled up some fields from google, please fill up the remaining mandatory fields😊",
+                    style:
+                        TextStyles.formSubTitle.copyWith(color: Colors.green),
+                  )
+                : const SizedBox.shrink(),
             Text(
               translation.createNew,
               style: TextStyles.headingMobile,
@@ -295,41 +298,79 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                 return null;
               },
             ),
-            OffsetFullButton(
-              content: translation.register,
-              fn: () async {
-                bool valid = _formKey.currentState!.validate();
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                if (valid) {
-                  int res = await reg.makeRegister(
-                      _emailController.text,
-                      _phController.text,
-                      _nameController.text,
-                      int.parse(_pinController.text),
-                      _cityController.text,
-                      _passwordController.text,
-                      _password2Controller.text,
-                      _dobController.text);
-                  if (res == 200) {
-                    ToastShow.returnToast(translation.ver);
-                    prefs.setString("temp_login_mail", _emailController.text);
-                    prefs.setString(
-                        "temp_login_password", _passwordController.text);
-                    navigateToPage(context, "/verify/email",
-                        data: VerifyEmail(
-                            emailId: _emailController.text,
-                            password: _passwordController.text),
-                        isReplacement: true);
-                  } else if (res == 400) {
-                    ToastShow.returnToast(translation.err);
+            if (_loadingReg)
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            if (!_loadingReg)
+              OffsetFullButton(
+                content: translation.register,
+                fn: () async {
+                  bool valid = _formKey.currentState!.validate();
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  if (valid) {
+                    setState(() {
+                      _loadingReg = true;
+                    });
+                    int res = await reg.makeRegister(
+                        _emailController.text,
+                        _phController.text,
+                        _nameController.text,
+                        int.parse(_pinController.text),
+                        _cityController.text,
+                        _passwordController.text,
+                        _password2Controller.text,
+                        _dobController.text);
+                    if (res == 200) {
+                      setState(() {
+                        _loadingReg = false;
+                      });
+                      int res = await ref
+                          .read(userLoginProvider.notifier)
+                          .makeLogin(
+                              _emailController.text.toString(),
+                              _passwordController.text.toString(),
+                              context,
+                              false);
+
+                      if (res == 200) {
+                        navigateToPage(context, "/check-login",
+                            isReplacement: true);
+                      }
+                      ToastShow.returnToast(translation.ver);
+                      // prefs.setString("temp_login_mail", _emailController.text);
+                      // prefs.setString(
+                      //     "temp_login_password", _passwordController.text);
+                      // navigateToPage(context, "/verify/email",
+                      //     data: VerifyEmail(
+                      //         emailId: _emailController.text,
+                      //         password: _passwordController.text),
+                      //     isReplacement: true);
+                    } else if (res == 400) {
+                      setState(() {
+                        _loadingReg=false;
+                      });
+                      ToastShow.returnToast(translation.err);
+                    } else {
+                      setState(() {
+                        _loadingReg=false;
+                      });
+                      ToastShow.returnToast(translation.datamissing);
+                    }
                   } else {
-                    ToastShow.returnToast(translation.datamissing);
+                    setState(() {
+                        _loadingReg=false;
+                      });
+                    ToastShow.returnToast(translation.chk);
                   }
-                } else {
-                  ToastShow.returnToast(translation.chk);
-                }
-              },
-            ),
+                },
+              ),
             OffsetSecondaryFullButton(
                 content: translation.changeLanguage,
                 icon: const Icon(Icons.language),

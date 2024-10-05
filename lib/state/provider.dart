@@ -44,8 +44,9 @@ final watchLaterProvider =
         (ref) => UserWatchLaterNotifier());
 
 final firstEpProvider =
-    StateNotifierProvider<FirstEpNotifier,String>(
-        (ref) => FirstEpNotifier(""));
+    StateNotifierProvider<FirstEpNotifier, List<String>>(
+        (ref) => FirstEpNotifier());
+
 
 // final internetConnectivityProvider =
 //     StateNotifierProvider<InternetCheckerNotifier, InternetStatus>(

@@ -75,11 +75,9 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   }
 
   getData() async {
-    // print("we called this 🎉🎉🎉🎉");
-    // print(widget.noEp);
+ 
     ContentManager ct = ContentManager();
     final dat = await ct.continueWatching(widget.id);
-    // print(dat);
     if (dat.success == true) {
       setState(() {
         _cw = dat;
@@ -90,8 +88,6 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    // final user = ref.read(userLoginProvider);
-    // final translation = AppLocalizations.of(context)!;
     final firstEpUrl = ref.watch(firstEpProvider);
 
     return FlexibleSpaceBar(
@@ -181,10 +177,22 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                     },
                     icon: PhosphorIconsFill.play,
                   ),
-                   if(_cw.success==false&& firstEpUrl=="")
-                    OffsetFullButton(content: firstEpUrl.toString(), fn: (){}),
+                   if(_cw.success==false)
+                    OffsetFullButton(content: "Start Watching", fn: (){
+                        navigateToPage(context, "/player",
+                          data: PlayerScreen(
+                              title: _cw.data?.subTitle ?? "",
+                              details: _cw.data?.subDescription ?? "",
+                              playLink: firstEpUrl[0].toString(),
+                              id: firstEpUrl[1].toString() ?? "",
+                              seekTo:0,
+                              type: "series",
+                              act: () {
+                                getData();
+                              }));
+                    }, icon: PhosphorIconsFill.play,),
                  
-                if (_cw.success == true )
+
                   const SizedBox(
                     height: 5,
                   ),

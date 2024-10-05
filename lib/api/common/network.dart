@@ -142,7 +142,7 @@ class NetworkManager {
       ToastShow.returnToast(msg.data?.message ?? "Error");
       throw Exception(e.message ?? "Error occurred");
     } catch (e) {
-      ToastShow.returnToast(e.toString());
+      // ToastShow.returnToast(e.toString());
       throw Exception(e.toString());
     }
 
