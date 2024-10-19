@@ -46,15 +46,14 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
   int _currentLength = 0;
   final _formKey = GlobalKey<FormState>();
 
-  Future<void>googleSignIn()async{
+  Future<void> googleSignIn() async {
     UserActivity ua = UserActivity();
     final data = await ua.googleLoginStepOne();
-    if(data.success!){
+    if (data.success!) {
       await launchUrl(Uri.parse(data.data!.authorizationUrl!));
       // context.go("/web-view",extra: data.data!.authorizationUrl);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +66,14 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
         child: Form(
           key: _formKey,
           child: FlexItems(widgetList: [
+            const Text(
+              "Use Google to seamlessly sign up to CatchMFLixx",
+              style: TextStyles.headingMobile,
+            ),
+            const Text(
+              "register with a single click!",
+              style: TextStyles.detailsMobile,
+            ),
             SecondaryFullButton(
               content: "Sign up with google",
               fn: () async {
@@ -74,9 +81,18 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
               },
               icon: const PhosphorIcon(PhosphorIconsBold.googleLogo),
             ),
-         
-            Text(
-              translation.createNew,
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("OR",
+                    textAlign: TextAlign.center,
+                    style: TextStyles.headingsForSections
+                        .copyWith(color: Colors.orangeAccent)),
+              ],
+            ),
+            const Text(
+              "Use your email and other details to create an account with CatchMFLixx",
               style: TextStyles.headingMobile,
             ),
             Text(
@@ -283,19 +299,19 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
                       //     isReplacement: true);
                     } else if (res == 400) {
                       setState(() {
-                        _loadingReg=false;
+                        _loadingReg = false;
                       });
                       ToastShow.returnToast(translation.err);
                     } else {
                       setState(() {
-                        _loadingReg=false;
+                        _loadingReg = false;
                       });
                       ToastShow.returnToast(translation.datamissing);
                     }
                   } else {
                     setState(() {
-                        _loadingReg=false;
-                      });
+                      _loadingReg = false;
+                    });
                     ToastShow.returnToast(translation.chk);
                   }
                 },

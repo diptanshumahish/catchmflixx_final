@@ -84,6 +84,11 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
       });
     }
   }
+  @override
+  void dispose() {
+    _cw=CurrentWatching(success: false);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

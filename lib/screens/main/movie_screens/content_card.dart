@@ -147,9 +147,11 @@ class ContentCard extends ConsumerWidget {
                       if (!isPaid)
                         const Icon(
                           PhosphorIconsFill.crown,
-                          color: Colors.yellow,
+                          color: Colors.orangeAccent,
                           size: 14,
                         ),
+                      if (userRented)
+                        const SizedBox(width: 5),
                       if (userRented)
                         const Icon(
                           PhosphorIconsFill.checkCircle,
@@ -171,9 +173,16 @@ class ContentCard extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    '${duration} mins',
-                    style: TextStyles.textButton,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(PhosphorIconsRegular.clock,color: Colors.white,size: 12,),
+                      const SizedBox(width: 5,),
+                      Text(
+                        '$duration mins',
+                        style: TextStyles.textButton,
+                      ),
+                    ],
                   ),
                 ],
               ),

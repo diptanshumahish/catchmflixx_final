@@ -143,7 +143,7 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
               height: 10,
             ),
             const Text(
-                "In case of any issues, please contact us at contact@catchmflix.com , we will be happy to help you out. If any payment has been made then make sure to attach the payment success mail, or your bank receipt for reference",
+                "In case of any issues, please contact us at contact@catchmflix.com , we will be happy to help you out. If any payment has been made then make sure to attach the payment success mail, or your bank receipt for",
                 style: TextStyles.formSubTitle),
             rt.data != null
                 ? Padding(
@@ -177,6 +177,7 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                 height: 10,
                               ),
                               OffsetFullButton(
+                                icon: PhosphorIconsLight.currencyInr,
                                 content: "Rent now (Razorpay)",
                                 fn: () async {
                                   PaymentsManager p = PaymentsManager();
@@ -200,6 +201,7 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                               ),
                               const SizedBox(height: 10),
                               OffsetFullButton(
+                                icon: PhosphorIconsLight.currencyInr,
                                 content: "Rent Now (Phonepe)",
                                 fn: () async {
                                   PaymentsManager p = PaymentsManager();

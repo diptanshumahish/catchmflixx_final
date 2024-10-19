@@ -41,7 +41,7 @@ GoRouter appRoute = GoRouter(
       builder: (context, state) {
         final String url = state.extra as String;
 
-        return BaseMain();
+        return const BaseMain();
       },
     ),
      GoRoute(
@@ -50,12 +50,6 @@ GoRouter appRoute = GoRouter(
         final String url = state.extra as String;
 
         return WebPage(url: url);
-      },
-    ),
-    GoRoute(
-      path: '/payment-success',
-      builder: (BuildContext context, GoRouterState state) {
-        return const PaymentSuccessScreen();
       },
     ),
     GoRoute(

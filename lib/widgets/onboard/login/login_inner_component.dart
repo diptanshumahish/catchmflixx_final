@@ -1,9 +1,11 @@
+import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
+import 'package:catchmflixx/widgets/common/buttons/secondary_full_button.dart';
 import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/inputs/input_field.dart';
 import 'package:flutter/gestures.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 //controllers
@@ -31,6 +34,15 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> googleSignIn() async {
+      UserActivity ua = UserActivity();
+      final data = await ua.googleLoginStepOne();
+      if (data.success!) {
+        await launchUrl(Uri.parse(data.data!.authorizationUrl!));
+        // context.go("/web-view",extra: data.data!.authorizationUrl);
+      }
+    }
+
     final size = MediaQuery.of(context).size;
     final translation = AppLocalizations.of(context)!;
     return Padding(
@@ -39,8 +51,29 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
         child: Form(
           key: _formKey,
           child: FlexItems(widgetList: [
-            Text(
-              translation.login,
+            const Text(
+              "Login with your Google account",
+              style: TextStyles.headingMobile,
+            ),
+            SecondaryFullButton(
+              content: "Sign in with google",
+              fn: () async {
+                await googleSignIn();
+              },
+              icon: const PhosphorIcon(PhosphorIconsBold.googleLogo),
+            ),
+            const Divider(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("OR",
+                    textAlign: TextAlign.center,
+                    style: TextStyles.headingsForSections
+                        .copyWith(color: Colors.orangeAccent)),
+              ],
+            ),
+            const Text(
+              "Login with Email",
               style: TextStyles.headingMobile,
             ),
             Text(
@@ -48,7 +81,7 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
               style: TextStyles.detailsMobile,
             ),
             CatchMFLixxInputField(
-                labelText: translation.logEmMb,
+                labelText: "email",
                 icon: Icons.verified_user,
                 controller: _eOrMController,
                 validator: (value) {
