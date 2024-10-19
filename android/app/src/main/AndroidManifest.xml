@@ -37,6 +37,15 @@
                     android:host="www.catchmflixx.com"
                     android:pathPrefix="/en/watch/watch-now/movie" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="catchmflixx.com"
+                    android:pathPrefix="/en/watch/watch-now/movie" />
+            </intent-filter>
 
             <!-- Intent filter for series deep links -->
             <intent-filter android:autoVerify="true">
@@ -48,6 +57,35 @@
                     android:host="www.catchmflixx.com"
                     android:pathPrefix="/en/watch/watch-now/series" />
             </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="catchmflixx.com"
+                    android:pathPrefix="/en/watch/watch-now/series" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="www.catchmflixx.com"
+                    android:pathPrefix="/en/sign-in-app/success" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="catchmflixx.com"
+                    android:pathPrefix="/en/sign-in-app/success" />
+            </intent-filter>
 
             <!-- Intent filter for payment success deep link -->
             <intent-filter android:autoVerify="true">
@@ -57,6 +95,15 @@
                 <data
                     android:scheme="https"
                     android:host="www.catchmflixx.com"
+                    android:pathPrefix="/en/payment-success" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="https"
+                    android:host="catchmflixx.com"
                     android:pathPrefix="/en/payment-success" />
             </intent-filter>
 

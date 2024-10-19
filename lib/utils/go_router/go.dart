@@ -15,6 +15,7 @@ import 'package:catchmflixx/screens/payments/payment_success.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
 import 'package:catchmflixx/screens/payments/web_page.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
+import 'package:catchmflixx/screens/redirects/redirect_screen.dart';
 import 'package:catchmflixx/screens/start/check_logged_in.dart';
 import 'package:catchmflixx/screens/start/profile/edit_profile.dart';
 import 'package:catchmflixx/screens/start/profile/profile_selection_screen.dart';
@@ -26,7 +27,6 @@ import 'package:catchmflixx/widgets/onboard/forgot/forgot_password.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 GoRouter appRoute = GoRouter(
   routes: <RouteBase>[
@@ -42,6 +42,14 @@ GoRouter appRoute = GoRouter(
         final String url = state.extra as String;
 
         return BaseMain();
+      },
+    ),
+     GoRoute(
+      path: '/web-view',
+      builder: (context, state) {
+        final String url = state.extra as String;
+
+        return WebPage(url: url);
       },
     ),
     GoRoute(
@@ -80,6 +88,13 @@ GoRouter appRoute = GoRouter(
       builder: (context, state) {
         final sId = state.uri.queryParameters["id"];
         return SeriesScreen(uuid: sId ?? '');
+      },
+    ),
+    GoRoute(
+      path: '/en/sign-in-app/success',
+      builder: (context, state) {
+        final sId = state.uri.queryParameters["code"];
+        return RedirectScreen(code: sId.toString(),);
       },
     ),
     GoRoute(

@@ -1,6 +1,8 @@
+import 'package:catchmflixx/api/user/user_activity/user.activity.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 // import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/state/provider.dart';
+import 'package:catchmflixx/utils/go_router/go.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/password/password_strength.dart';
 import 'package:catchmflixx/utils/toast.dart';
@@ -14,9 +16,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 //controllers
 final TextEditingController _emailController = TextEditingController();
@@ -41,85 +45,16 @@ class RegisterInner extends ConsumerStatefulWidget {
 class _RegisterInnerState extends ConsumerState<RegisterInner> {
   int _currentLength = 0;
   final _formKey = GlobalKey<FormState>();
-  bool _googleSignedIn = false; // Add this variable to track sign-in status
 
-  Future<void> googleSignup() async {
-    try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
-
-      // Sign out the current user if already signed in
-      await FirebaseAuth.instance.signOut();
-      await googleSignIn.signOut();
-
-      // Trigger the Google sign-in flow
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-      // If the user cancels the sign-in
-      if (googleUser == null) {
-        print('User canceled Google sign-in');
-        return;
-      }
-
-      // Get Google account authentication
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-
-      // Create a new credential
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      // Sign in with the credential
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-
-      final User? user = userCredential.user;
-
-      if (user != null) {
-        // Populate fields with user's Google information
-        setState(() {
-          _nameController.text = user.displayName ?? '';
-          _emailController.text = user.email ?? '';
-          _phController.text = user.phoneNumber ?? '';
-          _googleSignedIn = true;
-        });
-
-        // Show a SnackBar with success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Google sign-in successful. Fields auto-filled."),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
-          ),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Authentication failed: ${e.message}, try again"),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    } on PlatformException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Platform error: ${e.message}, try again"),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("An unknown error occurred: $e"),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 3),
-        ),
-      );
+  Future<void>googleSignIn()async{
+    UserActivity ua = UserActivity();
+    final data = await ua.googleLoginStepOne();
+    if(data.success!){
+      await launchUrl(Uri.parse(data.data!.authorizationUrl!));
+      // context.go("/web-view",extra: data.data!.authorizationUrl);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,17 +70,11 @@ class _RegisterInnerState extends ConsumerState<RegisterInner> {
             SecondaryFullButton(
               content: "Sign up with google",
               fn: () async {
-                await googleSignup();
+                await googleSignIn();
               },
               icon: const PhosphorIcon(PhosphorIconsBold.googleLogo),
             ),
-            _googleSignedIn
-                ? Text(
-                    "we have filled up some fields from google, please fill up the remaining mandatory fields😊",
-                    style:
-                        TextStyles.formSubTitle.copyWith(color: Colors.green),
-                  )
-                : const SizedBox.shrink(),
+         
             Text(
               translation.createNew,
               style: TextStyles.headingMobile,

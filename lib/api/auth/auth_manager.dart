@@ -96,6 +96,67 @@ class APIManager {
     return user;
   }
 
+
+  Future<UserLoginResponse> useGoogleLogin(
+      String code,  BuildContext context, bool manual) async {
+    const int statusOk = 200;
+    const int statusAccepted = 202;
+
+    UserLoginResponse user =
+        UserLoginResponse(false, null, null, null, null, null, false);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool cleared = await prefs.clear();
+    await addInterceptors();
+    if (!cleared) {
+      return user;
+    }
+
+    try {
+      final response = await dio.post(
+        "google-auth/login-signup/",
+        data: FormData.fromMap({"code": code, }),
+      );
+
+      if (response.statusCode == statusOk) {
+        user = UserLoginResponse.fromMap(response.data);
+
+        if (user.email_is_verified == true) {
+          user.isLoggedIn = true;
+          user.wrongCredentials = false;
+        }
+      } else if (response.statusCode == statusAccepted) {
+        ErrorModel error = ErrorModel.fromJson(response.data);
+        ToastShow.returnToast(error.data?.message ?? "Error");
+      } else {
+        if (kDebugMode) {
+          print("Unexpected status code: ${response.statusCode}");
+        }
+      }
+    } on DioException catch (e) {
+      if (e.response != null) {
+        handleDioError(e, context);
+      } else {
+        // if (kDebugMode) {
+        //   print(e.error);
+        // }
+        // if (kDebugMode) {
+        //   print(e.message);
+        // }
+        // if (kDebugMode) {
+        //   print("Network error: $e");
+        // }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("An unexpected error occurred: $e");
+      }
+    }
+
+    return user;
+  }
+
+
   Future<UserLoginResponse> useManualLogin(
       String id, BuildContext context, bool manual) async {
     await addInterceptors();

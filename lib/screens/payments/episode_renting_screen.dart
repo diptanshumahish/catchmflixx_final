@@ -132,8 +132,19 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
               "Available Options",
               style: TextStyles.cardHeading,
             ),
-             SizedBox(height: 5,),
-                              Text("you can use the phonepe or razorpay gateway for making payments securely, in case you face issues in any of the gateways, use the other",style: TextStyles.formSubTitle,),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              "you can use the phonepe or razorpay gateway for making payments securely, in case you face issues in any of the gateways, use the other",
+              style: TextStyles.formSubTitle,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+                "In case of any issues, please contact us at contact@catchmflix.com , we will be happy to help you out. If any payment has been made then make sure to attach the payment success mail, or your bank receipt for reference",
+                style: TextStyles.formSubTitle),
             rt.data != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -162,8 +173,9 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                   ),
                                 ],
                               ),
-                              
-                              const SizedBox(height: 10,),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               OffsetFullButton(
                                 content: "Rent now (Razorpay)",
                                 fn: () async {
@@ -174,8 +186,14 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                   final url = data.data.shortUrl;
 
                                   if (data.success) {
-                                    await launchUrl(Uri.parse(
-                                        "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
+                                    await launchUrl(
+                                        Uri.parse(
+                                            "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
+                                        mode: LaunchMode.externalApplication,
+                                        webViewConfiguration:
+                                            const WebViewConfiguration(
+                                                enableJavaScript: true,
+                                                enableDomStorage: true));
                                     navigateToPage(context, "/base");
                                   }
                                 },
@@ -192,16 +210,20 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                       .redirectInfo.url;
 
                                   if (data.data.success) {
-                                    await launchUrl(Uri.parse(
-                                        "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
+                                    await launchUrl(
+                                        Uri.parse(
+                                            "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
+                                        mode: LaunchMode.externalApplication,
+                                        webViewConfiguration:
+                                            const WebViewConfiguration(
+                                                enableJavaScript: true,
+                                                enableDomStorage: true));
                                     navigateToPage(context, "/base");
                                   }
                                 },
                               ),
-                             
                             ],
                           ),
-                          
                         );
                       }).toList(),
                       space: 10,

@@ -1,10 +1,21 @@
 import 'package:catchmflixx/api/common/network.dart';
 import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart';
 import 'package:catchmflixx/api/user/user_activity/watch_progress.model.dart';
+import 'package:catchmflixx/models/user/login/google.login.step.one.model.dart';
 import 'package:dio/dio.dart';
 
 class UserActivity {
   NetworkManager networkManager = NetworkManager();
+
+
+
+  Future<GoogleLoginStepOneResponse> googleLoginStepOne() async {
+    return await networkManager.makeRequest<GoogleLoginStepOneResponse>(
+        "user/google-auth/redirect/",
+        (p0) => GoogleLoginStepOneResponse.fromJson(p0),
+        method: "GET",
+      );
+  }
 
   Future<WatchProgress> addWatchProgress(String id, int progress) async {
     final FormData data = FormData.fromMap(

@@ -92,25 +92,22 @@ class _SeasonSectionState extends ConsumerState<SeasonSection> {
                 ),
                 const SizedBox(height: 12),
                 SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
                     children: _ep.data?.episodes!
-                            .map((e) => Padding(
-                                  padding: const EdgeInsets.only(right: 12.0),
-                                  child: ContentCard(
-                                    episodeNumber: e.epNumber.toString() ?? "0",
-                                    isPaid: e.free ?? false,
-                                    userRented: e.userRented ?? false,
-                                    key: Key(e.videoUuid ?? ""),
-                                    playLink: e.url ?? "",
-                                    duration: e.durationMinutes ?? 0,
-                                    poster: e.thumbnail ?? "",
-                                    fullDetailsId: e.videoUuid ?? "",
-                                    title: e.subTitle ?? "",
-                                    subTitle: e.subDescription ?? "",
-                                    progress: e.progress ?? 0,
-                                  ),
-                                ))
+                            .map((e) => ContentCard(
+                              episodeNumber: e.epNumber.toString() ?? "0",
+                              isPaid: e.free ?? false,
+                              userRented: e.userRented ?? false,
+                              key: Key(e.videoUuid ?? ""),
+                              playLink: e.url ?? "",
+                              duration: e.durationMinutes ?? 0,
+                              poster: e.thumbnail ?? "",
+                              fullDetailsId: e.videoUuid ?? "",
+                              title: e.subTitle ?? "",
+                              subTitle: e.subDescription ?? "",
+                              progress: e.progress ?? 0,
+                            ))
                             .toList() ??
                         [],
                   ),

@@ -40,181 +40,146 @@ class ContentCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.read(userLoginProvider);
 
-    final progressPercent =
-   (progress / (duration * 60)) ;
+    final progressPercent = (progress / (duration * 60));
 
     return Container(
-      margin: const EdgeInsets.only(right: 10),
-      width: 300,
-      height: 180,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white30.withOpacity(0.1)),
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      width: double.infinity,
+      child: Row(
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: 160,
+                height: 90,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white30.withOpacity(0.1)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    poster,
+                    width: 160,
+                    height: 90,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+              /// add a background black filter
+              Positioned.fill(
+                child: Container(
+                  color: Colors.black26,
+                ),
+              ),
+
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () {
+                    if (user is LoadedUserLoginResponseState &&
+                        user.userLoginResponse.isLoggedIn!) {
+                      if (isPaid || userRented) {
+                        navigateToPage(context, "/player",
+                            data: PlayerScreen(
+                              act: () {},
+                              type: "",
+                              title: title,
+                              id: fullDetailsId,
+                              details: subTitle,
+                              playLink: playLink,
+                              seekTo: progress ?? 0,
+                            ));
+                      } else {
+                        navigateToPage(context, "/episode-rent",
+                            data: EpisodeRentingScreen(
+                                act: () {},
+                                episodeNumber: episodeNumber,
+                                title: title,
+                                img: poster,
+                                id: fullDetailsId));
+                      }
+                    } else {
+                      ToastShow.returnToast("Please login to view content");
+                    }
+                  },
+                  child: const Center(
+                    child: Icon(
+                      PhosphorIconsFill.playCircle,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ),
+
+              if (progress > 0)
+                Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        child: FractionallySizedBox(
+                            alignment: Alignment.topLeft,
+                            widthFactor: progressPercent.toDouble(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            )))),
+            ],
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Stack(
-          children: [
-            Image.network(
-              width: 300,
-              poster,
-              fit: BoxFit.cover,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Container(
-                decoration: const BoxDecoration(
-                    gradient: CFGradient.topToBottomGradient),
-              ),
-            ),
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Row(
-                children: [
-                  if (!isPaid)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'PAID',
-                        style: TextStyles.smallSubText.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  if (userRented)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 4, horizontal: 8),
-                      margin: const EdgeInsets.only(left: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        'RENTED',
-                        style: TextStyles.smallSubText.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            Positioned(
-              bottom: 8,
-              left: 8,
-              right: 8,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Row(
+                    children: [
+                      if (!isPaid)
+                        const Icon(
+                          PhosphorIconsFill.crown,
+                          color: Colors.yellow,
+                          size: 14,
+                        ),
+                      if (userRented)
+                        const Icon(
+                          PhosphorIconsFill.checkCircle,
+                          color: Colors.green,
+                          size: 14,
+                        ),
+                    ],
+                  ),
+                  if (!isPaid || userRented) const SizedBox(height: 5),
                   Text(
                     title,
                     style: TextStyles.cardHeading,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 5),
                   Text(
                     subTitle,
                     style: TextStyles.smallSubText,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  Row(
-                    children: [
-                      const PhosphorIcon(
-                        PhosphorIconsRegular.hourglass,
-                        color: Colors.grey,
-                        size: 15,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "${duration}m ",
-                        style: TextStyles.smallSubText,
-                      ),
-                    ],
+                  const SizedBox(height: 5),
+                  Text(
+                    '${duration} mins',
+                    style: TextStyles.textButton,
                   ),
                 ],
               ),
             ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  if (user is LoadedUserLoginResponseState &&
-                      user.userLoginResponse.isLoggedIn!) {
-                    if (isPaid || userRented) {
-                      navigateToPage(context, "/player",
-                          data: PlayerScreen(
-                            act: () {},
-                            type: "",
-                            title: title,
-                            id: fullDetailsId,
-                            details: subTitle,
-                            playLink: playLink,
-                            seekTo: progress ?? 0,
-                          ));
-                    } else {
-                      navigateToPage(context, "/episode-rent",
-                          data: EpisodeRentingScreen(
-                              act: () {},
-                              episodeNumber: episodeNumber,
-                              title: title,
-                              img: poster,
-                              id: fullDetailsId));
-                    }
-                  } else {
-                    ToastShow.returnToast("Please login to view content");
-                  }
-                },
-                child: const PhosphorIcon(
-                  PhosphorIconsFill.play,
-                  color: Colors.white,
-                  size: 40,
-                ),
-              ),
-            ),
-            if (progress != null && progress! > 0)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.topLeft,
-                    widthFactor:progressPercent.toDouble(),
-
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

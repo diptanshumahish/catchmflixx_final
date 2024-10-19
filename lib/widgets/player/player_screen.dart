@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
@@ -5,6 +7,7 @@ import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -33,8 +36,10 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
+    setDataLeakage();
+
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
@@ -45,8 +50,29 @@ class _PlayerScreenState extends State<PlayerScreen> {
     super.initState();
   }
 
+  setDataLeakage() async {
+    try {
+      if (Platform.isIOS) {
+        await ScreenProtector.protectDataLeakageWithColor(Colors.black);
+      } else {
+        await ScreenProtector.protectDataLeakageOn();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  removeDataLeakage() async {
+    try {
+      await ScreenProtector.protectDataLeakageOff();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   @override
   void dispose() {
+    removeDataLeakage();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -95,7 +121,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
       // extendBody: true,
       extendBodyBehindAppBar: true,
 
-    
       backgroundColor: Colors.black,
       body: SafeArea(
         top: false,
@@ -144,7 +169,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
           ],
         ),
       ),
-     
     );
   }
 }

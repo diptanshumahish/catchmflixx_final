@@ -13,14 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:screen_protector/screen_protector.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //setup 120hz refresh rate.
-  
+
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
@@ -30,26 +29,17 @@ Future<void> main() async {
     debugPrint(e.toString());
   }
 
- await initializeFirebase();
-  try {
+  await initializeFirebase();
   
-  if (Platform.isIOS) {
-    await ScreenProtector.protectDataLeakageWithColor(Colors.black);
-  }else{
-    await ScreenProtector.protectDataLeakageOn();
-  }
-  } catch (e) {
-    debugPrint(e.toString());
-  }
   runApp(const ProviderScope(child: CatchMFlixxApp()));
 }
-
 
 Future<void> initializeFirebase() async {
   int retries = 3;
   while (retries > 0) {
     try {
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      await Firebase.initializeApp(
+          options: DefaultFirebaseOptions.currentPlatform);
       await FirebaseApi().initNotifications();
       break;
     } catch (e) {

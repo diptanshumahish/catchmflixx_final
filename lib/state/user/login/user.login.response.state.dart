@@ -83,6 +83,32 @@ class UserLoginResponseNotifier extends StateNotifier<UserLoginResponseState> {
     }
   }
 
+
+   Future<int> makeGoogleLogin(String code, BuildContext ctx,
+      bool manual) async {
+    APIManager api = APIManager();
+    try {
+      state = LoadingUserLoginResponseState();
+      UserLoginResponse user =
+          await api.useGoogleLogin(code,ctx, manual);
+      state = LoadedUserLoginResponseState(userLoginResponse: user);
+      saveUserLoginResponse();
+      if (user.success == true) {
+        if (user.email_is_verified == true) {
+          return 200;
+        } else {
+          ToastShow.returnToast("Email not verified!");
+          return 500;
+        }
+      } else {
+        return 400;
+      }
+    } catch (e) {
+      state = ErrorUserLoginResponseState(message: e.toString());
+      return 400;
+    }
+  }
+
   Future<int> makeManualLogin(String id, BuildContext ctx, bool manual) async {
     APIManager api = APIManager();
     try {
