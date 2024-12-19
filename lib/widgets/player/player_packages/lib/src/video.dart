@@ -251,20 +251,24 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
               children: [
                 const Row(
                   children: [
-                   PhosphorIcon(
+                    PhosphorIcon(
                       PhosphorIconsRegular.smiley,
                       color: Colors.white,
                       size: 32,
                     ),
-                    SizedBox(width: 10,),
-                     PhosphorIcon(
+                    SizedBox(
+                      width: 10,
+                    ),
+                    PhosphorIcon(
                       PhosphorIconsRegular.check,
                       color: Colors.white,
                       size: 32,
                     ),
                   ],
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 const Text(
                   "You have watched the full video 😊",
                   style: TextStyles.headingMobileSmallScreens,
@@ -273,23 +277,31 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                   "You can either watch this again or go back",
                   style: TextStyles.cardHeading,
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SizedBox(
                       width: 150,
-                      child: OffsetFullButton(content: "Go back", fn: (){
-                        Navigator.pop(context);
-                      }),
+                      child: OffsetFullButton(
+                          content: "Go back",
+                          fn: () {
+                            Navigator.pop(context);
+                          }),
                     ),
-                    const SizedBox(width: 10,),
-                     SizedBox(
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SizedBox(
                       width: 200,
-                      child: OffsetFullButton(content: "watch again",  fn: (){
-                        controller.seekTo(const Duration(seconds: 0));
-                        controller.play();
-                      }),
+                      child: OffsetFullButton(
+                          content: "watch again",
+                          fn: () {
+                            controller.seekTo(const Duration(seconds: 0));
+                            controller.play();
+                          }),
                     )
                   ],
                 )
@@ -315,6 +327,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
       title: widget.title,
       details: widget.details,
       act: () async {
+        await vibrateTap();
         await ref.read(watchHistoryProvider.notifier).updateState();
         Navigator.of(context).pop();
       },
@@ -433,10 +446,10 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                         vibrateTap();
                         setState(() {
                           // playBackShow = !playBackShow;
-                          if(_scaleFactor==1.0){
-                            _scaleFactor=1.5;
-                          }else{
-                            _scaleFactor=1.0;
+                          if (_scaleFactor == 1.0) {
+                            _scaleFactor = 1.5;
+                          } else {
+                            _scaleFactor = 1.0;
                           }
 
                           // if (playBackShow) {
@@ -456,7 +469,8 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
                           const SizedBox(
                             width: 5,
                           ),
-                          Text("Video zoom ${_scaleFactor==1.5?"Fill screen":"fit video"}",
+                          Text(
+                              "Video zoom ${_scaleFactor == 1.5 ? "Fill screen" : "fit video"}",
                               style: widget.videoStyle.qualityStyle),
                         ],
                       )),

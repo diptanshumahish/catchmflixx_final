@@ -118,7 +118,7 @@ class _RentingScreenState extends State<RentingScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "₹${ele.price.toString()}",
+                                            "${ele.price.toString()} USD",
                                             style: TextStyles
                                                 .headingsSecondaryMobile,
                                           ),
@@ -128,30 +128,30 @@ class _RentingScreenState extends State<RentingScreen> {
                                           )
                                         ],
                                       ),
-                                      OffsetFullButton(
-                                           content: "Buy now (phonepe gateway)",
-                                          fn: () async {
-                                            PaymentsManager p =
-                                                PaymentsManager();
-                                            final data =
-                                                await p.phonePeInitMovie(
-                                                    ele.id.toString());
+                                      // OffsetFullButton(
+                                      //      content: "Buy now (phonepe gateway)",
+                                      //     fn: () async {
+                                      //       PaymentsManager p =
+                                      //           PaymentsManager();
+                                      //       final data =
+                                      //           await p.phonePeInitMovie(
+                                      //               ele.id.toString());
 
-                                            final url = data
-                                                .data
-                                                .details
-                                                .transactionData
-                                                .instrumentResponse
-                                                .redirectInfo
-                                                .url;
+                                      //       final url = data
+                                      //           .data
+                                      //           .details
+                                      //           .transactionData
+                                      //           .instrumentResponse
+                                      //           .redirectInfo
+                                      //           .url;
 
-                                            if (data.data.success) {
-                                              await launchUrl(Uri.parse(
-                                                  "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
-                                              navigateToPage(context, "/base");
-                                            }
-                                          }),
-                                         const SizedBox(height: 10,),
+                                      //       if (data.data.success) {
+                                      //         await launchUrl(Uri.parse(
+                                      //             "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),mode: LaunchMode.externalApplication,webViewConfiguration: WebViewConfiguration(enableJavaScript: true, enableDomStorage: true) );
+                                      //         navigateToPage(context, "/base");
+                                      //       }
+                                      //     }),
+                                      //    const SizedBox(height: 10,),
                                           OffsetFullButton(
                                           content: "Buy now (razorpay gateway)",
                                           fn: () async {

@@ -95,12 +95,6 @@ class WatchedCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        "Watched : ${formatWatchedDate(DateTime.parse(lastWatchedTime))}",
-                        style: TextStyles.smallSubTextActive,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
                         type == "movie" ? "Movie" : "web Series",
                         style: TextStyles.smallSubText,
                       ),

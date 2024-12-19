@@ -106,8 +106,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                     const SizedBox(
                                       height: 5,
                                     ),
-                                    Text(
-                                      translation.chkLoginDetails,
+                                    const Text(
+                                      'Welcome to CatchMflix, login or register to continue',
                                       style: TextStyles.smallSubText,
                                     ),
                                     const SizedBox(
@@ -162,19 +162,19 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                     const SizedBox(
                                       height: 10,
                                     ),
-                                    Animate(
-                                      effects: const [
-                                        FadeEffect(
-                                            delay: Duration(milliseconds: 400))
-                                      ],
-                                      child: OffsetSecondaryFullButton(
-                                          content: translation.changeLanguage,
-                                          icon: const Icon(
-                                              PhosphorIconsBold.translate),
-                                          fn: () {
-                                            navigateToPage(context, "/languages");
-                                          }),
-                                    )
+                                    // Animate(
+                                    //   effects: const [
+                                    //     FadeEffect(
+                                    //         delay: Duration(milliseconds: 400))
+                                    //   ],
+                                    //   child: OffsetSecondaryFullButton(
+                                    //       content: translation.changeLanguage,
+                                    //       icon: const Icon(
+                                    //           PhosphorIconsBold.translate),
+                                    //       fn: () {
+                                    //         navigateToPage(context, "/languages");
+                                    //       }),
+                                    // )
                                   ],
                                 )
                               : Column(

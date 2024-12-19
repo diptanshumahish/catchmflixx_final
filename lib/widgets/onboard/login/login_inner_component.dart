@@ -35,12 +35,8 @@ class _LoginInnerState extends ConsumerState<LoginInner> {
   @override
   Widget build(BuildContext context) {
     Future<void> googleSignIn() async {
-      UserActivity ua = UserActivity();
-      final data = await ua.googleLoginStepOne();
-      if (data.success!) {
-        await launchUrl(Uri.parse(data.data!.authorizationUrl!));
-        // context.go("/web-view",extra: data.data!.authorizationUrl);
-      }
+      await launchUrl(
+          Uri.parse('https://catchmflixx.com/en/app-google-login-redirect'));
     }
 
     final size = MediaQuery.of(context).size;
