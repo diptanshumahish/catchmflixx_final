@@ -15,6 +15,7 @@ import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,6 +81,7 @@ class CatchMFlixxApp extends ConsumerWidget {
     ];
 
     if (Platform.isIOS) {
+      ScreenProtector.preventScreenshotOff();
       return CupertinoApp.router(
         routerConfig: appRoute,
         debugShowCheckedModeBanner: false,

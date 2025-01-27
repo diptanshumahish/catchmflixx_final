@@ -1,4 +1,19 @@
+// Add this block at the very top of your build.gradle file
+buildscript {
+    repositories {
+        google() // Required for Android Gradle Plugin
+        mavenCentral() // Additional repository
+    }
+    dependencies {
+        // Specify the version of the Android Gradle Plugin (AGP)
+        classpath 'com.android.tools.build:gradle:8.1.0'
 
+        // Add any other dependencies required for the build
+        classpath 'com.google.gms:google-services:4.3.15' // Example for Firebase
+    }
+}
+
+// Existing project configuration
 allprojects {
     repositories {
         google()
@@ -18,5 +33,4 @@ tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
 
-apply plugin: 'com.google.gms.google-services'
-
+// Do not apply plugins here; the buildscript block takes care of managing the plugins
