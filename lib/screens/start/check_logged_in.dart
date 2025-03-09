@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
@@ -6,13 +9,13 @@ import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
-import 'package:catchmflixx/widgets/common/buttons/offset_secondary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -27,7 +30,34 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
   @override
   void initState() {
     getHalfLoggedInState();
+    checkInactivity();
+    updateLastActiveTimestamp();
     super.initState();
+  }
+
+  Future<void> checkInactivity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final lastActive = prefs.getInt("last_active") ?? 0;
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    const sixDaysInMillis = 6 * 24 * 60 * 60 * 1000;
+
+    if (currentTime - lastActive > sixDaysInMillis) {
+      final api = APIManager();
+      await api.useLogout();
+      bool clear = await prefs.clear();
+      if (clear) {
+        Restart.restartApp();
+      }
+    } else {
+      await prefs.setInt("last_active", currentTime);
+    }
+  }
+
+  void updateLastActiveTimestamp() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
+    await prefs.setInt("last_active", currentTime);
   }
 
   Future<void> getHalfLoggedInState() async {
@@ -58,8 +88,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
               slivers: [
                 SliverToBoxAdapter(
                   child: ClipRRect(
-                    borderRadius:
-                        const BorderRadius.only(bottomLeft: Radius.circular(50)),
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(50)),
                     child: Container(
                       width: size.width,
                       height: (user is LoadedUserLoginResponseState &&
@@ -135,8 +165,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                       child: OffsetFullButton(
                                         content: translation.register,
                                         icon: PhosphorIconsBold.book,
-                                        fn: () =>
-                                            navigateToPage(context, "/onboard/0"),
+                                        fn: () => navigateToPage(
+                                            context, "/onboard/0"),
                                       ),
                                     ),
                                     // const SizedBox(
@@ -215,8 +245,8 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
                                         fn: () async {
                                           ProfileApi pro = ProfileApi();
                                           final res = await pro.fetchProfiles();
-                                          navigateToPage(
-                                              context, "/user/profile-selection",
+                                          navigateToPage(context,
+                                              "/user/profile-selection",
                                               data: res, isReplacement: true);
                                         },
                                       ),
