@@ -33,9 +33,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   getData() async {
     ProfileApi p = ProfileApi();
     final data = await p.getCurrentProfile();
-    setState(() {
-      _currentProfile = data;
-    });
+    if (mounted) {
+      setState(() {
+        _currentProfile = data;
+      });
+    }
   }
 
   @override
@@ -104,7 +106,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             content: "Switch profile",
             icon: PhosphorIconsDuotone.userSwitch,
             fn: () {
-             
               navigateToPage(context, "/check-login", isReplacement: true);
             },
             color: Colors.orangeAccent),

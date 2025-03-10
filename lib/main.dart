@@ -4,7 +4,6 @@ import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/theme/theme_catchmflixx.dart';
 import 'package:catchmflixx/utils/firebase/firebase_api.dart';
 import 'package:catchmflixx/utils/go_router/go.dart';
-// import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';

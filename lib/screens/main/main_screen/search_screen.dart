@@ -55,10 +55,12 @@ class _SearchScreenState extends State<SearchScreen> {
         SearchTop(
           searchText: translation.navDiscover,
           onSearching: (value, search) {
-            setState(() {
-              isSearching = search;
-              _searchData = value;
-            });
+            if (mounted) {
+              setState(() {
+                isSearching = search;
+                _searchData = value;
+              });
+            }
           },
         ),
         isSearching == false
