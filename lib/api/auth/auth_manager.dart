@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'package:catchmflixx/models/error/error_model.dart';
 import 'package:catchmflixx/models/user/login/user.login.response.model.dart';
@@ -12,6 +14,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIManager {
@@ -96,9 +99,8 @@ class APIManager {
     return user;
   }
 
-
   Future<UserLoginResponse> useGoogleLogin(
-      String code,  BuildContext context, bool manual) async {
+      String code, BuildContext context, bool manual) async {
     const int statusOk = 200;
     const int statusAccepted = 202;
 
@@ -115,7 +117,9 @@ class APIManager {
     try {
       final response = await dio.post(
         "google-auth/login-signup/",
-        data: FormData.fromMap({"code": code, }),
+        data: FormData.fromMap({
+          "code": code,
+        }),
       );
 
       if (response.statusCode == statusOk) {
@@ -155,7 +159,6 @@ class APIManager {
 
     return user;
   }
-
 
   Future<UserLoginResponse> useManualLogin(
       String id, BuildContext context, bool manual) async {
@@ -262,9 +265,16 @@ class APIManager {
     await addInterceptors();
     try {
       final response = await dio.post("refresh");
-
+      print('😁');
+      print(response.data);
+      print('😁');
+      print(response.statusMessage);
       if (response.statusCode == 201) {
         prefs.setString("bearer", response.data["data"]["access"]);
+      } else if (response.statusCode == 401) {
+        final api = APIManager();
+        await api.useLogout();
+        Restart.restartApp();
       }
     } catch (e) {
       if (kDebugMode) {

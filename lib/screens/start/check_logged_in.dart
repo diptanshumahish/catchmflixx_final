@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:catchmflixx/api/auth/auth_manager.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/images.dart';
@@ -8,6 +10,7 @@ import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -37,20 +40,29 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
 
   Future<void> checkInactivity() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final lastActive = prefs.getInt("last_active") ?? 0;
     final currentTime = DateTime.now().millisecondsSinceEpoch;
-
-    const sixDaysInMillis = 6 * 24 * 60 * 60 * 1000;
-
-    if (currentTime - lastActive > sixDaysInMillis) {
-      final api = APIManager();
-      await api.useLogout();
-      bool clear = await prefs.clear();
-      if (clear) {
-        Restart.restartApp();
-      }
-    } else {
+    final lastActive = prefs.getInt("last_active");
+    if (lastActive == null) {
       await prefs.setInt("last_active", currentTime);
+      return;
+    }
+
+    final lastActiveDate = DateTime.fromMillisecondsSinceEpoch(lastActive);
+
+    var diff = DateTime.now().difference(lastActiveDate);
+    if (diff.inDays < 6) {
+      return;
+    }
+
+    final api = APIManager();
+    await api.useLogout();
+    bool clear = await prefs.remove('last_active');
+    if (clear) {
+      Timer(const Duration(seconds: 2), () {
+        ToastShow.returnToast("You have been logged out due to inactivity");
+      });
+
+      Restart.restartApp();
     }
   }
 

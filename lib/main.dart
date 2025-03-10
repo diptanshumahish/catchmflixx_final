@@ -1,6 +1,5 @@
 import 'dart:io' show Platform;
 import 'package:catchmflixx/firebase_options.dart';
-import 'package:catchmflixx/screens/start/splash_screen.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/theme/theme_catchmflixx.dart';
 import 'package:catchmflixx/utils/firebase/firebase_api.dart';

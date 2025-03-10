@@ -138,9 +138,12 @@ class NetworkManager {
           return fromJson(res.data);
         }
       }
-      MessageModel msg = MessageModel.fromJson(e.response?.data);
-      ToastShow.returnToast(msg.data?.message ?? "Error");
-      throw Exception(e.message ?? "Error occurred");
+
+      if (e.response?.data != null &&
+          e.response!.data is Map<String, dynamic>) {
+        MessageModel msg = MessageModel.fromJson(e.response?.data);
+        ToastShow.returnToast(msg.data?.message ?? "Error");
+      }
     } catch (e) {
       // ToastShow.returnToast(e.toString());
       throw Exception(e.toString());

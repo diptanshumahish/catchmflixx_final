@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:catchmflixx/api/payments/payments.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/payments/episode_rent_options.dart';
@@ -199,31 +201,31 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
                                   }
                                 },
                               ),
-                              // const SizedBox(height: 10),
-                              // OffsetFullButton(
-                              //   icon: PhosphorIconsLight.currencyInr,
-                              //   content: "Rent Now (Phonepe)",
-                              //   fn: () async {
-                              //     PaymentsManager p = PaymentsManager();
-                              //     final data = await p
-                              //         .phonePeInitEpisode(ele.id.toString());
+                              const SizedBox(height: 10),
+                              OffsetFullButton(
+                                icon: PhosphorIconsLight.currencyInr,
+                                content: "Rent Now (Phonepe)",
+                                fn: () async {
+                                  PaymentsManager p = PaymentsManager();
+                                  final data = await p
+                                      .phonePeInitEpisode(ele.id.toString());
 
-                              //     final url = data.data.data.instrumentResponse
-                              //         .redirectInfo.url;
+                                  final url = data.data.data.instrumentResponse
+                                      .redirectInfo.url;
 
-                              //     if (data.data.success) {
-                              //       await launchUrl(
-                              //           Uri.parse(
-                              //               "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
-                              //           mode: LaunchMode.externalApplication,
-                              //           webViewConfiguration:
-                              //               const WebViewConfiguration(
-                              //                   enableJavaScript: true,
-                              //                   enableDomStorage: true));
-                              //       navigateToPage(context, "/base");
-                              //     }
-                              //   },
-                              // ),
+                                  if (data.data.success) {
+                                    await launchUrl(
+                                        Uri.parse(
+                                            "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
+                                        mode: LaunchMode.externalApplication,
+                                        webViewConfiguration:
+                                            const WebViewConfiguration(
+                                                enableJavaScript: true,
+                                                enableDomStorage: true));
+                                    navigateToPage(context, "/base");
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         );
