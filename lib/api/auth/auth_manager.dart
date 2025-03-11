@@ -265,20 +265,26 @@ class APIManager {
     await addInterceptors();
     try {
       final response = await dio.post("refresh");
-      print('😁');
-      print(response.data);
-      print('😁');
-      print(response.statusMessage);
       if (response.statusCode == 201) {
         prefs.setString("bearer", response.data["data"]["access"]);
-      } else if (response.statusCode == 401) {
+      } else if (response.statusCode == 401 ||
+          response.data["success"] == false) {
         final api = APIManager();
         await api.useLogout();
         Restart.restartApp();
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
+      if (e is DioException) {
+        if (e.response?.statusCode == 401 ||
+            e.response?.data["success"] == false) {
+          final api = APIManager();
+          await api.useLogout();
+          Restart.restartApp();
+        }
+      } else {
+        if (kDebugMode) {
+          print("An unexpected error occurred: $e");
+        }
       }
     }
   }

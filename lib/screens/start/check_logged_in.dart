@@ -33,43 +33,7 @@ class _CheckLoggedInState extends ConsumerState<CheckLoggedIn> {
   @override
   void initState() {
     getHalfLoggedInState();
-    checkInactivity();
-    updateLastActiveTimestamp();
     super.initState();
-  }
-
-  Future<void> checkInactivity() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final currentTime = DateTime.now().millisecondsSinceEpoch;
-    final lastActive = prefs.getInt("last_active");
-    if (lastActive == null) {
-      await prefs.setInt("last_active", currentTime);
-      return;
-    }
-
-    final lastActiveDate = DateTime.fromMillisecondsSinceEpoch(lastActive);
-
-    var diff = DateTime.now().difference(lastActiveDate);
-    if (diff.inDays < 6) {
-      return;
-    }
-
-    final api = APIManager();
-    await api.useLogout();
-    bool clear = await prefs.remove('last_active');
-    if (clear) {
-      Timer(const Duration(seconds: 2), () {
-        ToastShow.returnToast("You have been logged out due to inactivity");
-      });
-
-      Restart.restartApp();
-    }
-  }
-
-  void updateLastActiveTimestamp() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final currentTime = DateTime.now().millisecondsSinceEpoch;
-    await prefs.setInt("last_active", currentTime);
   }
 
   Future<void> getHalfLoggedInState() async {

@@ -3,7 +3,6 @@ import 'package:catchmflixx/api/user/profile/profile_api.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/constants/text.dart';
 import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
-import 'package:catchmflixx/state/provider.dart';
 
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/ads/ads_module.dart';
