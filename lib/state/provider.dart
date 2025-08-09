@@ -3,6 +3,8 @@
 import 'package:catchmflixx/api/user/user_activity/watch_history_list.model.dart';
 import 'package:catchmflixx/api/user/user_activity/watch_later_list.dart';
 import 'package:catchmflixx/models/language/language.model.dart' as lang;
+import 'package:catchmflixx/models/payments/subscription_model.dart';
+import 'package:catchmflixx/models/profiles/logged_in_current_profile.model.dart';
 import 'package:catchmflixx/models/tabs/tabselector.model.dart';
 import 'package:catchmflixx/state/first-ep/first_ep.dart';
 import 'package:catchmflixx/state/language/language.state.dart';
@@ -11,6 +13,8 @@ import 'package:catchmflixx/state/user/activity/user_activity.dart';
 import 'package:catchmflixx/state/user/details/user_details.state.dart';
 import 'package:catchmflixx/state/user/login/user.login.response.state.dart';
 import 'package:catchmflixx/state/user/register/register.response.state.dart';
+import 'package:catchmflixx/state/user/subscription/subscription.dart';
+import 'package:catchmflixx/state/user/profile/current_profile.state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,10 +47,18 @@ final watchLaterProvider =
     StateNotifierProvider<UserWatchLaterNotifier, WatchLaterList>(
         (ref) => UserWatchLaterNotifier());
 
-final firstEpProvider =
-    StateNotifierProvider<FirstEpNotifier, List<String>>(
-        (ref) => FirstEpNotifier());
+final firstEpProvider = StateNotifierProvider<FirstEpNotifier, List<String>>(
+    (ref) => FirstEpNotifier());
 
+final userSubscriptionProvider =
+    StateNotifierProvider<UserSubscriptionNotifier, SubscriptionPlans>(
+  (ref) => UserSubscriptionNotifier(),
+);
+
+// current profile
+final currentProfileProvider = StateNotifierProvider<CurrentProfileNotifier, LoggedInCurrentProfile?>(
+  (ref) => CurrentProfileNotifier(),
+);
 
 // final internetConnectivityProvider =
 //     StateNotifierProvider<InternetCheckerNotifier, InternetStatus>(

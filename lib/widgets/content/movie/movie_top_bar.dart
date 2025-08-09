@@ -1,6 +1,6 @@
 import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
-import 'package:catchmflixx/constants/styles/text_styles.dart';
+// unified typography
 import 'package:catchmflixx/models/content/series/continue.watching.model.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
 import 'package:catchmflixx/state/provider.dart';
@@ -15,6 +15,7 @@ import 'package:catchmflixx/widgets/common/glyph/glyph_censor.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_price.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_rented.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_year.dart';
+import 'package:catchmflixx/widgets/content/series/video_background.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:catchmflixx/theme/typography.dart';
 
 bool _added = false;
 CurrentWatching _cw = CurrentWatching(success: false);
@@ -80,7 +82,7 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
   getData() async {
     ContentManager ct = ContentManager();
     final dat = await ct.continueWatching(widget.id);
-    if (dat.success == true) {
+    if (dat!=null&& dat.success == true) {
       setState(() {
         _cw = dat;
       });
@@ -103,14 +105,25 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
     return FlexibleSpaceBar(
         background: Stack(
       children: [
+        // Video Background for trailers, Image for movies
         Animate(
           effects: const [FadeEffect(delay: Duration(milliseconds: 100))],
-          child: Image.network(
-            widget.imgLink,
-            height: size.height / 1.4,
-            width: size.width,
-            fit: BoxFit.cover,
-          ),
+          child: widget.type == "series" 
+              ? VideoBackground(
+                  videoUrl: widget.playId,
+                  fallbackImageUrl: widget.imgLink,
+                  height: size.height / 1.4,
+                  width: size.width,
+                  fit: BoxFit.cover,
+                  autoPlay: true,
+                  loop: true,
+                )
+              : Image.network(
+                  widget.imgLink,
+                  height: size.height / 1.4,
+                  width: size.width,
+                  fit: BoxFit.cover,
+                ),
         ),
         Container(
           decoration: const BoxDecoration(
@@ -136,11 +149,9 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                   effects: const [
                     FadeEffect(delay: Duration(milliseconds: 200))
                   ],
-                  child: Text(
+                  child: AppText(
                     widget.title,
-                    style: size.height > 840
-                        ? TextStyles.headingMobile
-                        : TextStyles.headingMobileSmallScreens,
+                    variant: AppTextVariant.headline,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -152,9 +163,9 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                   effects: const [
                     FadeEffect(delay: Duration(milliseconds: 400))
                   ],
-                  child: Text(
+                  child: AppText(
                     widget.subTitle,
-                    style: TextStyles.smallSubText,
+                    variant: AppTextVariant.bodySmall,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -190,9 +201,10 @@ class _MovieTopBarState extends ConsumerState<MovieTopBar> {
                             const SizedBox(
                               height: 5,
                             ),
-                            Text(
+                            AppText(
                               formatDuration(remainingSeconds),
-                              style: TextStyles.smallSubText,
+                              variant: AppTextVariant.caption,
+                              color: Colors.white60,
                             ),
                           ],
                         ),

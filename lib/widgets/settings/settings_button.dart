@@ -30,15 +30,13 @@ class SettingsButton extends StatelessWidget {
               children: [
                 Text(
                   headingName,
-                  style: MediaQuery.of(context).size.height > 840
-                      ? TextStyles.cardHeading
-                      : TextStyles.cardHeadingForSmallerScreens,
+                  style: TextStyles.getResponsiveCardHeading(context),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   child: Text(
                     subHeading,
-                    style: TextStyles.smallSubText,
+                    style: TextStyles.getResponsiveSmallSubText(context),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

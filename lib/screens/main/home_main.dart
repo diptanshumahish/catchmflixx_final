@@ -19,7 +19,8 @@ final List<Widget> screens = [
 ];
 
 class BaseMain extends ConsumerStatefulWidget {
-  const BaseMain({super.key});
+  final Widget? child; // Allow nested ShellRoute pages
+  const BaseMain({super.key, this.child});
 
   @override
   ConsumerState<BaseMain> createState() => _BaseMainState();
@@ -30,25 +31,33 @@ class _BaseMainState extends ConsumerState<BaseMain> {
   Widget build(BuildContext context) {
     final activeIndex = ref.watch(tabsProvider);
 
-    return Scaffold(
+    if (widget.child != null) {
+      return Scaffold(
         backgroundColor: Colors.black,
-        body: AnimatedSwitcher(
-            switchInCurve: Curves.easeInOut,
-            switchOutCurve: Curves.easeInOut,
-            duration:
-                const Duration(milliseconds: 400), // Adjust animation duration
-            transitionBuilder: (child, animation) {
-              final animationOffset = animation.drive(Tween(
-                begin: const Offset(1.0, 0.0), // Start from right side
-                end: Offset.zero, // Slide to center
-              ));
-              return SlideTransition(
-                position: animationOffset,
-                child: FadeTransition(opacity: animation, child: child),
-              );
-            },
-            child: screens[activeIndex.tab]),
-        extendBody: true,
-        bottomNavigationBar: const BottomNavbar());
+        body: widget.child,
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: AnimatedSwitcher(
+        switchInCurve: Curves.easeInOut,
+        switchOutCurve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 400),
+        transitionBuilder: (child, animation) {
+          final animationOffset = animation.drive(Tween(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ));
+          return SlideTransition(
+            position: animationOffset,
+            child: FadeTransition(opacity: animation, child: child),
+          );
+        },
+        child: screens[activeIndex.tab],
+      ),
+      extendBody: true,
+      bottomNavigationBar: const BottomNavbar(),
+    );
   }
 }

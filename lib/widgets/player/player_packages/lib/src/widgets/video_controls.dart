@@ -29,80 +29,96 @@ class VideoControls extends StatelessWidget {
         visible: showControls,
         child: Positioned.fill(
           child: Center(
-            child:controller.value.isCompleted?GestureDetector() : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Animate(
-                  effects: const [
-                    FadeEffect(delay: Duration(milliseconds: 100))
-                  ],
-                  child: GestureDetector(
-                      onTap: () {
-                        controller.rewind().then((value) {
-                          onRewind?.call(controller.value);
-                        });
-                      },
-                      child: const PhosphorIcon(
-                        PhosphorIconsFill.clockCounterClockwise,
-                        color: Colors.white,
-                        size: 32,
-                      )),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Animate(
-                  effects: const [FadeEffect()],
-                  child: GestureDetector(
-                    onTap: onPlayButtonTap,
-                    child: () {
-                     
-                      if (controller.value.isBuffering) {
-                        return (Platform.isIOS)
-                            ? const CupertinoActivityIndicator(
-                                color: Colors.white,
-                                radius: 30,
-                              )
-                            : const CircularProgressIndicator(
-                                color: Colors.white,
-                              );
-                      }
-                      var defaultIcon = PhosphorIcon(
-                        controller.value.isPlaying
-                            ? PhosphorIconsFill.pause
-                            : PhosphorIconsFill.play,
-                        duotoneSecondaryColor: Colors.white,
-                        color: Colors.white,
-                        size: 60,
-                      );
-
-                      return defaultIcon;
-                    }(),
+            child: controller.value.isCompleted
+                ? const SizedBox()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Animate(
+                        effects: const [
+                          FadeEffect(delay: Duration(milliseconds: 100))
+                        ],
+                        child: GestureDetector(
+                            onTap: () {
+                              controller.rewind().then((value) {
+                                onRewind?.call(controller.value);
+                              });
+                            },
+                            child: const PhosphorIcon(
+                              PhosphorIconsFill.clockCounterClockwise,
+                              color: Colors.white,
+                              size: 32,
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Animate(
+                        effects: const [FadeEffect()],
+                        child: GestureDetector(
+                          onTap: onPlayButtonTap,
+                          child: _buildPlayPauseButton(),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Animate(
+                        effects: const [
+                          FadeEffect(delay: Duration(milliseconds: 100))
+                        ],
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.fastForward().then((value) {
+                              onFastForward?.call(controller.value);
+                            });
+                          },
+                          child: const PhosphorIcon(
+                            PhosphorIconsFill.clockClockwise,
+                            color: Colors.white,
+                            size: 32,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Animate(
-                  effects: const [
-                    FadeEffect(delay: Duration(milliseconds: 100))
-                  ],
-                  child: GestureDetector(
-                    onTap: () {
-                      controller.fastForward().then((value) {
-                        onFastForward?.call(controller.value);
-                      });
-                    },
-                    child: const PhosphorIcon(
-                      PhosphorIconsFill.clockClockwise,
-                      color: Colors.white,
-                      size: 32,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ));
+  }
+
+  Widget _buildPlayPauseButton() {
+    // First check if video is ready to be played
+    if (!controller.value.isInitialized) {
+      return _buildLoadingIndicator();
+    }
+
+    // Android specific fix for incorrect buffering state
+    // Only show loading indicator when actually buffering and not playing
+    if (controller.value.isBuffering &&
+        (!controller.value.isPlaying ||
+            controller.value.position == Duration.zero)) {
+      return _buildLoadingIndicator();
+    }
+
+    // Show play/pause button
+    return PhosphorIcon(
+      controller.value.isPlaying
+          ? PhosphorIconsFill.pause
+          : PhosphorIconsFill.play,
+      duotoneSecondaryColor: Colors.white,
+      color: Colors.white,
+      size: 60,
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Platform.isIOS
+        ? const CupertinoActivityIndicator(
+            color: Colors.white,
+            radius: 30,
+          )
+        : const CircularProgressIndicator(
+            color: Colors.white,
+          );
   }
 }

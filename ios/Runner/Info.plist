@@ -2,14 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MinimumOSVersion</key>
-	<string>13.0</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We need access to your photo library to read and save photos.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>We need access to your photo library to save photos.</string>
-	<key>NSDocumentsFolderUsageDescription</key>
-	<string>For smooth access, CatchMFLixx requires folder access</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.diptanshumahish.catchmflixxapp</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.286624835671-asae5b6ett5tjpmbre56vgigng8iseag</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>google</string>
+		<string>com.googleusercontent.apps.286624835671-asae5b6ett5tjpmbre56vgigng8iseag</string>
+		<string>http</string>
+  		<string>https</string>
+		<string>sms</string>
+  		<string>tel</string>
+		<string>mailto</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -51,7 +70,19 @@
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+  	<string>applinks:www.catchmflixx.com</string>
+	</array>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>com.apple.developer.applesignin</key>
+	<array>
+    	<string>Default</string>
+	</array>
 </dict>
 </plist>

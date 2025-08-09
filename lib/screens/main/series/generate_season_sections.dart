@@ -21,7 +21,9 @@ class _GenerateSeasonSectionsState extends State<GenerateSeasonSections> {
               .map((e) => SeasonSection(
                   sectionHeading: e.subTitle ?? "",
                   uuid: e.suuid ?? "",
-                  sectionDetails: e.subDescription ?? ""))
+                  sectionDetails: e.subDescription ?? "",
+                  isFree: e.free ?? false,
+                  thumbnail: e.thumbnail ?? ""))
               .toList()),
     );
   }

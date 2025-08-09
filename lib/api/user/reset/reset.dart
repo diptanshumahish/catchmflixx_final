@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 class ResetPassword {
   NetworkManager networkManager = NetworkManager();
 
-  Future<ResetSent> addResetSent(
+  Future<ResetSent?> addResetSent(
     String email,
   ) async {
     final FormData data = FormData.fromMap({

@@ -11,7 +11,7 @@ class ContentManager {
   final NetworkManager networkManager = NetworkManager();
   String path = "content/";
 
-  Future<ContentList> searchContent(String search) async {
+  Future<ContentList?> searchContent(String search) async {
     final lang = await networkManager.getLang();
     return await networkManager.makeRequest<ContentList>(
       "$path$lang/list?search=$search",
@@ -19,7 +19,7 @@ class ContentManager {
     );
   }
 
-  Future<SeriesSeasons> getSeasonsData(String uuid) async {
+  Future<SeriesSeasons?> getSeasonsData(String uuid) async {
     final lang = await networkManager.getLang();
     return await networkManager.makeRequest<SeriesSeasons>(
       "$path$lang/details/$uuid",
@@ -27,7 +27,7 @@ class ContentManager {
     );
   }
 
-  Future<MovieFullModel> getMovie(String uuid) async {
+  Future<MovieFullModel?> getMovie(String uuid) async {
     final lang = await networkManager.getLang();
     return await networkManager.makeRequest<MovieFullModel>(
       "$path$lang/details/$uuid",
@@ -35,7 +35,7 @@ class ContentManager {
     );
   }
 
-  Future<EpisodesModel> getEpisodes(String uuid) async {
+  Future<EpisodesModel?> getEpisodes(String uuid) async {
     final lang = await networkManager.getLang();
     return await networkManager.makeRequest<EpisodesModel>(
       "$path$lang/season-details/$uuid",
@@ -43,24 +43,24 @@ class ContentManager {
     );
   }
 
-  Future<CastResponse> getCast(String uuid) async {
+  Future<CastResponse?> getCast(String uuid) async {
     return await networkManager.makeRequest<CastResponse>(
       "$path/cast/$uuid",
       (data) => CastResponse.fromJson(data),
     );
   }
 
-  Future<LanguageModel> getLanguages(String uuid) async {
+  Future<LanguageModel?> getLanguages(String uuid) async {
     return await networkManager.makeRequest<LanguageModel>(
       "$path/languages/$uuid",
-      (data) => LanguageModel.fromJson(data),
+      LanguageModel.fromJson,
     );
   }
 
-  Future<CurrentWatching> continueWatching(String uuid) async {
+  Future<CurrentWatching?> continueWatching(String uuid) async {
     final lang = await networkManager.getLang();
     return await networkManager.makeRequest<CurrentWatching>(
-      "$path$lang  /continue-watching/$uuid",
+      "$path$lang/continue-watching/$uuid",
       (data) => CurrentWatching.fromJson(data),
     );
   }

@@ -13,25 +13,26 @@ import 'package:dio/dio.dart';
 class ProfileApi {
   final NetworkManager networkManager = NetworkManager();
 
-  
-
-
-  Future<ProfileLoginResponse> useProfileLogin(
+  Future<ProfileLoginResponse?> useProfileLogin(
       String hash, String? password) async {
     final data = FormData.fromMap({"hash": hash, "password": password ?? ""});
     return await networkManager.makeRequest<ProfileLoginResponse>(
         "user/profile-login", (data) => ProfileLoginResponse.fromJson(data),
         data: data, method: "POST");
   }
-  Future<MessageModel> resetProfilePassword(
-      String hash, ) async {
-    final data = FormData.fromMap({"uuid": hash, });
+
+  Future<MessageModel?> resetProfilePassword(
+    String hash,
+  ) async {
+    final data = FormData.fromMap({
+      "uuid": hash,
+    });
     return await networkManager.makeRequest<MessageModel>(
         "user/request-reset-profile", (data) => MessageModel.fromJson(data),
         data: data, method: "POST");
   }
 
-  Future<ProfileCreationResponse> addProfile(
+  Future<ProfileCreationResponse?> addProfile(
       String name, String? password, ProfileType type, String? avatar) async {
     final data = FormData.fromMap({
       "name": name,
@@ -46,14 +47,14 @@ class ProfileApi {
         data: data, method: "POST");
   }
 
-  Future<MessageModel> deleteProfile(String profileId) async {
+  Future<MessageModel?> deleteProfile(String profileId) async {
     return await networkManager.makeRequest<MessageModel>(
         "user/del-edit-profile/$profileId",
         (data) => MessageModel.fromJson(data),
         method: "DELETE");
   }
 
-  Future<ProfilesList> fetchProfiles() async {
+  Future<ProfilesList?> fetchProfiles() async {
     try {
       return await networkManager.makeRequest<ProfilesList>(
         "user/profiles",
@@ -64,12 +65,15 @@ class ProfileApi {
     }
   }
 
-  Future<MessageModel> editProfile(String profileId, String? name, int avatarId,
-      String? pin, bool changepin) async {
+  Future<MessageModel?> editProfile(String profileId, String? name,
+      int avatarId, String? pin, bool changepin) async {
     var data = FormData();
     if (changepin) {
-      data = FormData.fromMap(
-          {"name": name, "avatar_id": avatarId, "password": int.parse(pin!)});
+      data = FormData.fromMap({
+        "name": name,
+        "avatar_id": avatarId,
+        "password": (pin == null || pin.isEmpty) ? "" : int.parse(pin)
+      });
     } else {
       data = FormData.fromMap({
         "name": name,
@@ -84,7 +88,7 @@ class ProfileApi {
         method: "PUT");
   }
 
-  Future<AvatarList> getAvatars() async {
+  Future<AvatarList?> getAvatars() async {
     try {
       return await networkManager.makeRequest<AvatarList>(
           "user/get-avatar", (data) => AvatarList.fromJson(data),
@@ -101,7 +105,7 @@ class ProfileApi {
           "user/watch-later/", (data) => AddedToWatchLater.fromJson(data),
           data: data, method: "POST");
 
-      ToastShow.returnToast(response.message ?? "");
+      ToastShow.returnToast(response?.message ?? "");
     } catch (e) {
       ToastShow.returnToast("Error adding to watch later");
     }
@@ -114,13 +118,13 @@ class ProfileApi {
           "user/watch-later/", (data) => AddedToWatchLater.fromJson(data),
           data: data, method: "DELETE");
 
-      ToastShow.returnToast(response.message ?? "");
+      ToastShow.returnToast(response?.message ?? "");
     } catch (e) {
       ToastShow.returnToast("Error removing from watch later");
     }
   }
 
-  Future<WatchLaterList> getWatchLater() async {
+  Future<WatchLaterList?> getWatchLater() async {
     try {
       return await networkManager.makeRequest<WatchLaterList>(
           "user/watch-later/", (data) => WatchLaterList.fromJson(data),
@@ -130,7 +134,7 @@ class ProfileApi {
     }
   }
 
-  Future<LoggedInCurrentProfile> getCurrentProfile() async {
+  Future<LoggedInCurrentProfile?> getCurrentProfile() async {
     return await networkManager.makeRequest<LoggedInCurrentProfile>(
         "user/get-profile/", (data) => LoggedInCurrentProfile.fromJson(data));
   }

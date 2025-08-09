@@ -1,6 +1,7 @@
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:catchmflixx/utils/responsive/responsive_utils.dart';
 
 class SettingsSwitch extends StatelessWidget {
   final String heading;
@@ -29,9 +30,7 @@ class SettingsSwitch extends StatelessWidget {
                 width: MediaQuery.of(context).size.width - 120,
                 child: Text(
                   heading,
-                  style: MediaQuery.of(context).size.height > 750
-                      ? TextStyles.cardHeading
-                      : TextStyles.cardHeadingForSmallerScreens,
+                  style: TextStyles.getResponsiveCardHeading(context),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -41,7 +40,7 @@ class SettingsSwitch extends StatelessWidget {
                 child: Text(
                   subHeading,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyles.smallSubText,
+                  style: TextStyles.getResponsiveSmallSubText(context),
                   maxLines: 1,
                   softWrap: true,
                 ),
@@ -49,7 +48,7 @@ class SettingsSwitch extends StatelessWidget {
             ],
           ),
           CupertinoSwitch(
-              activeColor: Colors.blue,
+              activeTrackColor: Colors.blue,
               value: switchBool,
               onChanged: (val) {
                 fn(val);

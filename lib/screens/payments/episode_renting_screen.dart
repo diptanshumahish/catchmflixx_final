@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:catchmflixx/api/payments/payments.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/models/payments/episode_rent_options.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
-import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -43,7 +44,7 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
   Future<void> getData() async {
     PaymentsManager p = PaymentsManager();
     final data = await p.getEpisodeRents(widget.id);
-    if (data.success!) {
+    if (data != null && data.success!) {
       setState(() {
         rt = data;
       });
@@ -52,193 +53,456 @@ class _EpisodeRentingScreenState extends State<EpisodeRentingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isIOS = Platform.isIOS;
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: const CupertinoNavigationBarBackButton(
-          color: Colors.white,
+        elevation: 0,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const CupertinoNavigationBarBackButton(
+            color: Colors.white,
+          ),
         ),
         title: Text(
           'Episode ${widget.episodeNumber}',
-          style: TextStyles.headingsForSections,
+          style: TextStyles.headingsForSections.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
         ),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
-          children: [
-            const Row(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black,
+              Colors.black.withOpacity(0.95),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                PhosphorIcon(
-                  PhosphorIconsLight.currencyInr,
-                  color: Colors.white,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  "Rent this Episode",
-                  style: TextStyles.headingMobile,
-                ),
-              ],
-            ),
-            const Divider(
-              color: Colors.white24,
-              thickness: 1,
-              height: 30,
-            ),
-            SizedBox(
-              height: 200,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        widget.img,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                // Header Section
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.05),
+                        Colors.white.withOpacity(0.02),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.1),
+                      width: 1,
                     ),
                   ),
-                  Positioned(
-                    bottom: 10,
-                    left: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(4),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const PhosphorIcon(
+                              PhosphorIconsLight.currencyInr,
+                              color: Colors.orange,
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              "Rent this Episode",
+                              style: TextStyles.headingMobile.copyWith(
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        'Episode ${widget.episodeNumber}',
-                        style: TextStyles.smallSubText.copyWith(
-                          color: Colors.white,
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 32),
+                
+                // Hero Image Section
+                Container(
+                  height: 220,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                          widget.img,
+                          width: double.infinity,
+                          height: 220,
+                          fit: BoxFit.cover,
                         ),
                       ),
+                      // Gradient overlay
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Episode badge
+                      Positioned(
+                        bottom: 16,
+                        left: 16,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withOpacity(0.9),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            'Episode ${widget.episodeNumber}',
+                            style: TextStyles.smallSubText.copyWith(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 24),
+                
+                // Title Section
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.03),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.08),
                     ),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              widget.title,
-              style: TextStyles.headingsSecondaryMobile,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "Available Options",
-              style: TextStyles.cardHeading,
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            const Text(
-              "you can use the phonepe or razorpay gateway for making payments securely, in case you face issues in any of the gateways, use the other",
-              style: TextStyles.formSubTitle,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-                "In case of any issues, please contact us at contact@catchmflix.com , we will be happy to help you out. If any payment has been made then make sure to attach the payment success mail, or your bank receipt for",
-                style: TextStyles.formSubTitle),
-            rt.data != null
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: FlexItems(
-                      widgetList: rt.data!.map((ele) {
-                        return Container(
+                  child: Text(
+                    widget.title,
+                    style: TextStyles.headingsSecondaryMobile.copyWith(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                
+                const SizedBox(height: 32),
+                
+                // Options Section
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withOpacity(0.05),
+                        Colors.white.withOpacity(0.02),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: Colors.white.withOpacity(0.1),
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.green.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const PhosphorIcon(
+                              PhosphorIconsLight.listChecks,
+                              color: Colors.green,
+                              size: 20,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            "Available Options",
+                            style: TextStyles.cardHeading.copyWith(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 16),
+                      
+                      if (isIOS) ...[
+                        Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.white12),
+                            color: Colors.orange.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.orange.withOpacity(0.3),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const PhosphorIcon(
+                                PhosphorIconsLight.warning,
+                                color: Colors.orange,
+                                size: 20,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  "Renting is currently not available on iOS due to App Store policies. Please use an Android device or visit the website to complete your purchase.",
+                                  style: TextStyles.formSubTitle.copyWith(
+                                    color: Colors.orange,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.blue.withOpacity(0.3),
+                            ),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "${ele.price.toString()} USD",
-                                    style: TextStyles.headingsSecondaryMobile,
+                                  const PhosphorIcon(
+                                    PhosphorIconsLight.info,
+                                    color: Colors.blue,
+                                    size: 20,
                                   ),
+                                  const SizedBox(width: 12),
                                   Text(
-                                    "${ele.days.toString()} days",
-                                    style: TextStyles.cardHeading,
+                                    "Payment Information",
+                                    style: TextStyles.cardHeading.copyWith(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(
-                                height: 10,
+                              const SizedBox(height: 8),
+                              Text(
+                                "You can use the payment gateway for making payments securely. In case you face any issues, please contact us.",
+                                style: TextStyles.formSubTitle.copyWith(
+                                  fontSize: 14,
+                                  height: 1.4,
+                                ),
                               ),
-                              OffsetFullButton(
-                                icon: PhosphorIconsLight.currencyInr,
-                                content: "Rent now (Razorpay)",
-                                fn: () async {
-                                  PaymentsManager p = PaymentsManager();
-                                  final data = await p
-                                      .razorPeInitEpisode(ele.id.toString());
-
-                                  final url = data.data.shortUrl;
-
-                                  if (data.success) {
-                                    await launchUrl(
-                                        Uri.parse(
-                                            "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
-                                        mode: LaunchMode.externalApplication,
-                                        webViewConfiguration:
-                                            const WebViewConfiguration(
-                                                enableJavaScript: true,
-                                                enableDomStorage: true));
-                                    navigateToPage(context, "/base");
-                                  }
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              OffsetFullButton(
-                                icon: PhosphorIconsLight.currencyInr,
-                                content: "Rent Now (Phonepe)",
-                                fn: () async {
-                                  PaymentsManager p = PaymentsManager();
-                                  final data = await p
-                                      .phonePeInitEpisode(ele.id.toString());
-
-                                  final url = data.data.data.instrumentResponse
-                                      .redirectInfo.url;
-
-                                  if (data.data.success) {
-                                    await launchUrl(
-                                        Uri.parse(
-                                            "https://www.catchmflixx.com/en/redirect?url=${url.toString()}"),
-                                        mode: LaunchMode.externalApplication,
-                                        webViewConfiguration:
-                                            const WebViewConfiguration(
-                                                enableJavaScript: true,
-                                                enableDomStorage: true));
-                                    navigateToPage(context, "/base");
-                                  }
-                                },
+                              const SizedBox(height: 8),
+                              Text(
+                                "In case of any issues, please contact us at contact@catchmflix.com. If a payment has been made, make sure to attach the success email or your bank receipt.",
+                                style: TextStyles.formSubTitle.copyWith(
+                                  fontSize: 14,
+                                  height: 1.4,
+                                ),
                               ),
                             ],
                           ),
-                        );
-                      }).toList(),
-                      space: 10,
-                    ),
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
+                        ),
+                        
+                        const SizedBox(height: 20),
+                        
+                        rt.data != null
+                            ? Column(
+                                children: rt.data!.map((ele) {
+                                  return Container(
+                                    margin: const EdgeInsets.only(bottom: 16),
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white.withOpacity(0.08),
+                                          Colors.white.withOpacity(0.04),
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: Colors.white.withOpacity(0.15),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "₹${ele.price.toString()}",
+                                                  style: TextStyles.headingsSecondaryMobile.copyWith(
+                                                    fontSize: 28,
+                                                    fontWeight: FontWeight.w800,
+                                                    color: Colors.orange,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  "Rental Price",
+                                                  style: TextStyles.smallSubText.copyWith(
+                                                    color: Colors.white60,
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 16,
+                                                vertical: 8,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(20),
+                                                border: Border.all(
+                                                  color: Colors.green.withOpacity(0.4),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                "${ele.days.toString()} days",
+                                                style: TextStyles.cardHeading.copyWith(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 20),
+                                        OffsetFullButton(
+                                          icon: PhosphorIconsLight.currencyInr,
+                                          content: "Rent Now",
+                                          fn: () async {
+                                            PaymentsManager p = PaymentsManager();
+                                            final data = await p
+                                                .phonePeInitEpisode(ele.id.toString());
+
+                                            final url = data!.transactionData
+                                                .instrumentResponse.redirectInfo.url;
+
+                                            await launchUrl(
+                                              Uri.parse(
+                                                  "https://www.catchmflixx.com/en/redirect?url=$url"),
+                                              mode: LaunchMode.externalApplication,
+                                            );
+                                            navigateToPage(context, "/base");
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }).toList(),
+                              )
+                            : Container(
+                                padding: const EdgeInsets.all(40),
+                                child: const Center(
+                                  child: Column(
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 3,
+                                      ),
+                                      SizedBox(height: 16),
+                                      Text(
+                                        "Loading rental options...",
+                                        style: TextStyles.formSubTitle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                      ],
+                    ],
                   ),
-          ],
+                ),
+                
+                const SizedBox(height: 32),
+              ],
+            ),
+          ),
         ),
       ),
     );

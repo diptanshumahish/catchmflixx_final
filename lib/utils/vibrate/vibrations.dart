@@ -1,15 +1,14 @@
 import 'dart:io';
 
-import 'package:haptic_feedback/haptic_feedback.dart';
 import 'package:vibration/vibration.dart';
+import "package:flutter/services.dart";
 
 Future<void> vibrateTap() async {
   if (Platform.isIOS) {
-    final canVibrate = await Haptics.canVibrate();
-    if (canVibrate) {
-      await Haptics.vibrate(HapticsType.soft);
-    }
+    HapticFeedback.mediumImpact();
   } else {
-    Vibration.vibrate(duration: 50);
+    if (await Vibration.hasVibrator()) {
+      Vibration.vibrate(duration: 50);
+    }
   }
 }

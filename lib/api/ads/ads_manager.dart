@@ -5,7 +5,7 @@ class AdsManager {
   final NetworkManager networkManager = NetworkManager();
   String path = "content";
 
-  Future<AdsResponse> getAds() async {
+  Future<AdsResponse?> getAds() async {
     return await networkManager.makeRequest<AdsResponse>(
       "$path/banner-retrieve",
       (data) => AdsResponse.fromJson(data),

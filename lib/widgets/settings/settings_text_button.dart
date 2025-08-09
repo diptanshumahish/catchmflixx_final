@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:catchmflixx/theme/typography.dart';
 
 class SettingsTextButton extends StatelessWidget {
   final String content;
@@ -22,9 +23,10 @@ class SettingsTextButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                AppText(
                   content,
-                  style: TextStyle(color: color, fontFamily: "Kollektif"),
+                  variant: AppTextVariant.body,
+                  color: color,
                 ),
                 const SizedBox(
                   width: 10,

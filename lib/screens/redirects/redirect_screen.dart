@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class RedirectScreen extends ConsumerStatefulWidget {
-  const RedirectScreen({super.key, required this.code});
+  const RedirectScreen({super.key, required this.idToken, required this.accessToken});
 
-  final String code;
+  final String idToken;
+  final String accessToken;
 
   @override
   RedirectScreenState createState() => RedirectScreenState();
@@ -27,7 +28,7 @@ class RedirectScreenState extends ConsumerState<RedirectScreen> {
       try {
         final res = await ref
             .read(userLoginProvider.notifier)
-            .makeGoogleLogin(widget.code, context, false);
+            .makeGoogleLogin(widget.idToken, widget.accessToken, context, false);
         if (res == 200) {
           navigateToPage(context, "/check-login", isReplacement: true);
         } else {

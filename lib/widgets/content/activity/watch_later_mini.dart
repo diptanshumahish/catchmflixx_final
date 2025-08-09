@@ -36,6 +36,8 @@ class _WatchLaterComponentState extends ConsumerState<WatchLaterComponent> {
       sectionDetails: "Check out what you have been watching so far",
       sectionHeading: "Added to watch Later",
       showMore: "",
+      compact: true,
+      hideHeader: true,
       sectionCards: data.data!
           .map((e) => SectionCard(
               type: e.type ?? "movie",

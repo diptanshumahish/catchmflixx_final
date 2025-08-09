@@ -164,6 +164,7 @@ class Seasons {
   String? thumbnail;
   String? trailer;
   int? noOfEpisodes;
+  bool? free;
 
   Seasons(
       {this.suuid,
@@ -172,7 +173,8 @@ class Seasons {
       this.subDescription,
       this.thumbnail,
       this.trailer,
-      this.noOfEpisodes});
+      this.noOfEpisodes,
+      this.free});
 
   Seasons.fromJson(Map<String, dynamic> json) {
     suuid = json['suuid'];
@@ -182,6 +184,7 @@ class Seasons {
     thumbnail = json['thumbnail'];
     trailer = json['trailer'];
     noOfEpisodes = json['no_of_episodes'];
+    free = json['free'];
   }
 
   Map<String, dynamic> toJson() {
@@ -193,6 +196,7 @@ class Seasons {
     data['thumbnail'] = thumbnail;
     data['trailer'] = trailer;
     data['no_of_episodes'] = noOfEpisodes;
+    data['free'] = free;
     return data;
   }
 }

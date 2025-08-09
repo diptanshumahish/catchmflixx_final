@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:catchmflixx/constants/images.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
@@ -7,7 +5,6 @@ import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:screen_protector/screen_protector.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -36,7 +33,6 @@ class PlayerScreen extends StatefulWidget {
 class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
-    setDataLeakage();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -44,35 +40,15 @@ class _PlayerScreenState extends State<PlayerScreen> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    // print("here we have 💵💵💵💵💵💵💵💵");
-    // print(widget.seekTo);
+
 
     super.initState();
   }
 
-  setDataLeakage() async {
-    try {
-      if (Platform.isIOS) {
-        await ScreenProtector.protectDataLeakageWithColor(Colors.black);
-      } else {
-        await ScreenProtector.protectDataLeakageOn();
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  removeDataLeakage() async {
-    try {
-      await ScreenProtector.protectDataLeakageOff();
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
 
   @override
   void dispose() {
-    removeDataLeakage();
+    // removeDataLeakage();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -82,7 +58,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.playLink == "" || widget.playLink == null) {
+    if (widget.playLink == "") {
       return Scaffold(
         body: Center(
           child: Column(
@@ -118,7 +94,6 @@ class _PlayerScreenState extends State<PlayerScreen> {
     }
 
     return Scaffold(
-      // extendBody: true,
       extendBodyBehindAppBar: true,
 
       backgroundColor: Colors.black,

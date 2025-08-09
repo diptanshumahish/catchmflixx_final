@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "1005279405528",
     "project_id": "cf-notif-72f77",
-    "storage_bucket": "cf-notif-72f77.appspot.com"
+    "storage_bucket": "cf-notif-72f77.firebasestorage.app"
   },
   "client": [
     {
@@ -21,6 +21,50 @@
             "certificate_hash": "daedab12481a5e15d50d96680a99e7f55e0432d4"
           }
         },
+        {
+          "client_id": "1005279405528-ccfbqmemlio8fogtb0ud07rib3ec7hfd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diptanshumahish.catchmflixxapp",
+            "certificate_hash": "9d43aaebe003930e6bbc9f14a70ce40df88cf493"
+          }
+        },
+        {
+          "client_id": "1005279405528-r1o781mohrmhd76gle4kra71akn4i8k3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMZqMrKamFPrSKi-5o7mjZfYnFwnM8kUk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1005279405528-r1o781mohrmhd76gle4kra71akn4i8k3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1005279405528-jcd77ra0jm9dns9dl9uvoa4ajd43fk06.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.diptanshumahish.catchmflixxapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1005279405528:android:07f56f62d15f4ed763fead",
+        "android_client_info": {
+          "package_name": "com.example.cfios"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "1005279405528-r1o781mohrmhd76gle4kra71akn4i8k3.apps.googleusercontent.com",
           "client_type": 3

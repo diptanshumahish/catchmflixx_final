@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class VideoLoading extends StatelessWidget {
   /// Constructor
   const VideoLoading({
-    Key? key,
+    super.key,
     this.loadingStyle,
-  }) : super(key: key);
+  });
 
   /// A model class to provide the custom style for the loading widget.
   final VideoLoadingStyle? loadingStyle;

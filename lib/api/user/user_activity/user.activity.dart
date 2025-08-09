@@ -9,7 +9,7 @@ class UserActivity {
 
 
 
-  Future<GoogleLoginStepOneResponse> googleLoginStepOne() async {
+  Future<GoogleLoginStepOneResponse?> googleLoginStepOne() async {
     return await networkManager.makeRequest<GoogleLoginStepOneResponse>(
         "user/google-auth/redirect/",
         (p0) => GoogleLoginStepOneResponse.fromJson(p0),
@@ -17,7 +17,7 @@ class UserActivity {
       );
   }
 
-  Future<WatchProgress> addWatchProgress(String id, int progress) async {
+  Future<WatchProgress?> addWatchProgress(String id, int progress) async {
     final FormData data = FormData.fromMap(
         {"video_id": id, "progress_seconds": progress.toString()});
     return await networkManager.makeRequest<WatchProgress>(
@@ -25,7 +25,7 @@ class UserActivity {
         method: "POST", data: data);
   }
 
-  Future<WatchProgress> acknowledgeAd(String id) async {
+  Future<WatchProgress?> acknowledgeAd(String id) async {
     final FormData data = FormData.fromMap({
       "uuid": id,
     });
@@ -34,7 +34,7 @@ class UserActivity {
         method: "POST", data: data);
   }
 
-  Future<UserActivityHistory> getWatchHistory() async {
+  Future<UserActivityHistory?> getWatchHistory() async {
     return await networkManager.makeRequest<UserActivityHistory>(
         "content/watched-list", (p0) => UserActivityHistory.fromJson(p0));
   }

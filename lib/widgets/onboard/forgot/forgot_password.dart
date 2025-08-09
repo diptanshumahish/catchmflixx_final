@@ -70,7 +70,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                           ResetPassword rs = ResetPassword();
                           final res =
                               await rs.addResetSent(_emailController.text);
-                          if (res.success!) {
+                          if (res!=null&& res.success!) {
                             ToastShow.returnToast(res.data!.message!);
                             navigateToPage(context, "/check-login");
                           }

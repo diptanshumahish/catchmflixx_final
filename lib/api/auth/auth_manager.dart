@@ -5,16 +5,19 @@ import 'package:catchmflixx/models/error/error_model.dart';
 import 'package:catchmflixx/models/user/login/user.login.response.model.dart';
 import 'package:catchmflixx/models/user/maxlimit.response.model.dart';
 import 'package:catchmflixx/models/user/register/register.response.model.dart';
+import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/deviceinfo/device_info.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
+import 'package:catchmflixx/utils/terminate.dart';
 import 'package:catchmflixx/utils/toast.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIManager {
@@ -26,6 +29,8 @@ class APIManager {
       headers: Map.from({
         'Accept': 'application/json',
       })));
+
+  final globalContainer = ProviderContainer();
 
   Future<void> addInterceptors() async {
     String agent = await returnDeviceInfo();
@@ -99,8 +104,8 @@ class APIManager {
     return user;
   }
 
-  Future<UserLoginResponse> useGoogleLogin(
-      String code, BuildContext context, bool manual) async {
+  Future<UserLoginResponse> useGoogleLogin(String idToken, String accessToken,
+      BuildContext context, bool manual) async {
     const int statusOk = 200;
     const int statusAccepted = 202;
 
@@ -118,7 +123,9 @@ class APIManager {
       final response = await dio.post(
         "google-auth/login-signup/",
         data: FormData.fromMap({
-          "code": code,
+          "type": "access_token",
+          "access_token": accessToken,
+          "id_token": idToken
         }),
       );
 
@@ -243,12 +250,22 @@ class APIManager {
 
   Future<int> useLogout() async {
     await addInterceptors();
+
+    // Sign out from Google if signed in
+    final GoogleSignIn gSign = GoogleSignIn();
+    if (await gSign.isSignedIn()) {
+      await gSign.signOut();
+    }
+
     int res = 0;
 
     try {
       final response = await dio.post("logout");
 
       if (response.statusCode == 204) {
+        ToastShow.returnToast(
+            "pleae login again, for security reasons, you need to login every 30 days :)");
+        ToastShow.returnToast("You have signed out!");
         res = 200;
       } else {
         res = 400;
@@ -256,6 +273,10 @@ class APIManager {
     } catch (e) {
       res = 400;
     }
+    final prefs = await SharedPreferences.getInstance();
+    globalContainer.read(userLoginProvider.notifier).logout();
+    await prefs.clear();
+    closeApp();
 
     return res;
   }
@@ -263,6 +284,7 @@ class APIManager {
   Future<void> refreshToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await addInterceptors();
+
     try {
       final response = await dio.post("refresh");
       if (response.statusCode == 201) {
@@ -271,7 +293,6 @@ class APIManager {
           response.data["success"] == false) {
         final api = APIManager();
         await api.useLogout();
-        Restart.restartApp();
       }
     } catch (e) {
       if (e is DioException) {
@@ -279,37 +300,39 @@ class APIManager {
             e.response?.data["success"] == false) {
           final api = APIManager();
           await api.useLogout();
-          Restart.restartApp();
         }
       } else {
-        if (kDebugMode) {
-          print("An unexpected error occurred: $e");
-        }
+        print("Unexpected error: $e");
       }
     }
   }
 
   Future<RegisterResponse> useRegister(
       String email,
-      String phone_number,
+      // String? phone_number,
       String name,
-      int pincode,
-      String city,
+      // int? pincode,
+      // String? city,
       String password,
       String password2,
-      String dob) async {
+      // String? dob
+      ) async {
     RegisterResponse res = RegisterResponse(data: null, success: false);
     try {
-      final response = await dio.post("register",
-          data: FormData.fromMap({
-            "email": email,
-            "phone_number": phone_number,
-            "name": name,
-            "pincode": pincode,
-            "city": city,
-            "password": password,
-            "password2": password2,
-          }));
+      final formData = {
+        "email": email,
+        // "phone_number": phone_number,
+        "name": name,
+        // "pincode": pincode,
+        // "city": city,
+        "password": password,
+        "password2": password2,
+      };
+
+      // if (dob != null) {
+      //   formData["dob"] = dob;
+      // }
+      final response = await dio.post("register", data: formData);
 
       if (response.statusCode == 201) {
         res = RegisterResponse.fromMap(response.data);

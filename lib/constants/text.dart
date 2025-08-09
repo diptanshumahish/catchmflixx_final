@@ -1,4 +1,4 @@
 abstract class ConstantTexts {
-  static const String versionInfo = "2.0.4";
-  static const int versionCheck = 204;
+  static const String versionInfo = "3.3.1";
+  static const int versionCheck = 331;
 }

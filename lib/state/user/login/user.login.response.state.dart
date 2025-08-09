@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ? This also deals with some api calls and maintaining state of logged in user
 
 @immutable
 abstract class UserLoginResponseState {}
@@ -46,6 +45,14 @@ class UserLoginResponseNotifier extends StateNotifier<UserLoginResponseState> {
     }
   }
 
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_userLoginResponseKey);
+    await prefs.remove("bearer");
+    await prefs.remove("refresh_token");
+    state = InitialUserLoginResponseState();
+  }
+
   Future<void> saveUserLoginResponse() async {
     final SharedPreferences sp = await SharedPreferences.getInstance();
     if (state is LoadedUserLoginResponseState) {
@@ -83,14 +90,13 @@ class UserLoginResponseNotifier extends StateNotifier<UserLoginResponseState> {
     }
   }
 
-
-   Future<int> makeGoogleLogin(String code, BuildContext ctx,
-      bool manual) async {
+  Future<int> makeGoogleLogin(
+      String idToken, String accessToken, BuildContext ctx, bool manual) async {
     APIManager api = APIManager();
     try {
       state = LoadingUserLoginResponseState();
       UserLoginResponse user =
-          await api.useGoogleLogin(code,ctx, manual);
+          await api.useGoogleLogin(idToken, accessToken, ctx, manual);
       state = LoadedUserLoginResponseState(userLoginResponse: user);
       saveUserLoginResponse();
       if (user.success == true) {

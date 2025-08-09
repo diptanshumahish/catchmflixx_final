@@ -17,7 +17,7 @@ class _LanguagesAvailableState extends State<LanguagesAvailable> {
   getData() async {
     ContentManager c = ContentManager();
     final data = await c.getLanguages(widget.uuid);
-    if (data.success) {
+    if (data!=null&& data.success) {
       setState(() {
         _lm = data;
       });

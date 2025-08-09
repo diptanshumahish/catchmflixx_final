@@ -1,6 +1,6 @@
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:catchmflixx/theme/typography.dart';
 
 class OffsetSecondaryFullButton extends StatelessWidget {
   final String content;
@@ -17,59 +17,41 @@ class OffsetSecondaryFullButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return CupertinoButton(
-        padding: EdgeInsets.zero,
-        child: Container(
-          width: notFull == null ? size.width : size.width / 2,
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.white54),
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(2, 2),
-                  blurRadius: 0,
-                  spreadRadius: 0,
-                ),
-              ]),
-          child: Padding(
-            padding:
-                EdgeInsets.symmetric(vertical: size.height > 840 ? 16.0 : 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                (icon == null)
-                    ? const SizedBox()
-                    : Icon(
-                        icon!.icon,
-                        color: Colors.white,
-                        size: 19,
-                      ),
-                (icon == null)
-                    ? const SizedBox()
-                    : const SizedBox(
-                        width: 5,
-                      ),
-                Text(
-                  content,
-                  style: TextStyle(
-                    fontFamily: "Kollektif",
-                    fontSize: size.height > 840 ? 15 : 14,
-                    color: Colors.white,
-                    letterSpacing: 0.4,
-                  ),
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                ),
-              ],
-            ),
-          ),
-        ),
+    return SizedBox(
+      width: notFull == null ? size.width : size.width / 2,
+      child: OutlinedButton(
         onPressed: () async {
           await vibrateTap();
           fn();
-        });
+        },
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Colors.white38, width: 1),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          foregroundColor: Colors.white,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (icon != null)
+              Icon(
+                icon!.icon,
+                color: Colors.white,
+                size: 18,
+              ),
+            if (icon != null) const SizedBox(width: 8),
+            AppText(
+              content,
+              variant: AppTextVariant.subtitle,
+              color: Colors.white,
+              weight: FontWeight.w600,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

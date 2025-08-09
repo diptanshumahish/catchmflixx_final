@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catchmflixx/constants/styles/gradient.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SettingsTop extends StatelessWidget {

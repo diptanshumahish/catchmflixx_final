@@ -1,6 +1,6 @@
 import 'package:catchmflixx/api/content/common.dart';
 import 'package:catchmflixx/api/user/profile/profile_api.dart';
-import 'package:catchmflixx/constants/styles/text_styles.dart';
+// unified typography
 import 'package:catchmflixx/models/content/series/continue.watching.model.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/navigation/navigator.dart';
@@ -10,6 +10,7 @@ import 'package:catchmflixx/widgets/common/flex/flex_items.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_catchmflixx_originals.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_censor.dart';
 import 'package:catchmflixx/widgets/common/glyph/glyph_year.dart';
+import 'package:catchmflixx/widgets/content/series/video_background.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:catchmflixx/theme/typography.dart';
 
 bool _added = false;
 CurrentWatching _cw = CurrentWatching(success: false);
@@ -40,7 +42,6 @@ class SeriesTopBar extends ConsumerStatefulWidget {
   final bool? isFree;
   const SeriesTopBar(
       {super.key,
-
       this.movieID,
       required this.imgLink,
       required this.noEp,
@@ -65,7 +66,7 @@ class SeriesTopBar extends ConsumerStatefulWidget {
 class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
   @override
   void initState() {
-    if(widget.noEp>0){
+    if (widget.noEp > 0) {
       getData();
     }
     setState(() {
@@ -74,20 +75,21 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _cw = CurrentWatching(success: false);
+    super.dispose();
+  }
+
   getData() async {
- 
     ContentManager ct = ContentManager();
     final dat = await ct.continueWatching(widget.id);
-    if (dat.success == true) {
+
+    if (dat != null && dat.success == true) {
       setState(() {
         _cw = dat;
       });
     }
-  }
-  @override
-  void dispose() {
-    _cw=CurrentWatching(success: false);
-    super.dispose();
   }
 
   @override
@@ -98,15 +100,20 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
     return FlexibleSpaceBar(
         background: Stack(
       children: [
+        // Video Background
         Animate(
-          effects: const [FadeEffect(delay: Duration(milliseconds: 100))],
-          child: Image.network(
-            widget.imgLink,
-            height: size.height / 1.4,
-            width: size.width,
-            fit: BoxFit.cover,
-          ),
-        ),
+            effects: const [FadeEffect(delay: Duration(milliseconds: 100))],
+            child: VideoBackground(
+              videoUrl: widget.playId,
+              fallbackImageUrl: widget.imgLink,
+              height: size.height / 1.4,
+              width: size.width,
+              fit: BoxFit.cover,
+              autoPlay: true,
+              loop: true,
+            )),
+        
+        // Gradient Overlay
         Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -114,6 +121,8 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                   end: Alignment.bottomCenter,
                   colors: [Colors.transparent, Colors.black54, Colors.black])),
         ),
+        
+        // Content
         Padding(
           padding: EdgeInsets.all(size.height / 40),
           child: SizedBox(
@@ -131,11 +140,9 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                   effects: const [
                     FadeEffect(delay: Duration(milliseconds: 200))
                   ],
-                  child: Text(
+                  child: AppText(
                     widget.title,
-                    style: size.height > 840
-                        ? TextStyles.headingMobile
-                        : TextStyles.headingMobileSmallScreens,
+                    variant: AppTextVariant.headline,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -147,9 +154,9 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                   effects: const [
                     FadeEffect(delay: Duration(milliseconds: 400))
                   ],
-                  child: Text(
+                  child: AppText(
                     widget.subTitle,
-                    style: TextStyles.smallSubText,
+                    variant: AppTextVariant.bodySmall,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -160,11 +167,12 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                 const SizedBox(
                   height: 5,
                 ),
-              
                 const SizedBox(
                   height: 8,
                 ),
-                if (_cw.success == true)
+                if (_cw.success == true &&
+                    _cw.data != null &&
+                    (_cw.data!.userRented! || _cw.data!.free!))
                   OffsetFullButton(
                     content: "Resume watching",
                     fn: () {
@@ -182,25 +190,29 @@ class _SeriesTopBarState extends ConsumerState<SeriesTopBar> {
                     },
                     icon: PhosphorIconsFill.play,
                   ),
-                   if(_cw.success==false)
-                    OffsetFullButton(content: "Start Watching", fn: (){
-                        navigateToPage(context, "/player",
+                if (_cw.success == false &&
+                    _cw.data != null &&
+                    _cw.data!.userRented!)
+                  OffsetFullButton(
+                    content: "Start Watching",
+                    fn: () {
+                      navigateToPage(context, "/player",
                           data: PlayerScreen(
                               title: _cw.data?.subTitle ?? "",
                               details: _cw.data?.subDescription ?? "",
                               playLink: firstEpUrl[0].toString(),
-                              id: firstEpUrl[1].toString() ?? "",
-                              seekTo:0,
+                              id: firstEpUrl[1].toString(),
+                              seekTo: 0,
                               type: "series",
                               act: () {
                                 getData();
                               }));
-                    }, icon: PhosphorIconsFill.play,),
-                 
-
-                  const SizedBox(
-                    height: 5,
+                    },
+                    icon: PhosphorIconsFill.play,
                   ),
+                const SizedBox(
+                  height: 5,
+                ),
                 Animate(
                   effects: const [
                     FadeEffect(delay: Duration(milliseconds: 700))

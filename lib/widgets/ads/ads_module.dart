@@ -20,7 +20,7 @@ class _AdsModuleState extends State<AdsModule> {
   getData() async {
     AdsManager a = AdsManager();
     final data = await a.getAds();
-    if (data.success!) {
+    if (data!=null&& data.success!) {
       setState(() {
         _adsResponse = data;
       });
@@ -78,7 +78,7 @@ class _AdsModuleState extends State<AdsModule> {
                               _adsResponse.data?[0].callToAction ?? "",
                               style: TextStyles.headingsForSections,
                             ),
-                            PhosphorIcon(
+                            const PhosphorIcon(
                               PhosphorIconsRegular.arrowUpRight,
                               color: Colors.white,
                             )

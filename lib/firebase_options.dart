@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1005279405528',
     projectId: 'cf-notif-72f77',
     authDomain: 'cf-notif-72f77.firebaseapp.com',
-    storageBucket: 'cf-notif-72f77.appspot.com',
+    storageBucket: 'cf-notif-72f77.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:1005279405528:android:1ada329046380a2e63fead',
     messagingSenderId: '1005279405528',
     projectId: 'cf-notif-72f77',
-    storageBucket: 'cf-notif-72f77.appspot.com',
+    storageBucket: 'cf-notif-72f77.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +62,9 @@ class DefaultFirebaseOptions {
     appId: '1:1005279405528:ios:b6c944b8affc2f8163fead',
     messagingSenderId: '1005279405528',
     projectId: 'cf-notif-72f77',
-    storageBucket: 'cf-notif-72f77.appspot.com',
+    storageBucket: 'cf-notif-72f77.firebasestorage.app',
+    androidClientId: '1005279405528-95rfcgeiil0s96plmasfssef5a0711jm.apps.googleusercontent.com',
+    iosClientId: '1005279405528-jcd77ra0jm9dns9dl9uvoa4ajd43fk06.apps.googleusercontent.com',
     iosBundleId: 'com.diptanshumahish.catchmflixxapp',
   );
 
@@ -71,7 +73,9 @@ class DefaultFirebaseOptions {
     appId: '1:1005279405528:ios:b6c944b8affc2f8163fead',
     messagingSenderId: '1005279405528',
     projectId: 'cf-notif-72f77',
-    storageBucket: 'cf-notif-72f77.appspot.com',
+    storageBucket: 'cf-notif-72f77.firebasestorage.app',
+    androidClientId: '1005279405528-95rfcgeiil0s96plmasfssef5a0711jm.apps.googleusercontent.com',
+    iosClientId: '1005279405528-jcd77ra0jm9dns9dl9uvoa4ajd43fk06.apps.googleusercontent.com',
     iosBundleId: 'com.diptanshumahish.catchmflixxapp',
   );
 
@@ -81,7 +85,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1005279405528',
     projectId: 'cf-notif-72f77',
     authDomain: 'cf-notif-72f77.firebaseapp.com',
-    storageBucket: 'cf-notif-72f77.appspot.com',
+    storageBucket: 'cf-notif-72f77.firebasestorage.app',
   );
 
 }

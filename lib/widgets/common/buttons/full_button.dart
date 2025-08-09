@@ -1,6 +1,6 @@
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:catchmflixx/theme/typography.dart';
 
 class FullButton extends StatelessWidget {
   final String content;
@@ -21,62 +21,59 @@ class FullButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final buttonWidth = notFull == null ? size.width : size.width / 3;
+    final buttonWidth = (notFull == true) ? size.width / 3 : size.width;
 
-    return CupertinoButton(
-      padding: EdgeInsets.zero,
-      child: Container(
-        width: buttonWidth,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: Colors.black),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              offset: Offset(2, 2),
-              blurRadius: 4,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        child: Padding(
+    return SizedBox(
+      width: buttonWidth,
+      child: ElevatedButton(
+        onPressed: (isLoading == true)
+            ? null
+            : () async {
+                await vibrateTap();
+                fn();
+              },
+        style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-          child: isLoading == true
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (icon != null)
-                      Icon(
-                        icon,
-                        color: Colors.black,
-                        size: 20,
-                      ),
-                    if (icon != null) const SizedBox(width: 8),
-                    Text(
-                      content,
-                      style: TextStyle(
-                        fontFamily: "Kollektif",
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 4,
+          shadowColor: Colors.black.withOpacity(0.1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(color: Colors.black, width: 1),
+          ),
         ),
+        child: isLoading == true
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(color: Colors.black, strokeWidth: 2.5),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null)
+                    Icon(
+                      icon,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                  if (icon != null) const SizedBox(width: 8),
+                  Flexible(
+                    child: AppText(
+                      content,
+                      variant: AppTextVariant.subtitle,
+                      color: Colors.black,
+                      weight: FontWeight.w600,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
       ),
-      onPressed: () async {
-        await vibrateTap();
-        fn();
-      },
     );
   }
 }

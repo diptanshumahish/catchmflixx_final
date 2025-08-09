@@ -30,18 +30,27 @@ class Data {
   String? trailer;
   int? durationMinutes;
   int? progress;
+  int? videoViews;
+  bool? rentable;
+  bool? userRented;
+  bool? free;
 
-  Data(
-      {this.videoUuid,
-      this.epNumber,
-      this.seasonNumber,
-      this.thumbnail,
-      this.subTitle,
-      this.subDescription,
-      this.url,
-      this.trailer,
-      this.durationMinutes,
-      this.progress});
+  Data({
+    this.videoUuid,
+    this.epNumber,
+    this.seasonNumber,
+    this.thumbnail,
+    this.subTitle,
+    this.subDescription,
+    this.url,
+    this.trailer,
+    this.durationMinutes,
+    this.progress,
+    this.videoViews,
+    this.rentable,
+    this.userRented,
+    this.free,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     videoUuid = json['video_uuid'];
@@ -54,6 +63,10 @@ class Data {
     trailer = json['trailer'];
     durationMinutes = json['duration_minutes'];
     progress = json['progress'];
+    videoViews = json['video_views'];
+    rentable = json['rentable'];
+    userRented = json['user_rented'];
+    free = json['free'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +81,10 @@ class Data {
     data['trailer'] = trailer;
     data['duration_minutes'] = durationMinutes;
     data['progress'] = progress;
+    data['video_views'] = videoViews;
+    data['rentable'] = rentable;
+    data['user_rented'] = userRented;
+    data['free'] = free;
     return data;
   }
 }

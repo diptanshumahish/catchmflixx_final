@@ -27,22 +27,28 @@ class RegisterResponseNotifier extends StateNotifier<RegisterResponseState> {
   final APIManager _authHandler = APIManager();
 
   Future<int> makeRegister(
-      String email,
-      String phone_number,
-      String name,
-      int pincode,
-      String city,
-      String password,
-      String password2,
-      String dob) async {
-    var dobString = dob.split("/");
-    final dobData = "${dobString[2]}-${dobString[1]}-${dobString[0]}}";
+    String email,
+    String? phone_number,
+    String name,
+    // int? pincode,
+    // String? city,
+    String password,
+    String password2,
+    // String? dob
+  ) async {
+    // String? dobData;
+    // if (dob != null && dob.isNotEmpty) {
+    //   var dobString = dob.split("/");
+    //   if (dobString.length == 3) {
+    //     dobData = "${dobString[2]}-${dobString[1]}-${dobString[0]}";
+    //   }
+    // }
 
     try {
       state = LoadingRegister();
 
-      RegisterResponse user = await _authHandler.useRegister(email,
-          phone_number, name, pincode, city, password, password2, dobData);
+      RegisterResponse user =
+          await _authHandler.useRegister(email, name, password, password2);
       state = LoadedRegister(registerResponse: user);
 
       if (user.success == true) {

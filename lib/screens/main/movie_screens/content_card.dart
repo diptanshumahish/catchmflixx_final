@@ -1,4 +1,3 @@
-import 'package:catchmflixx/constants/styles/gradient.dart';
 import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/screens/payments/episode_renting_screen.dart';
 import 'package:catchmflixx/state/provider.dart';

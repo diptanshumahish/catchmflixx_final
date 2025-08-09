@@ -6,12 +6,10 @@ import 'package:catchmflixx/constants/styles/text_styles.dart';
 import 'package:catchmflixx/state/provider.dart';
 import 'package:catchmflixx/utils/ads/ads.dart';
 import 'package:catchmflixx/utils/player/return_quality.dart';
-import 'package:catchmflixx/utils/toast.dart';
 import 'package:catchmflixx/utils/vibrate/vibrations.dart';
 import 'package:catchmflixx/widgets/common/buttons/offset_full_button.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/lecle_yoyo_player.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/duration_extensions.dart';
-import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/extensions/screen_size_extensions.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/utils/package_utils/file_utils.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video_controls.dart';
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video_loading.dart';
@@ -23,10 +21,8 @@ import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/video
 import 'package:catchmflixx/widgets/player/player_packages/lib/src/widgets/widget_bottombar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:video_player/video_player.dart';
@@ -167,7 +163,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
     UserActivity ua = UserActivity();
     final res = await ua.addWatchProgress(
         widget.id, controller.value.position.inSeconds);
-    if (res.data!.vidAd != null) {
+    if ( res!=null&& res.data!.vidAd != null) {
       if (res.data!.vidAd!.advertisement != null) {
         controller.pause();
         showFullScreenAd(context, res.data!.vidAd!.advertisement!,
@@ -241,7 +237,7 @@ class _YoYoPlayerState extends ConsumerState<YoYoPlayer>
   List<Widget> videoBuiltInChildren() {
     if (controller.value.isCompleted) {
       return [
-        Container(
+        SizedBox(
           height: double.maxFinite,
           width: double.infinity,
           child: Center(

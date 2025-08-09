@@ -37,8 +37,8 @@ class _MovieScreenState extends State<MovieScreen> {
 
   getData() async {
     ContentManager ct = ContentManager();
-    MovieFullModel data = await ct.getMovie(widget.uuid);
-    if (data.success!) {
+    MovieFullModel? data = await ct.getMovie(widget.uuid);
+    if (data!=null && data.success!) {
       setState(() {
         _movies = data;
         _isLoading = false;

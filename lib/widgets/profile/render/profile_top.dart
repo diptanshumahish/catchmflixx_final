@@ -8,12 +8,29 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 class ProfileTop extends StatelessWidget {
   final String settingsText;
   final String settingsSubText;
+  final String planLabel;
   final String? image;
-  const ProfileTop(
-      {super.key,
-      required this.settingsText,
-      required this.settingsSubText,
-      required this.image});
+
+  const ProfileTop({
+    super.key,
+    required this.settingsText,
+    required this.settingsSubText,
+    required this.planLabel,
+    required this.image,
+  });
+
+  Color _planColor(String name) {
+    switch (name.toLowerCase()) {
+      case "premium":
+        return Colors.amber;
+      case "pro":
+        return Colors.blueAccent;
+      case "standard":
+        return Colors.greenAccent;
+      default:
+        return Colors.grey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +47,18 @@ class ProfileTop extends StatelessWidget {
                   height: 60,
                   width: 60,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60),
-                      image: DecorationImage(
-                          image: CachedNetworkImageProvider(image ??
-                              "https://img.playbook.com/Axh_gEkgZbsvB1VDuXm4GNvbjXXu2RUUqwToXJEJ8ZQ/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzM5NTk3ODYx/LWQ1MzItNDZmMC1i/ZDhmLTQ2NjRiYjcz/NjZmMQ"),
-                          fit: BoxFit.cover)),
+                    borderRadius: BorderRadius.circular(60),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        image ??
+                            "https://img.playbook.com/Axh_gEkgZbsvB1VDuXm4GNvbjXXu2RUUqwToXJEJ8ZQ/Z3M6Ly9wbGF5Ym9v/ay1hc3NldHMtcHVi/bGljLzM5NTk3ODYx/LWQ1MzItNDZmMC1i/ZDhmLTQ2NjRiYjcz/NjZmMQ",
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,13 +66,29 @@ class ProfileTop extends StatelessWidget {
                         settingsText,
                         style: size.height > 840
                             ? TextStyles.headingMobile
-                            : TextStyles
-                                .headingsSecondaryMobileForSmallerScreens,
+                            : TextStyles.headingsSecondaryMobileForSmallerScreens,
                       ),
+                      const SizedBox(height: 2),
                       Text(
                         settingsSubText,
                         style: TextStyles.smallSubText,
-                      )
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: _planColor(planLabel).withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          "Plan: $planLabel",
+                          style: TextStyle(
+                            color: _planColor(planLabel),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -79,18 +115,13 @@ class ProfileTop extends StatelessWidget {
                         navigateToPage(context, "/settings");
                       },
                       child: const Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           PhosphorIcon(
                             PhosphorIconsLight.gear,
                             color: Colors.white,
                             size: 20,
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          SizedBox(width: 5),
                           Text(
                             "App settings",
                             style: TextStyles.cardHeading,
@@ -98,34 +129,27 @@ class ProfileTop extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
+                    const SizedBox(width: 20),
                     GestureDetector(
                       onTap: () async {
                         await vibrateTap();
                         navigateToPage(context, "/user/profile-management");
                       },
                       child: const Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           PhosphorIcon(
                             PhosphorIconsLight.userGear,
                             color: Colors.white,
                             size: 20,
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          SizedBox(width: 5),
                           Text(
                             "Profile settings",
                             style: TextStyles.cardHeading,
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

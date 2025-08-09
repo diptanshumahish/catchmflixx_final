@@ -11,6 +11,10 @@ class CatchMFLixxInputField extends StatelessWidget {
   final String? Function(String?)? validator;
   final String? Function(String?)? onchange;
   final List<TextInputFormatter>? inputFormatters;
+  final Widget? suffixIcon;
+  final String? hintText;
+  final TextInputAction? textInputAction;
+  final void Function(String)? onFieldSubmitted;
   const CatchMFLixxInputField(
       {super.key,
       required this.labelText,
@@ -19,33 +23,49 @@ class CatchMFLixxInputField extends StatelessWidget {
       this.inputFormatters,
       this.onchange,
       required this.icon,
-      required this.controller,
-      required this.type});
+       required this.controller,
+       required this.type,
+       this.suffixIcon,
+       this.hintText,
+       this.textInputAction,
+       this.onFieldSubmitted});
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       keyboardType: type,
       obscureText: obscureText!,
+      textInputAction: textInputAction,
       validator: validator,
       onChanged: onchange,
+      onFieldSubmitted: onFieldSubmitted,
       inputFormatters: inputFormatters,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.all(22),
         errorMaxLines: 2,
         prefixIcon: Icon(icon),
+        suffixIcon: suffixIcon,
         labelText: labelText,
+        hintText: hintText,
         labelStyle: MediaQuery.of(context).size.height > 750
             ? TextStyles.formSubTitle
             : TextStyles.formSubTitleForSmallerScreens,
-        focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white)),
-        enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white30)),
-        errorBorder:
-            const OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-        focusedErrorBorder:
-            const OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white30),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(12),
+        ),
       ),
       style: MediaQuery.of(context).size.height > 750
           ? TextStyles.textInputText

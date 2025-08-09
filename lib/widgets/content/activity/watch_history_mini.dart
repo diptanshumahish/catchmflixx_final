@@ -36,6 +36,8 @@ class _WatchHistoryComponentState extends ConsumerState<WatchHistoryComponent> {
       sectionDetails: "Check out what you have been watching so far",
       sectionHeading: "Watch History",
       showMore: "",
+      compact: true,
+      hideHeader: true,
       watchedCards: data.data!
           .map((e) => WatchedCard(
               duration: ((e.durationMinutes) ?? 0) * 60,

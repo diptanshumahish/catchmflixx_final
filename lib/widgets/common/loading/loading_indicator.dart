@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CoolLoadingIndicator extends StatefulWidget {
-  const CoolLoadingIndicator({Key? key}) : super(key: key);
+  const CoolLoadingIndicator({super.key});
 
   @override
   _CoolLoadingIndicatorState createState() => _CoolLoadingIndicatorState();

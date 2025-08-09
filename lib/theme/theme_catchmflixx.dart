@@ -1,8 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 abstract class CatchMFLixxTheme {
   static final theme = ThemeData(
+    // Ensure Material text uses Karla everywhere
+    textTheme: GoogleFonts.karlaTextTheme(
+      ThemeData(brightness: Brightness.dark).textTheme,
+    ),
+    // Ensure Cupertino widgets used within Material tree use Karla too
+    cupertinoOverrideTheme: CupertinoThemeData(
+      textTheme: CupertinoTextThemeData(
+        textStyle: GoogleFonts.karla(),
+      ),
+    ),
     inputDecorationTheme: const InputDecorationTheme(
       focusedBorder:
           OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
@@ -15,23 +26,23 @@ abstract class CatchMFLixxTheme {
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder()
       },
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF5AB5FF)),
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color(0xFF00F5C8), // Brand: bold greenish-cyan (unique)
+      brightness: Brightness.dark,
+    ),
     useMaterial3: true,
-    fontFamily: "Kollektif",
   );
 }
 
 abstract class CatchMFLixxThemeIOS {
-  static const theme = CupertinoThemeData(
-    primaryColor: CupertinoColors.activeBlue,
-    primaryContrastingColor: CupertinoColors.white,
+  static final theme = CupertinoThemeData(
+    primaryColor: const Color(0xFF00F5C8),
+    primaryContrastingColor: CupertinoColors.black,
     textTheme: CupertinoTextThemeData(
       primaryColor: CupertinoColors.white,
-      textStyle: TextStyle(
-        fontFamily: "Kollektif",
-      ),
+      textStyle: GoogleFonts.karla(),
     ),
-    barBackgroundColor: CupertinoColors.systemBackground,
-    scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
+    barBackgroundColor: CupertinoColors.black,
+    scaffoldBackgroundColor: CupertinoColors.black,
   );
 }

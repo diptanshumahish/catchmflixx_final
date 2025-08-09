@@ -10,9 +10,11 @@ import 'package:catchmflixx/screens/main/movie_screens/movie_screen.dart';
 import 'package:catchmflixx/screens/main/series/series_screen.dart';
 import 'package:catchmflixx/screens/onboard/error/max_login.dart';
 import 'package:catchmflixx/screens/onboard/screen/onboard_screen.dart';
+import 'package:catchmflixx/screens/payments/all_plans_screen.dart';
 import 'package:catchmflixx/screens/payments/episode_renting_screen.dart';
 import 'package:catchmflixx/screens/payments/payment_success.dart';
 import 'package:catchmflixx/screens/payments/renting_screen.dart';
+import 'package:catchmflixx/screens/payments/season_renting_screen.dart';
 import 'package:catchmflixx/screens/payments/web_page.dart';
 import 'package:catchmflixx/screens/profile/profile_management.screen.dart';
 import 'package:catchmflixx/screens/redirects/redirect_screen.dart';
@@ -22,6 +24,7 @@ import 'package:catchmflixx/screens/start/profile/profile_selection_screen.dart'
 import 'package:catchmflixx/screens/start/splash_screen.dart';
 import 'package:catchmflixx/screens/start/verify_email.dart';
 import 'package:catchmflixx/screens/version/version_screen.dart';
+import 'package:catchmflixx/utils/protection/secure_screen_wrapper.dart';
 import 'package:catchmflixx/widgets/common/CFXModal/custom_modal.dart';
 import 'package:catchmflixx/widgets/onboard/forgot/forgot_password.dart';
 import 'package:catchmflixx/widgets/player/player_screen.dart';
@@ -29,6 +32,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 GoRouter appRoute = GoRouter(
+  initialLocation: "/",
   routes: <RouteBase>[
     GoRoute(
       path: "/",
@@ -39,12 +43,10 @@ GoRouter appRoute = GoRouter(
     GoRoute(
       path: '/payment-make',
       builder: (context, state) {
-        final String url = state.extra as String;
-
         return const BaseMain();
       },
     ),
-     GoRoute(
+    GoRoute(
       path: '/web-view',
       builder: (context, state) {
         final String url = state.extra as String;
@@ -70,25 +72,31 @@ GoRouter appRoute = GoRouter(
         return const ForgotPasswordScreen();
       },
     ),
-    GoRoute(
-      path: '/en/watch/watch-now/movie',
-      builder: (context, state) {
-        final movieId = state.uri.queryParameters["id"];
-        return MovieScreen(uuid: movieId ?? "");
-      },
-    ),
-    GoRoute(
-      path: '/en/watch/watch-now/series',
-      builder: (context, state) {
-        final sId = state.uri.queryParameters["id"];
-        return SeriesScreen(uuid: sId ?? '');
-      },
-    ),
+    GoRoute(path: "/", builder: (context, state) => const BaseMain(), routes: [
+      GoRoute(
+        path: '/en/watch/watch-now/movie',
+        builder: (context, state) {
+          final movieId = state.uri.queryParameters["id"];
+          return MovieScreen(uuid: movieId ?? "");
+        },
+      ),
+      GoRoute(
+        path: '/en/watch/watch-now/series',
+        builder: (context, state) {
+          final sId = state.uri.queryParameters["id"];
+          return SeriesScreen(uuid: sId ?? '');
+        },
+      ),
+    ]),
     GoRoute(
       path: '/en/sign-in-app/success',
       builder: (context, state) {
-        final sId = state.uri.queryParameters["code"];
-        return RedirectScreen(code: sId.toString(),);
+        final aId = state.uri.queryParameters["accessToken"];
+        final token = state.uri.queryParameters["idToken"];
+        return RedirectScreen(
+          idToken: token.toString(),
+          accessToken: aId.toString(),
+        );
       },
     ),
     GoRoute(
@@ -169,14 +177,16 @@ GoRouter appRoute = GoRouter(
       path: "/player",
       builder: (BuildContext context, GoRouterState state) {
         final PlayerScreen? data = state.extra as PlayerScreen?;
-        return PlayerScreen(
-            seekTo: data!.seekTo ?? 0,
-            title: data!.title,
-            details: data.details,
-            playLink: data.playLink,
-            id: data.id,
-            type: data.type,
-            act: data.act);
+        return SecureScreenWrapper(
+          child: PlayerScreen(
+              seekTo: data!.seekTo ?? 0,
+              title: data.title,
+              details: data.details,
+              playLink: data.playLink,
+              id: data.id,
+              type: data.type,
+              act: data.act),
+        );
       },
     ),
     GoRoute(
@@ -211,6 +221,12 @@ GoRouter appRoute = GoRouter(
       },
     ),
     GoRoute(
+      path: "/plans",
+      builder: (BuildContext context, GoRouterState state) {
+        return const AllPlansScreen();
+      },
+    ),
+    GoRoute(
       path: "/custom-modal",
       builder: (BuildContext context, GoRouterState state) {
         final CustomModal data = state.extra as CustomModal;
@@ -239,6 +255,19 @@ GoRouter appRoute = GoRouter(
           img: data.img,
           id: data.id,
           episodeNumber: data.episodeNumber,
+        );
+      },
+    ),
+    GoRoute(
+      path: "/season-renting",
+      builder: (BuildContext context, GoRouterState state) {
+        final Map<String, dynamic> data = state.extra as Map<String, dynamic>;
+        return SeasonRentingScreen(
+          act: data['act'] as VoidCallback,
+          title: data['title'] as String,
+          img: data['img'] as String,
+          id: data['id'] as String,
+          seasonNumber: data['seasonNumber'] as String,
         );
       },
     ),

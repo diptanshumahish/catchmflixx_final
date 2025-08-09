@@ -26,8 +26,8 @@ class _PickedForYouState extends State<PickedForYou> {
 
   getData() async {
     ContentManager ct = ContentManager();
-    ContentList data = await ct.searchContent("");
-    if (data.results!.success!) {
+    ContentList? data = await ct.searchContent("");
+    if (data!=null&& data.results!.success!) {
       setState(() {
         _cList = data;
         _isReady = true;
@@ -42,7 +42,6 @@ class _PickedForYouState extends State<PickedForYou> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

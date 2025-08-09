@@ -55,7 +55,7 @@ class _SearchResultsState extends State<SearchResults> {
     });
     ContentManager c = ContentManager();
     final data = await c.searchContent(_searchTerms);
-    if (data.results!.success!) {
+    if (data!=null&& data.results!.success!) {
       setState(() {
         _contentList = data;
         _searching = false;

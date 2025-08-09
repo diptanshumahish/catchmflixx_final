@@ -21,5 +21,5 @@ void showFullScreenAd(BuildContext context, String videoUrl, bool skippable,
     ),
   );
 
-  overlayState?.insert(overlayEntry);
+  overlayState.insert(overlayEntry);
 }
